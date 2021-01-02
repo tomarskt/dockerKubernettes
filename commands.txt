@@ -25,4 +25,8 @@ kubectl run nginx --image=nginx
 kubectl expose pod nginx --type=ClusterIP --port=80
 kubectl get ingress
 kubectl apply -f ingress.yaml
-creating scheduled pods
+creating scheduled pods - specify the node name
+http://www.devopsworld.co.in/p/kubernetes-pods-overview.html
+http://www.devopsworld.co.in/p/assigning-pods-to-nodes.html
+kubectl delete multiple services
+kubectl delete pods --all
