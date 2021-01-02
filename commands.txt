@@ -30,3 +30,4 @@ http://www.devopsworld.co.in/p/kubernetes-pods-overview.html
 http://www.devopsworld.co.in/p/assigning-pods-to-nodes.html
 kubectl delete multiple services
 kubectl delete pods --all
+if nodename does not exists - then pod will be in pending state
