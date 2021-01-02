@@ -14,3 +14,5 @@ kubectl create -f nodeportservice.yaml
 - - accessible outside now - http://15.206.165.57(host ip address):31111/test.html
 kubectl describe svc my-service
 - - any hostip from network will allow access to the pod through service
+kubectl delete svc my-service
+kubectl delete -f nodeportservice.yaml
