@@ -1,0 +1,10 @@
+kubectl get pods -o wide
+- pod network
+- service to access pod externally
+- services - 3 types
+- - clusterip - used for internal usage
+- - nodeport - for external usage - one external port which will allow access externally
+- - load balancer - cloud system - access through ALB, ELB - uses cloud external IP for ELB/ALB
+- - service has in built load balancing capabality
+- - end point of service is the port to the pod
+- - possible to curl the pod ip from host machine but not from outside
