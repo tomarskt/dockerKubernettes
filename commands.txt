@@ -16,3 +16,6 @@ kubectl describe svc my-service
 - - any hostip from network will allow access to the pod through service
 kubectl delete svc my-service
 kubectl delete -f nodeportservice.yaml
+ingress holds limited public ip address which allows internal services to be exposed through ports/clusterip
+Ingress Controllers
+- - nginx ingress controller
