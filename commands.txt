@@ -19,3 +19,10 @@ kubectl delete -f nodeportservice.yaml
 ingress holds limited public ip address which allows internal services to be exposed through ports/clusterip
 Ingress Controllers
 - - nginx ingress controller
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.35.0/deploy/static/provider/baremetal/deploy.yaml
+kubectl get svc --all-namespaces
+kubectl run nginx --image=nginx
+kubectl expose pod nginx --type=ClusterIP --port=80
+kubectl get ingress
+kubectl apply -f ingress.yaml
+creating scheduled pods

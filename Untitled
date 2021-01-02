@@ -1,0 +1,17 @@
+pipeline {
+    agent any
+    stages{
+      stage('Build & Unit Test') {
+          steps {
+            withAWS(credentials: 'a7a48a48-cde5-4e77-b563-5292cc29e7b4',region:'us-west-2'){
+              script {
+                bat 'aws s3 ls'
+                  docker.image("hello-world").inside("--net=host -e AWS_DEFAULT_REGION=us-west-2") {
+                    bat 'aws s3 ls'
+                  }
+                }
+            }
+          }
+      }
+    }
+}

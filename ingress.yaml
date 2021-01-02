@@ -1,0 +1,19 @@
+#ingress.yaml
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: simple-fanout-example
+  annotations:
+   nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - http:
+     paths:
+     - path: /nginx
+       backend:
+        serviceName: nginx
+        servicePort: 80
+     - path: /tomcattest
+       backend:
+        serviceName: websvc
+        servicePort: 8080
