@@ -33,3 +33,4 @@ kubectl delete pods --all
 if nodename does not exists - then pod will be in pending state
 node labels
 node affinity - operators - in, not in, exists - https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
+taint and toleration
