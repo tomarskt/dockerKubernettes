@@ -1,0 +1,343 @@
+(base) stomar-n@Sudhirs-MacBook-Pro-3 yasui-master % kubectl get pods
+NAME                      READY   STATUS    RESTARTS   AGE
+nginx-pod-configmap-vol   1/1     Running   0          14m
+(base) stomar-n@Sudhirs-MacBook-Pro-3 yasui-master % kubectl create -f env.yaml
+error: the path "env.yaml" does not exist
+(base) stomar-n@Sudhirs-MacBook-Pro-3 yasui-master % cd ..
+(base) stomar-n@Sudhirs-MacBook-Pro-3 projects % cd cognixia
+(base) stomar-n@Sudhirs-MacBook-Pro-3 cognixia % cd dockerKubernettes 
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % 
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % ls -la
+total 13656
+drwxr-xr-x  17 stomar-n  staff      544 Jan  9 05:58 .
+drwxr-xr-x  21 stomar-n  staff      672 Dec 19 05:45 ..
+-rw-------@  1 stomar-n  staff   348403 Jan  9 05:58 Kubernetes-ConfigMaps.pdf
+-rw-r--r--@  1 stomar-n  staff  2630178 Dec 20 08:04 L03-04 - Docker – Containers.pdf
+-rw-r--r--@  1 stomar-n  staff  1673834 Dec 20 08:05 L13 - Docker Swarm.pdf
+-rw-r--r--@  1 stomar-n  staff    32864 Dec 20 08:05 Lecture 3..3.docx
+-rw-r--r--@  1 stomar-n  staff   864870 Dec 20 08:05 Lecture 3.1.pdf
+-rw-r--r--@  1 stomar-n  staff   914176 Dec 20 08:06 Lecture 3.2.pdf
+-rw-r--r--@  1 stomar-n  staff    21372 Dec 20 08:06 Lecture 4.docx
+-rw-r--r--@  1 stomar-n  staff    24065 Dec 20 08:06 Lecture 5.docx
+-rw-r--r--@  1 stomar-n  staff   228091 Dec 20 08:06 Lecture 8.docx
+-rw-r--r--@  1 stomar-n  staff    22582 Dec 20 08:06 Lecture 9.docx
+-rw-r--r--@  1 stomar-n  staff    22088 Dec 20 08:06 Lecture6.docx
+-rw-r--r--@  1 stomar-n  staff    50360 Dec 20 08:06 Lecture7.docx
+-rw-r--r--@  1 stomar-n  staff   120301 Dec 20 06:52 docker-quick-ref.pdf
+drwxr-xr-x  16 stomar-n  staff      512 Jan  9 06:20 dockerKubernettes
+-r--------@  1 stomar-n  staff     1700 Dec 19 05:44 itextechus.pem
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % cd dockerKubernettes 
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % ls -la
+total 104
+drwxr-xr-x  16 stomar-n  staff   512 Jan  9 06:20 .
+drwxr-xr-x  17 stomar-n  staff   544 Jan  9 05:58 ..
+drwxr-xr-x  14 stomar-n  staff   448 Jan  9 06:18 .git
+-rw-r--r--   1 stomar-n  staff   200 Jan  2 05:39 README.md
+-rw-r--r--   1 stomar-n  staff   455 Jan  2 06:52 Untitled
+-rw-r--r--   1 stomar-n  staff   213 Jan  2 06:12 clusteripservice.yaml
+-rw-r--r--   1 stomar-n  staff  1749 Jan  3 08:47 commands.txt
+-rw-r--r--   1 stomar-n  staff   515 Jan  9 06:00 config-map-yaml.yaml
+-rw-r--r--   1 stomar-n  staff   515 Jan  9 06:02 config-map.yaml
+-rw-r--r--   1 stomar-n  staff   332 Jan  9 06:21 env.yaml
+-rw-r--r--   1 stomar-n  staff    16 Jan  9 06:02 file-a.txt
+-rw-r--r--   1 stomar-n  staff    16 Jan  9 06:02 file-b.txt
+-rw-r--r--   1 stomar-n  staff   382 Jan  2 06:40 ingress.yaml
+-rw-r--r--   1 stomar-n  staff   232 Jan  2 06:03 nodeportservice.yaml
+-rw-r--r--   1 stomar-n  staff   437 Jan  9 06:01 pod.yaml
+-rw-r--r--   1 stomar-n  staff   155 Jan  2 05:44 vi.yaml
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl create -f env.yaml
+pod/envar-demo created
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get pods
+NAME                      READY   STATUS              RESTARTS   AGE
+envar-demo                0/1     ContainerCreating   0          8s
+nginx-pod-configmap-vol   1/1     Running             0          17m
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl exec envar-demo  -- bash
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl exec -it envar-demo  -- bash
+root@envar-demo:/# ls -la
+total 76
+drwxr-xr-x   1 root root 4096 Jan  9 14:22 .
+drwxr-xr-x   1 root root 4096 Jan  9 14:22 ..
+-rwxr-xr-x   1 root root    0 Jan  9 14:22 .dockerenv
+drwxr-xr-x   1 root root 4096 Mar 24  2016 bin
+drwxr-xr-x   2 root root 4096 Jan  6  2016 boot
+drwxr-xr-x   5 root root  360 Jan  9 14:22 dev
+drwxr-xr-x   1 root root 4096 Jan  9 14:22 etc
+drwxr-xr-x   2 root root 4096 Jan  6  2016 home
+drwxr-xr-x   1 root root 4096 Mar 24  2016 lib
+drwxr-xr-x   2 root root 4096 Mar  1  2016 lib64
+drwxr-xr-x   2 root root 4096 Mar  1  2016 media
+drwxr-xr-x   2 root root 4096 Mar  1  2016 mnt
+drwxr-xr-x   2 root root 4096 Mar  1  2016 opt
+dr-xr-xr-x 195 root root    0 Jan  9 14:22 proc
+drwx------   1 root root 4096 Apr  1  2016 root
+drwxr-xr-x   1 root root 4096 Jan  9 14:22 run
+drwxr-xr-x   2 root root 4096 Mar  1  2016 sbin
+-rw-r-----   1 root root  861 Apr  4  2016 server.js
+drwxr-xr-x   2 root root 4096 Mar  1  2016 srv
+dr-xr-xr-x  13 root root    0 Dec 31 19:40 sys
+drwxrwxrwt   1 root root 4096 Mar 24  2016 tmp
+drwxr-xr-x   1 root root 4096 Apr  1  2016 usr
+drwxr-xr-x   1 root root 4096 Mar 24  2016 var
+root@envar-demo:/# env
+NODE_VERSION=4.4.2
+HOSTNAME=envar-demo
+KUBERNETES_PORT_443_TCP_PORT=443
+KUBERNETES_PORT=tcp://10.96.0.1:443
+TERM=xterm
+KUBERNETES_SERVICE_PORT=443
+KUBERNETES_SERVICE_HOST=10.96.0.1
+NPM_CONFIG_LOGLEVEL=info
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+PWD=/
+DEMO_FAREWELL=Such a sweet sorrow
+SHLVL=1
+HOME=/root
+KUBERNETES_PORT_443_TCP_PROTO=tcp
+KUBERNETES_SERVICE_PORT_HTTPS=443
+KUBERNETES_PORT_443_TCP_ADDR=10.96.0.1
+KUBERNETES_PORT_443_TCP=tcp://10.96.0.1:443
+DEMO_GREETING=Hello from the environment
+_=/usr/bin/env
+root@envar-demo:/# kubectl create configmap redis-configmap-env --from-literal=file.1=file.a --from-literal=file.2=file.b^C
+root@envar-demo:/# exit
+exit
+command terminated with exit code 130
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl create configmap redis-configmap-env --from-literal=file.1=file.a --from-literal=file.2=file.b
+configmap/redis-configmap-env created
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get cm
+NAME                  DATA   AGE
+kube-root-ca.crt      1      12d
+nginx-configmap-vol   2      33m
+redis-configmap-env   2      57s
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl describe cm redis-configmap-env
+Name:         redis-configmap-env
+Namespace:    default
+Labels:       <none>
+Annotations:  <none>
+
+Data
+====
+file.1:
+----
+file.a
+file.2:
+----
+file.b
+Events:  <none>
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl create -f cmenv.yaml
+pod/redis-pod-configmap-env created
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get pods
+NAME                      READY   STATUS    RESTARTS   AGE
+envar-demo                1/1     Running   0          10m
+nginx-pod-configmap-vol   1/1     Running   0          28m
+redis-pod-configmap-env   1/1     Running   0          10s
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl describe pod redis-pod-configmap-env
+Name:         redis-pod-configmap-env
+Namespace:    default
+Priority:     0
+Node:         minikube/192.168.49.2
+Start Time:   Sat, 09 Jan 2021 06:32:32 -0800
+Labels:       <none>
+Annotations:  <none>
+Status:       Running
+IP:           172.17.0.7
+IPs:
+  IP:  172.17.0.7
+Containers:
+  redis-container:
+    Container ID:   docker://ce4829763a91406e47751a8b9c0476aeb4341a5aac95410c7f70d6e617ba804b
+    Image:          redis
+    Image ID:       docker-pullable://redis@sha256:0f724af268d0d3f5fb1d6b33fc22127ba5cbca2d58523b286ed3122db0dc5381
+    Port:           <none>
+    Host Port:      <none>
+    State:          Running
+      Started:      Sat, 09 Jan 2021 06:32:38 -0800
+    Ready:          True
+    Restart Count:  0
+    Environment:
+      FILE_1:  <set to the key 'file.1' of config map 'redis-configmap-env'>  Optional: false
+      FILE_2:  <set to the key 'file.2' of config map 'redis-configmap-env'>  Optional: false
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from default-token-ph5nf (ro)
+Conditions:
+  Type              Status
+  Initialized       True 
+  Ready             True 
+  ContainersReady   True 
+  PodScheduled      True 
+Volumes:
+  default-token-ph5nf:
+    Type:        Secret (a volume populated by a Secret)
+    SecretName:  default-token-ph5nf
+    Optional:    false
+QoS Class:       BestEffort
+Node-Selectors:  <none>
+Tolerations:     node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                 node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type    Reason     Age   From               Message
+  ----    ------     ----  ----               -------
+  Normal  Scheduled  22s   default-scheduler  Successfully assigned default/redis-pod-configmap-env to minikube
+  Normal  Pulling    21s   kubelet            Pulling image "redis"
+  Normal  Pulled     16s   kubelet            Successfully pulled image "redis" in 5.6832364s
+  Normal  Created    16s   kubelet            Created container redis-container
+  Normal  Started    16s   kubelet            Started container redis-container
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl exec -it pod redis-pod-configmap-env 
+kubectl exec [POD] [COMMAND] is DEPRECATED and will be removed in a future version. Use kubectl exec [POD] -- [COMMAND] instead.
+Error from server (NotFound): pods "pod" not found
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl exec -it pods redis-pod-configmap-env 
+kubectl exec [POD] [COMMAND] is DEPRECATED and will be removed in a future version. Use kubectl exec [POD] -- [COMMAND] instead.
+Error from server (NotFound): pods "pods" not found
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl exec -it redis-pod-configmap-env     
+error: you must specify at least one command for the container
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl exec -it redis-pod-configmap-env -- bash
+root@redis-pod-configmap-env:/data# env
+KUBERNETES_SERVICE_PORT_HTTPS=443
+KUBERNETES_SERVICE_PORT=443
+HOSTNAME=redis-pod-configmap-env
+REDIS_DOWNLOAD_SHA=dc2bdcf81c620e9f09cfd12e85d3bc631c897b2db7a55218fd8a65eaa37f86dd
+PWD=/data
+HOME=/root
+KUBERNETES_PORT_443_TCP=tcp://10.96.0.1:443
+REDIS_VERSION=6.0.9
+GOSU_VERSION=1.12
+TERM=xterm
+REDIS_DOWNLOAD_URL=http://download.redis.io/releases/redis-6.0.9.tar.gz
+SHLVL=1
+KUBERNETES_PORT_443_TCP_PROTO=tcp
+KUBERNETES_PORT_443_TCP_ADDR=10.96.0.1
+KUBERNETES_SERVICE_HOST=10.96.0.1
+KUBERNETES_PORT=tcp://10.96.0.1:443
+KUBERNETES_PORT_443_TCP_PORT=443
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+FILE_2=file.b
+FILE_1=file.a
+_=/usr/bin/env
+root@redis-pod-configmap-env:/data# exit
+exit
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl create -f configmap.yaml
+configmap/game-demo created
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get cm  NAME                  DATA   AGE
+game-demo             4      12s
+kube-root-ca.crt      1      13d
+nginx-configmap-vol   2      52m
+redis-configmap-env   2      19m
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl describe game-demo 
+error: the server doesn't have a resource type "game-demo"
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl describe cm game-demo 
+Name:         game-demo
+Namespace:    default
+Labels:       <none>
+Annotations:  <none>
+
+Data
+====
+game.properties:
+----
+enemy.types=aliens,monsters
+player.maximum-lives=5
+
+player_initial_lives:
+----
+3
+ui_properties_file_name:
+----
+user-interface.properties
+user-interface.properties:
+----
+color.good=purple
+color.bad=yellow
+allow.textmode=true
+
+Events:  <none>
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl create -f gamepod.yaml 
+pod/configmap-demo-pod created
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get pods
+NAME                      READY   STATUS    RESTARTS   AGE
+configmap-demo-pod        1/1     Running   0          7s
+envar-demo                1/1     Running   0          28m
+nginx-pod-configmap-vol   1/1     Running   0          46m
+redis-pod-configmap-env   1/1     Running   0          18m
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl exec -it configmap-demo-pod 
+error: you must specify at least one command for the container
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl exec -it configmap-demo-pod  -- bash
+root@configmap-demo-pod:/# env
+KUBERNETES_SERVICE_PORT_HTTPS=443
+KUBERNETES_SERVICE_PORT=443
+HOSTNAME=configmap-demo-pod
+UI_PROPERTIES_FILE_NAME=user-interface.properties
+PWD=/
+PKG_RELEASE=1~buster
+HOME=/root
+KUBERNETES_PORT_443_TCP=tcp://10.96.0.1:443
+PLAYER_INITIAL_LIVES=3
+NJS_VERSION=0.5.0
+TERM=xterm
+SHLVL=1
+KUBERNETES_PORT_443_TCP_PROTO=tcp
+KUBERNETES_PORT_443_TCP_ADDR=10.96.0.1
+KUBERNETES_SERVICE_HOST=10.96.0.1
+KUBERNETES_PORT=tcp://10.96.0.1:443
+KUBERNETES_PORT_443_TCP_PORT=443
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+NGINX_VERSION=1.19.6
+_=/usr/bin/env
+root@configmap-demo-pod:/# ls -la
+total 92
+drwxr-xr-x   1 root root 4096 Jan  9 14:50 .
+drwxr-xr-x   1 root root 4096 Jan  9 14:50 ..
+-rwxr-xr-x   1 root root    0 Jan  9 14:50 .dockerenv
+drwxr-xr-x   2 root root 4096 Dec  9 23:22 bin
+drwxr-xr-x   2 root root 4096 Nov 22 12:37 boot
+drwxrwxrwx   3 root root 4096 Jan  9 14:50 config
+drwxr-xr-x   5 root root  360 Jan  9 14:50 dev
+drwxr-xr-x   1 root root 4096 Dec 15 20:20 docker-entrypoint.d
+-rwxrwxr-x   1 root root 1202 Dec 15 20:20 docker-entrypoint.sh
+drwxr-xr-x   1 root root 4096 Jan  9 14:50 etc
+drwxr-xr-x   2 root root 4096 Nov 22 12:37 home
+drwxr-xr-x   1 root root 4096 Dec 15 20:20 lib
+drwxr-xr-x   2 root root 4096 Dec  9 23:22 lib64
+drwxr-xr-x   2 root root 4096 Dec  9 23:22 media
+drwxr-xr-x   2 root root 4096 Dec  9 23:22 mnt
+drwxr-xr-x   2 root root 4096 Dec  9 23:22 opt
+dr-xr-xr-x 204 root root    0 Jan  9 14:50 proc
+drwx------   2 root root 4096 Dec  9 23:22 root
+drwxr-xr-x   1 root root 4096 Jan  9 14:50 run
+drwxr-xr-x   2 root root 4096 Dec  9 23:22 sbin
+drwxr-xr-x   2 root root 4096 Dec  9 23:22 srv
+dr-xr-xr-x  13 root root    0 Dec 31 19:40 sys
+drwxrwxrwt   1 root root 4096 Dec 15 20:20 tmp
+drwxr-xr-x   1 root root 4096 Dec  9 23:22 usr
+drwxr-xr-x   1 root root 4096 Dec  9 23:22 var
+root@configmap-demo-pod:/# env           
+KUBERNETES_SERVICE_PORT_HTTPS=443
+KUBERNETES_SERVICE_PORT=443
+HOSTNAME=configmap-demo-pod
+UI_PROPERTIES_FILE_NAME=user-interface.properties
+PWD=/
+PKG_RELEASE=1~buster
+HOME=/root
+KUBERNETES_PORT_443_TCP=tcp://10.96.0.1:443
+PLAYER_INITIAL_LIVES=3
+NJS_VERSION=0.5.0
+TERM=xterm
+SHLVL=1
+KUBERNETES_PORT_443_TCP_PROTO=tcp
+KUBERNETES_PORT_443_TCP_ADDR=10.96.0.1
+KUBERNETES_SERVICE_HOST=10.96.0.1
+KUBERNETES_PORT=tcp://10.96.0.1:443
+KUBERNETES_PORT_443_TCP_PORT=443
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+NGINX_VERSION=1.19.6
+_=/usr/bin/env
+root@configmap-demo-pod:/# ls /config
+game.properties  user-interface.properties
+root@configmap-demo-pod:/# cd config/ 
+root@configmap-demo-pod:/config# cat game.properties 
+enemy.types=aliens,monsters
+player.maximum-lives=5
+root@configmap-demo-pod:/config# cat user-interface.properties 
+color.good=purple
+color.bad=yellow
+allow.textmode=true
+root@configmap-demo-pod:/config# 
