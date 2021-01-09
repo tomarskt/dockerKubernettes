@@ -1,0 +1,227 @@
+root@configmap-demo-pod:/config# kubectl get pods
+bash: kubectl: command not found
+root@configmap-demo-pod:/config# exit
+exit
+command terminated with exit code 127
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl exec -it configmap-demo-pod  
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % cd secrets 
+(base) stomar-n@Sudhirs-MacBook-Pro-3 secrets % echo -n 'admin' > username.txt
+(base) stomar-n@Sudhirs-MacBook-Pro-3 secrets % echo -n 'pa$$w00rd' > password.txt
+(base) stomar-n@Sudhirs-MacBook-Pro-3 secrets % kubectl create secret generic nginx-secret-vol --from-file=username.txt --from-file=password.txt
+secret/nginx-secret-vol created
+(base) stomar-n@Sudhirs-MacBook-Pro-3 secrets % kubects get secrets
+zsh: command not found: kubects
+(base) stomar-n@Sudhirs-MacBook-Pro-3 secrets % kubectl get secrets
+NAME                  TYPE                                  DATA   AGE
+default-token-ph5nf   kubernetes.io/service-account-token   3      13d
+nginx-secret-vol      Opaque                                2      62s
+(base) stomar-n@Sudhirs-MacBook-Pro-3 secrets % kubectl describe secret nginx-secret-vol 
+Name:         nginx-secret-vol
+Namespace:    default
+Labels:       <none>
+Annotations:  <none>
+
+Type:  Opaque
+
+Data
+====
+password.txt:  9 bytes
+username.txt:  5 bytes
+(base) stomar-n@Sudhirs-MacBook-Pro-3 secrets % kubectl get secret nginx-secret-vol -o yaml
+apiVersion: v1
+data:
+  password.txt: cGEkJHcwMHJk
+  username.txt: YWRtaW4=
+kind: Secret
+metadata:
+  creationTimestamp: "2021-01-09T15:27:04Z"
+  managedFields:
+  - apiVersion: v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:data:
+        .: {}
+        f:password.txt: {}
+        f:username.txt: {}
+      f:type: {}
+    manager: kubectl-create
+    operation: Update
+    time: "2021-01-09T15:27:04Z"
+  name: nginx-secret-vol
+  namespace: default
+  resourceVersion: "23388"
+  uid: 83aa668e-6403-4f21-a200-95bc4ffc0b53
+type: Opaque
+(base) stomar-n@Sudhirs-MacBook-Pro-3 secrets % cd ..
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl create -f secretpod.yaml 
+pod/nginx-pod-secret-vol created
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubect get pods
+zsh: command not found: kubect
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get pods
+NAME                      READY   STATUS    RESTARTS   AGE
+configmap-demo-pod        1/1     Running   0          41m
+envar-demo                1/1     Running   0          69m
+nginx-pod-configmap-vol   1/1     Running   0          87m
+nginx-pod-secret-vol      1/1     Running   0          13s
+redis-pod-configmap-env   1/1     Running   0          59m
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl describe pod nginx-pod-secret-vol
+Name:         nginx-pod-secret-vol
+Namespace:    default
+Priority:     0
+Node:         minikube/192.168.49.2
+Start Time:   Sat, 09 Jan 2021 07:31:41 -0800
+Labels:       <none>
+Annotations:  <none>
+Status:       Running
+IP:           172.17.0.9
+IPs:
+  IP:  172.17.0.9
+Containers:
+  nginx-container:
+    Container ID:   docker://c6441ac4a65b37973186c3edfb43b54b35790aec039f2920ac6ef7153f59075a
+    Image:          nginx
+    Image ID:       docker-pullable://nginx@sha256:4cf620a5c81390ee209398ecc18e5fb9dd0f5155cd82adcbae532fec94006fb9
+    Port:           <none>
+    Host Port:      <none>
+    State:          Running
+      Started:      Sat, 09 Jan 2021 07:31:44 -0800
+    Ready:          True
+    Restart Count:  0
+    Environment:    <none>
+    Mounts:
+      /etc/confidential from test-vol (ro)
+      /var/run/secrets/kubernetes.io/serviceaccount from default-token-ph5nf (ro)
+Conditions:
+  Type              Status
+  Initialized       True 
+  Ready             True 
+  ContainersReady   True 
+  PodScheduled      True 
+Volumes:
+  test-vol:
+    Type:        Secret (a volume populated by a Secret)
+    SecretName:  nginx-secret-vol
+    Optional:    false
+  default-token-ph5nf:
+    Type:        Secret (a volume populated by a Secret)
+    SecretName:  default-token-ph5nf
+    Optional:    false
+QoS Class:       BestEffort
+Node-Selectors:  <none>
+Tolerations:     node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                 node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type    Reason     Age   From               Message
+  ----    ------     ----  ----               -------
+  Normal  Scheduled  30s   default-scheduler  Successfully assigned default/nginx-pod-secret-vol to minikube
+  Normal  Pulling    29s   kubelet            Pulling image "nginx"
+  Normal  Pulled     27s   kubelet            Successfully pulled image "nginx" in 1.6284888s
+  Normal  Created    27s   kubelet            Created container nginx-container
+  Normal  Started    27s   kubelet            Started container nginx-container
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl exec -it nginx-pod-secret-vol   -- bash
+root@nginx-pod-secret-vol:/# cd /etc/confidential/
+root@nginx-pod-secret-vol:/etc/confidential# ls -la
+total 8
+drwxrwxrwt 3 root root  120 Jan  9 15:31 .
+drwxr-xr-x 1 root root 4096 Jan  9 15:31 ..
+drwxr-xr-x 2 root root   80 Jan  9 15:31 ..2021_01_09_15_31_41.837253976
+lrwxrwxrwx 1 root root   31 Jan  9 15:31 ..data -> ..2021_01_09_15_31_41.837253976
+lrwxrwxrwx 1 root root   19 Jan  9 15:31 password.txt -> ..data/password.txt
+lrwxrwxrwx 1 root root   19 Jan  9 15:31 username.txt -> ..data/username.txt
+root@nginx-pod-secret-vol:/etc/confidential# cat password.txt 
+pa$$w00rdroot@nginx-pod-secret-vol:/etc/confidential# cat username.txt 
+adminroot@nginx-pod-secret-vol:/etc/confidential# exit
+exit
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl -f secrets.yaml 
+Error: unknown shorthand flag: 'f' in -f
+See 'kubectl --help' for usage.
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl create -f secrets.yaml
+secret/redis-secret-env created
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl create -f secretsenv.yaml
+pod/redis-pod-secret-env created
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl exec -it redis-pod-secret-env 
+error: you must specify at least one command for the container
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl exec -it redis-pod-secret-env-- bash
+kubectl exec [POD] [COMMAND] is DEPRECATED and will be removed in a future version. Use kubectl exec [POD] -- [COMMAND] instead.
+Error from server (NotFound): pods "redis-pod-secret-env--" not found
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl exec -it redis-pod-secret-env -- bash
+root@redis-pod-secret-env:/data# ls -la
+total 8
+drwxr-xr-x 2 redis redis 4096 Dec 11 16:24 .
+drwxr-xr-x 1 root  root  4096 Jan  9 15:38 ..
+root@redis-pod-secret-env:/data# env
+KUBERNETES_SERVICE_PORT_HTTPS=443
+KUBERNETES_SERVICE_PORT=443
+HOSTNAME=redis-pod-secret-env
+REDIS_DOWNLOAD_SHA=dc2bdcf81c620e9f09cfd12e85d3bc631c897b2db7a55218fd8a65eaa37f86dd
+PWD=/data
+HOME=/root
+KUBERNETES_PORT_443_TCP=tcp://10.96.0.1:443
+REDIS_VERSION=6.0.9
+SECRET_USERNAME=admin
+GOSU_VERSION=1.12
+TERM=xterm
+REDIS_DOWNLOAD_URL=http://download.redis.io/releases/redis-6.0.9.tar.gz
+SHLVL=1
+KUBERNETES_PORT_443_TCP_PROTO=tcp
+KUBERNETES_PORT_443_TCP_ADDR=10.96.0.1
+KUBERNETES_SERVICE_HOST=10.96.0.1
+KUBERNETES_PORT=tcp://10.96.0.1:443
+KUBERNETES_PORT_443_TCP_PORT=443
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+SECRET_PASSWORD=pa$$w00rd
+_=/usr/bin/env
+root@redis-pod-secret-env:/data# exit
+exit
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl describe pod redis-pod-secret-env
+Name:         redis-pod-secret-env
+Namespace:    default
+Priority:     0
+Node:         minikube/192.168.49.2
+Start Time:   Sat, 09 Jan 2021 07:38:15 -0800
+Labels:       <none>
+Annotations:  <none>
+Status:       Running
+IP:           172.17.0.10
+IPs:
+  IP:  172.17.0.10
+Containers:
+  redis-container:
+    Container ID:   docker://de50dc3480ebc367278fddb124c5b0005707b68968cd8ac6151ad6dc0445c387
+    Image:          redis
+    Image ID:       docker-pullable://redis@sha256:0f724af268d0d3f5fb1d6b33fc22127ba5cbca2d58523b286ed3122db0dc5381
+    Port:           <none>
+    Host Port:      <none>
+    State:          Running
+      Started:      Sat, 09 Jan 2021 07:38:18 -0800
+    Ready:          True
+    Restart Count:  0
+    Environment:
+      SECRET_USERNAME:  <set to the key 'username' in secret 'redis-secret-env'>  Optional: false
+      SECRET_PASSWORD:  <set to the key 'password' in secret 'redis-secret-env'>  Optional: false
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from default-token-ph5nf (ro)
+Conditions:
+  Type              Status
+  Initialized       True 
+  Ready             True 
+  ContainersReady   True 
+  PodScheduled      True 
+Volumes:
+  default-token-ph5nf:
+    Type:        Secret (a volume populated by a Secret)
+    SecretName:  default-token-ph5nf
+    Optional:    false
+QoS Class:       BestEffort
+Node-Selectors:  <none>
+Tolerations:     node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                 node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type    Reason     Age    From               Message
+  ----    ------     ----   ----               -------
+  Normal  Scheduled  3m14s  default-scheduler  Successfully assigned default/redis-pod-secret-env to minikube
+  Normal  Pulling    3m13s  kubelet            Pulling image "redis"
+  Normal  Pulled     3m11s  kubelet            Successfully pulled image "redis" in 1.4384941s
+  Normal  Created    3m11s  kubelet            Created container redis-container
+  Normal  Started    3m11s  kubelet            Started container redis-container
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % 
