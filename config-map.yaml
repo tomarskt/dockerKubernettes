@@ -1,0 +1,24 @@
+apiVersion: v1
+data:
+  file-1.txt: |
+    config file 1
+  file-2.txt: |
+    config file 2
+kind: ConfigMap
+metadata:
+  creationTimestamp: "2021-01-09T13:55:11Z"
+  managedFields:
+  - apiVersion: v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:data:
+        .: {}
+        f:file-1.txt: {}
+        f:file-2.txt: {}
+    manager: kubectl-create
+    operation: Update
+    time: "2021-01-09T13:55:11Z"
+  name: nginx-configmap-vol
+  namespace: default
+  resourceVersion: "19470"
+  uid: 2c332ba5-dda9-4b4e-bc60-ebeec82f2c36
