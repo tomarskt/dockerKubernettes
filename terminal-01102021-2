@@ -1,0 +1,1721 @@
+root@configmap-demo-pod:/config# kubectl get pods
+bash: kubectl: command not found
+root@configmap-demo-pod:/config# exit
+exit
+command terminated with exit code 127
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl exec -it configmap-demo-pod  
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % cd secrets 
+(base) stomar-n@Sudhirs-MacBook-Pro-3 secrets % echo -n 'admin' > username.txt
+(base) stomar-n@Sudhirs-MacBook-Pro-3 secrets % echo -n 'pa$$w00rd' > password.txt
+(base) stomar-n@Sudhirs-MacBook-Pro-3 secrets % kubectl create secret generic nginx-secret-vol --from-file=username.txt --from-file=password.txt
+secret/nginx-secret-vol created
+(base) stomar-n@Sudhirs-MacBook-Pro-3 secrets % kubects get secrets
+zsh: command not found: kubects
+(base) stomar-n@Sudhirs-MacBook-Pro-3 secrets % kubectl get secrets
+NAME                  TYPE                                  DATA   AGE
+default-token-ph5nf   kubernetes.io/service-account-token   3      13d
+nginx-secret-vol      Opaque                                2      62s
+(base) stomar-n@Sudhirs-MacBook-Pro-3 secrets % kubectl describe secret nginx-secret-vol 
+Name:         nginx-secret-vol
+Namespace:    default
+Labels:       <none>
+Annotations:  <none>
+
+Type:  Opaque
+
+Data
+====
+password.txt:  9 bytes
+username.txt:  5 bytes
+(base) stomar-n@Sudhirs-MacBook-Pro-3 secrets % kubectl get secret nginx-secret-vol -o yaml
+apiVersion: v1
+data:
+  password.txt: cGEkJHcwMHJk
+  username.txt: YWRtaW4=
+kind: Secret
+metadata:
+  creationTimestamp: "2021-01-09T15:27:04Z"
+  managedFields:
+  - apiVersion: v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:data:
+        .: {}
+        f:password.txt: {}
+        f:username.txt: {}
+      f:type: {}
+    manager: kubectl-create
+    operation: Update
+    time: "2021-01-09T15:27:04Z"
+  name: nginx-secret-vol
+  namespace: default
+  resourceVersion: "23388"
+  uid: 83aa668e-6403-4f21-a200-95bc4ffc0b53
+type: Opaque
+(base) stomar-n@Sudhirs-MacBook-Pro-3 secrets % cd ..
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl create -f secretpod.yaml 
+pod/nginx-pod-secret-vol created
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubect get pods
+zsh: command not found: kubect
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get pods
+NAME                      READY   STATUS    RESTARTS   AGE
+configmap-demo-pod        1/1     Running   0          41m
+envar-demo                1/1     Running   0          69m
+nginx-pod-configmap-vol   1/1     Running   0          87m
+nginx-pod-secret-vol      1/1     Running   0          13s
+redis-pod-configmap-env   1/1     Running   0          59m
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl describe pod nginx-pod-secret-vol
+Name:         nginx-pod-secret-vol
+Namespace:    default
+Priority:     0
+Node:         minikube/192.168.49.2
+Start Time:   Sat, 09 Jan 2021 07:31:41 -0800
+Labels:       <none>
+Annotations:  <none>
+Status:       Running
+IP:           172.17.0.9
+IPs:
+  IP:  172.17.0.9
+Containers:
+  nginx-container:
+    Container ID:   docker://c6441ac4a65b37973186c3edfb43b54b35790aec039f2920ac6ef7153f59075a
+    Image:          nginx
+    Image ID:       docker-pullable://nginx@sha256:4cf620a5c81390ee209398ecc18e5fb9dd0f5155cd82adcbae532fec94006fb9
+    Port:           <none>
+    Host Port:      <none>
+    State:          Running
+      Started:      Sat, 09 Jan 2021 07:31:44 -0800
+    Ready:          True
+    Restart Count:  0
+    Environment:    <none>
+    Mounts:
+      /etc/confidential from test-vol (ro)
+      /var/run/secrets/kubernetes.io/serviceaccount from default-token-ph5nf (ro)
+Conditions:
+  Type              Status
+  Initialized       True 
+  Ready             True 
+  ContainersReady   True 
+  PodScheduled      True 
+Volumes:
+  test-vol:
+    Type:        Secret (a volume populated by a Secret)
+    SecretName:  nginx-secret-vol
+    Optional:    false
+  default-token-ph5nf:
+    Type:        Secret (a volume populated by a Secret)
+    SecretName:  default-token-ph5nf
+    Optional:    false
+QoS Class:       BestEffort
+Node-Selectors:  <none>
+Tolerations:     node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                 node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type    Reason     Age   From               Message
+  ----    ------     ----  ----               -------
+  Normal  Scheduled  30s   default-scheduler  Successfully assigned default/nginx-pod-secret-vol to minikube
+  Normal  Pulling    29s   kubelet            Pulling image "nginx"
+  Normal  Pulled     27s   kubelet            Successfully pulled image "nginx" in 1.6284888s
+  Normal  Created    27s   kubelet            Created container nginx-container
+  Normal  Started    27s   kubelet            Started container nginx-container
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl exec -it nginx-pod-secret-vol   -- bash
+root@nginx-pod-secret-vol:/# cd /etc/confidential/
+root@nginx-pod-secret-vol:/etc/confidential# ls -la
+total 8
+drwxrwxrwt 3 root root  120 Jan  9 15:31 .
+drwxr-xr-x 1 root root 4096 Jan  9 15:31 ..
+drwxr-xr-x 2 root root   80 Jan  9 15:31 ..2021_01_09_15_31_41.837253976
+lrwxrwxrwx 1 root root   31 Jan  9 15:31 ..data -> ..2021_01_09_15_31_41.837253976
+lrwxrwxrwx 1 root root   19 Jan  9 15:31 password.txt -> ..data/password.txt
+lrwxrwxrwx 1 root root   19 Jan  9 15:31 username.txt -> ..data/username.txt
+root@nginx-pod-secret-vol:/etc/confidential# cat password.txt 
+pa$$w00rdroot@nginx-pod-secret-vol:/etc/confidential# cat username.txt 
+adminroot@nginx-pod-secret-vol:/etc/confidential# exit
+exit
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl -f secrets.yaml 
+Error: unknown shorthand flag: 'f' in -f
+See 'kubectl --help' for usage.
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl create -f secrets.yaml
+secret/redis-secret-env created
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl create -f secretsenv.yaml
+pod/redis-pod-secret-env created
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl exec -it redis-pod-secret-env 
+error: you must specify at least one command for the container
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl exec -it redis-pod-secret-env-- bash
+kubectl exec [POD] [COMMAND] is DEPRECATED and will be removed in a future version. Use kubectl exec [POD] -- [COMMAND] instead.
+Error from server (NotFound): pods "redis-pod-secret-env--" not found
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl exec -it redis-pod-secret-env -- bash
+root@redis-pod-secret-env:/data# ls -la
+total 8
+drwxr-xr-x 2 redis redis 4096 Dec 11 16:24 .
+drwxr-xr-x 1 root  root  4096 Jan  9 15:38 ..
+root@redis-pod-secret-env:/data# env
+KUBERNETES_SERVICE_PORT_HTTPS=443
+KUBERNETES_SERVICE_PORT=443
+HOSTNAME=redis-pod-secret-env
+REDIS_DOWNLOAD_SHA=dc2bdcf81c620e9f09cfd12e85d3bc631c897b2db7a55218fd8a65eaa37f86dd
+PWD=/data
+HOME=/root
+KUBERNETES_PORT_443_TCP=tcp://10.96.0.1:443
+REDIS_VERSION=6.0.9
+SECRET_USERNAME=admin
+GOSU_VERSION=1.12
+TERM=xterm
+REDIS_DOWNLOAD_URL=http://download.redis.io/releases/redis-6.0.9.tar.gz
+SHLVL=1
+KUBERNETES_PORT_443_TCP_PROTO=tcp
+KUBERNETES_PORT_443_TCP_ADDR=10.96.0.1
+KUBERNETES_SERVICE_HOST=10.96.0.1
+KUBERNETES_PORT=tcp://10.96.0.1:443
+KUBERNETES_PORT_443_TCP_PORT=443
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+SECRET_PASSWORD=pa$$w00rd
+_=/usr/bin/env
+root@redis-pod-secret-env:/data# exit
+exit
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl describe pod redis-pod-secret-env
+Name:         redis-pod-secret-env
+Namespace:    default
+Priority:     0
+Node:         minikube/192.168.49.2
+Start Time:   Sat, 09 Jan 2021 07:38:15 -0800
+Labels:       <none>
+Annotations:  <none>
+Status:       Running
+IP:           172.17.0.10
+IPs:
+  IP:  172.17.0.10
+Containers:
+  redis-container:
+    Container ID:   docker://de50dc3480ebc367278fddb124c5b0005707b68968cd8ac6151ad6dc0445c387
+    Image:          redis
+    Image ID:       docker-pullable://redis@sha256:0f724af268d0d3f5fb1d6b33fc22127ba5cbca2d58523b286ed3122db0dc5381
+    Port:           <none>
+    Host Port:      <none>
+    State:          Running
+      Started:      Sat, 09 Jan 2021 07:38:18 -0800
+    Ready:          True
+    Restart Count:  0
+    Environment:
+      SECRET_USERNAME:  <set to the key 'username' in secret 'redis-secret-env'>  Optional: false
+      SECRET_PASSWORD:  <set to the key 'password' in secret 'redis-secret-env'>  Optional: false
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from default-token-ph5nf (ro)
+Conditions:
+  Type              Status
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl create -f rc.yaml
+error: no objects passed to create
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl create -f rc.yaml
+replicationcontroller/nginx-rc created
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get rc
+NAME       DESIRED   CURRENT   READY   AGE
+nginx-rc   3         3         3       103s
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl create -f rc-2.yaml
+Error from server (BadRequest): error when creating "rc-2.yaml": pod in version "v1" cannot be handled as a Pod: no kind "pod" is registered for version "v1" in scheme "k8s.io/kubernetes/pkg/api/legacyscheme/scheme.go:30"
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl create -f rc-2.yaml
+error: error validating "rc-2.yaml": error validating data: ValidationError(Pod.spec): unknown field "image" in io.k8s.api.core.v1.PodSpec; if you choose to ignore these errors, turn validation off with --validate=false
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl create -f rc-2.yaml
+pod/pod1 created
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get pods
+NAME                      READY   STATUS    RESTARTS   AGE
+configmap-demo-pod        1/1     Running   0          22h
+envar-demo                1/1     Running   0          23h
+nginx-pod-configmap-vol   1/1     Running   0          23h
+nginx-pod-secret-vol      1/1     Running   0          22h
+nginx-rc-rh4wv            1/1     Running   0          3m20s
+nginx-rc-zk6xd            1/1     Running   0          3m20s
+nginx-rc-zv5b9            1/1     Running   0          3m20s
+redis-pod-configmap-env   1/1     Running   0          23h
+redis-pod-secret-env      1/1     Running   0          22h
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get pods -o wide
+NAME                      READY   STATUS    RESTARTS   AGE     IP            NODE       NOMINATED NODE   READINESS GATES
+configmap-demo-pod        1/1     Running   0          22h     172.17.0.8    minikube   <none>           <none>
+envar-demo                1/1     Running   0          23h     172.17.0.6    minikube   <none>           <none>
+nginx-pod-configmap-vol   1/1     Running   0          23h     172.17.0.5    minikube   <none>           <none>
+nginx-pod-secret-vol      1/1     Running   0          22h     172.17.0.9    minikube   <none>           <none>
+nginx-rc-rh4wv            1/1     Running   0          3m44s   172.17.0.13   minikube   <none>           <none>
+nginx-rc-zk6xd            1/1     Running   0          3m44s   172.17.0.11   minikube   <none>           <none>
+nginx-rc-zv5b9            1/1     Running   0          3m44s   172.17.0.12   minikube   <none>           <none>
+redis-pod-configmap-env   1/1     Running   0          23h     172.17.0.7    minikube   <none>           <none>
+redis-pod-secret-env      1/1     Running   0          22h     172.17.0.10   minikube   <none>           <none>
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl scale rc nginx-rc --replicas=10
+replicationcontroller/nginx-rc scaled
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get pods -o wide               
+NAME                      READY   STATUS              RESTARTS   AGE    IP            NODE       NOMINATED NODE   READINESS GATES
+configmap-demo-pod        1/1     Running             0          22h    172.17.0.8    minikube   <none>           <none>
+envar-demo                1/1     Running             0          23h    172.17.0.6    minikube   <none>           <none>
+nginx-pod-configmap-vol   1/1     Running             0          23h    172.17.0.5    minikube   <none>           <none>
+nginx-pod-secret-vol      1/1     Running             0          22h    172.17.0.9    minikube   <none>           <none>
+nginx-rc-ch6vm            0/1     ContainerCreating   0          5s     <none>        minikube   <none>           <none>
+nginx-rc-fk6bl            0/1     ContainerCreating   0          5s     <none>        minikube   <none>           <none>
+nginx-rc-g5msd            1/1     Running             0          5s     172.17.0.15   minikube   <none>           <none>
+nginx-rc-jsfzn            0/1     ContainerCreating   0          5s     <none>        minikube   <none>           <none>
+nginx-rc-k27sb            0/1     ContainerCreating   0          5s     <none>        minikube   <none>           <none>
+nginx-rc-lljjx            0/1     ContainerCreating   0          5s     <none>        minikube   <none>           <none>
+nginx-rc-mksw5            0/1     ContainerCreating   0          5s     <none>        minikube   <none>           <none>
+nginx-rc-rh4wv            1/1     Running             0          7m8s   172.17.0.13   minikube   <none>           <none>
+nginx-rc-zk6xd            1/1     Running             0          7m8s   172.17.0.11   minikube   <none>           <none>
+nginx-rc-zv5b9            1/1     Running             0          7m8s   172.17.0.12   minikube   <none>           <none>
+redis-pod-configmap-env   1/1     Running             0          23h    172.17.0.7    minikube   <none>           <none>
+redis-pod-secret-env      1/1     Running             0          22h    172.17.0.10   minikube   <none>           <none>
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl scale rc nginx-rc --replicas=2 
+replicationcontroller/nginx-rc scaled
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get pods -o wide              
+NAME                      READY   STATUS        RESTARTS   AGE     IP            NODE       NOMINATED NODE   READINESS GATES
+configmap-demo-pod        1/1     Running       0          22h     172.17.0.8    minikube   <none>           <none>
+envar-demo                1/1     Running       0          23h     172.17.0.6    minikube   <none>           <none>
+nginx-pod-configmap-vol   1/1     Running       0          23h     172.17.0.5    minikube   <none>           <none>
+nginx-pod-secret-vol      1/1     Running       0          22h     172.17.0.9    minikube   <none>           <none>
+nginx-rc-ch6vm            0/1     Terminating   0          30s     172.17.0.19   minikube   <none>           <none>
+nginx-rc-fk6bl            0/1     Terminating   0          30s     172.17.0.16   minikube   <none>           <none>
+nginx-rc-g5msd            0/1     Terminating   0          30s     172.17.0.15   minikube   <none>           <none>
+nginx-rc-jsfzn            1/1     Terminating   0          30s     172.17.0.14   minikube   <none>           <none>
+nginx-rc-k27sb            0/1     Terminating   0          30s     172.17.0.18   minikube   <none>           <none>
+nginx-rc-lljjx            0/1     Terminating   0          30s     172.17.0.17   minikube   <none>           <none>
+nginx-rc-mksw5            0/1     Terminating   0          30s     172.17.0.20   minikube   <none>           <none>
+nginx-rc-rh4wv            0/1     Terminating   0          7m33s   172.17.0.13   minikube   <none>           <none>
+nginx-rc-zk6xd            1/1     Running       0          7m33s   172.17.0.11   minikube   <none>           <none>
+nginx-rc-zv5b9            1/1     Running       0          7m33s   172.17.0.12   minikube   <none>           <none>
+redis-pod-configmap-env   1/1     Running       0          23h     172.17.0.7    minikube   <none>           <none>
+redis-pod-secret-env      1/1     Running       0          22h     172.17.0.10   minikube   <none>           <none>
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get pods -o wide
+NAME                      READY   STATUS    RESTARTS   AGE     IP            NODE       NOMINATED NODE   READINESS GATES
+configmap-demo-pod        1/1     Running   0          22h     172.17.0.8    minikube   <none>           <none>
+envar-demo                1/1     Running   0          23h     172.17.0.6    minikube   <none>           <none>
+nginx-pod-configmap-vol   1/1     Running   0          23h     172.17.0.5    minikube   <none>           <none>
+nginx-pod-secret-vol      1/1     Running   0          22h     172.17.0.9    minikube   <none>           <none>
+nginx-rc-zk6xd            1/1     Running   0          9m28s   172.17.0.11   minikube   <none>           <none>
+nginx-rc-zv5b9            1/1     Running   0          9m28s   172.17.0.12   minikube   <none>           <none>
+redis-pod-configmap-env   1/1     Running   0          23h     172.17.0.7    minikube   <none>           <none>
+redis-pod-secret-env      1/1     Running   0          22h     172.17.0.10   minikube   <none>           <none>
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get rc -o wide
+NAME       DESIRED   CURRENT   READY   AGE   CONTAINERS        IMAGES   SELECTOR
+nginx-rc   2         2         2       13m   nginx-container   nginx    app=nginx-app
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get pods -o wide --watch
+NAME                      READY   STATUS    RESTARTS   AGE   IP            NODE       NOMINATED NODE   READINESS GATES
+configmap-demo-pod        1/1     Running   0          23h   172.17.0.8    minikube   <none>           <none>
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get all
+NAME                          READY   STATUS    RESTARTS   AGE
+pod/configmap-demo-pod        1/1     Running   0          24h
+pod/envar-demo                1/1     Running   0          24h
+pod/nginx-pod-configmap-vol   1/1     Running   0          24h
+pod/nginx-pod-secret-vol      1/1     Running   0          23h
+pod/nginx-rc-zk6xd            1/1     Running   0          79m
+pod/nginx-rc-zv5b9            1/1     Running   0          79m
+pod/nginx-rs-8g9vm            1/1     Running   0          44m
+pod/nginx-rs-m7rz8            1/1     Running   0          44m
+pod/nginx-rs-npx4v            1/1     Running   0          44m
+pod/redis-pod-configmap-env   1/1     Running   0          24h
+pod/redis-pod-secret-env      1/1     Running   0          23h
+
+NAME                             DESIRED   CURRENT   READY   AGE
+replicationcontroller/nginx-rc   2         2         2       79m
+
+NAME                 TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+service/kubernetes   ClusterIP   10.96.0.1    <none>        443/TCP   14d
+
+NAME                       DESIRED   CURRENT   READY   AGE
+replicaset.apps/nginx-rs   3         3         3       44m
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl create -f blueegreen-1.yaml 
+deployment.apps/nginx-deploy created
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get deploy
+NAME           READY   UP-TO-DATE   AVAILABLE   AGE
+nginx-deploy   3/3     3            3           20m
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get deploy -o wide
+NAME           READY   UP-TO-DATE   AVAILABLE   AGE   CONTAINERS        IMAGES        SELECTOR
+nginx-deploy   3/3     3            3           20m   nginx-container   nginx:1.7.9   app=nginx-app
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get rs            
+NAME                      DESIRED   CURRENT   READY   AGE
+nginx-deploy-5878ddd45b   3         3         3       21m
+nginx-rs                  3         3         3       65m
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get pods
+NAME                            READY   STATUS    RESTARTS   AGE
+configmap-demo-pod              1/1     Running   0          24h
+envar-demo                      1/1     Running   0          24h
+nginx-deploy-5878ddd45b-hvwqm   1/1     Running   0          21m
+nginx-deploy-5878ddd45b-smzqb   1/1     Running   0          21m
+nginx-deploy-5878ddd45b-zv62j   1/1     Running   0          21m
+nginx-pod-configmap-vol         1/1     Running   0          25h
+nginx-pod-secret-vol            1/1     Running   0          23h
+nginx-rc-zk6xd                  1/1     Running   0          101m
+nginx-rc-zv5b9                  1/1     Running   0          101m
+nginx-rs-8g9vm                  1/1     Running   0          66m
+nginx-rs-m7rz8                  1/1     Running   0          66m
+nginx-rs-npx4v                  1/1     Running   0          66m
+redis-pod-configmap-env         1/1     Running   0          24h
+redis-pod-secret-env            1/1     Running   0          23h
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl describe deployment
+Name:                   nginx-deploy
+Namespace:              default
+CreationTimestamp:      Sun, 10 Jan 2021 06:56:17 -0800
+Labels:                 app=nginx-app
+Annotations:            deployment.kubernetes.io/revision: 1
+Selector:               app=nginx-app
+Replicas:               3 desired | 3 updated | 3 total | 3 available | 0 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:  app=nginx-app
+  Containers:
+   nginx-container:
+    Image:        nginx:1.7.9
+    Port:         80/TCP
+    Host Port:    0/TCP
+    Environment:  <none>
+    Mounts:       <none>
+  Volumes:        <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Available      True    MinimumReplicasAvailable
+  Progressing    True    NewReplicaSetAvailable
+OldReplicaSets:  <none>
+NewReplicaSet:   nginx-deploy-5878ddd45b (3/3 replicas created)
+Events:
+  Type    Reason             Age   From                   Message
+  ----    ------             ----  ----                   -------
+  Normal  ScalingReplicaSet  21m   deployment-controller  Scaled up replica set nginx-deploy-5878ddd45b to 3
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl set image deploy nginx-deploy nginx-container=nginx:1.91 --record
+deployment.apps/nginx-deploy image updated
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get all
+NAME                                READY   STATUS         RESTARTS   AGE
+pod/configmap-demo-pod              1/1     Running        0          24h
+pod/envar-demo                      1/1     Running        0          24h
+pod/nginx-deploy-5878ddd45b-hvwqm   1/1     Running        0          25m
+pod/nginx-deploy-5878ddd45b-smzqb   1/1     Running        0          25m
+pod/nginx-deploy-5878ddd45b-zv62j   1/1     Running        0          25m
+pod/nginx-deploy-5c6f848db6-xs529   0/1     ErrImagePull   0          60s
+pod/nginx-pod-configmap-vol         1/1     Running        0          25h
+pod/nginx-pod-secret-vol            1/1     Running        0          23h
+pod/nginx-rc-zk6xd                  1/1     Running        0          105m
+pod/nginx-rc-zv5b9                  1/1     Running        0          105m
+pod/nginx-rs-8g9vm                  1/1     Running        0          70m
+pod/nginx-rs-m7rz8                  1/1     Running        0          70m
+pod/nginx-rs-npx4v                  1/1     Running        0          70m
+pod/redis-pod-configmap-env         1/1     Running        0          24h
+pod/redis-pod-secret-env            1/1     Running        0          23h
+
+NAME                             DESIRED   CURRENT   READY   AGE
+replicationcontroller/nginx-rc   2         2         2       105m
+
+NAME                 TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+service/kubernetes   ClusterIP   10.96.0.1    <none>        443/TCP   14d
+
+NAME                           READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/nginx-deploy   3/3     1            3           25m
+
+NAME                                      DESIRED   CURRENT   READY   AGE
+replicaset.apps/nginx-deploy-5878ddd45b   3         3         3       25m
+replicaset.apps/nginx-deploy-5c6f848db6   1         1         0       60s
+replicaset.apps/nginx-rs                  3         3         3       70m
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl describe pod pod/nginx-deploy-5c6f848db6-xs529
+error: there is no need to specify a resource type as a separate argument when passing arguments in resource/name form (e.g. 'kubectl get resource/<resource_name>' instead of 'kubectl get resource resource/<resource_name>'
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl describe pod/nginx-deploy-5c6f848db6-xs529 
+Name:         nginx-deploy-5c6f848db6-xs529
+Namespace:    default
+Priority:     0
+Node:         minikube/192.168.49.2
+Start Time:   Sun, 10 Jan 2021 07:20:31 -0800
+Labels:       app=nginx-app
+              pod-template-hash=5c6f848db6
+Annotations:  <none>
+Status:       Pending
+IP:           172.17.0.19
+IPs:
+  IP:           172.17.0.19
+Controlled By:  ReplicaSet/nginx-deploy-5c6f848db6
+Containers:
+  nginx-container:
+    Container ID:   
+    Image:          nginx:1.91
+    Image ID:       
+    Port:           80/TCP
+    Host Port:      0/TCP
+    State:          Waiting
+      Reason:       ImagePullBackOff
+    Ready:          False
+    Restart Count:  0
+    Environment:    <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from default-token-ph5nf (ro)
+Conditions:
+  Type              Status
+  Initialized       True 
+  Ready             False 
+  ContainersReady   False 
+  PodScheduled      True 
+Volumes:
+  default-token-ph5nf:
+    Type:        Secret (a volume populated by a Secret)
+    SecretName:  default-token-ph5nf
+    Optional:    false
+QoS Class:       BestEffort
+Node-Selectors:  <none>
+Tolerations:     node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                 node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason     Age                 From               Message
+  ----     ------     ----                ----               -------
+  Normal   Scheduled  105s                default-scheduler  Successfully assigned default/nginx-deploy-5c6f848db6-xs529 to minikube
+  Normal   BackOff    26s (x5 over 101s)  kubelet            Back-off pulling image "nginx:1.91"
+  Warning  Failed     26s (x5 over 101s)  kubelet            Error: ImagePullBackOff
+  Normal   Pulling    14s (x4 over 105s)  kubelet            Pulling image "nginx:1.91"
+  Warning  Failed     9s (x4 over 101s)   kubelet            Failed to pull image "nginx:1.91": rpc error: code = Unknown desc = Error response from daemon: manifest for nginx:1.91 not found: manifest unknown: manifest unknown
+  Warning  Failed     9s (x4 over 101s)   kubelet            Error: ErrImagePull
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl rollout status deployment/nginx-deploy
+Waiting for deployment "nginx-deploy" rollout to finish: 1 out of 3 new replicas have been updated...
+^C%                                                                                                                                                                                                                          
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl rollout history deployment/nginx-deploy
+
+
+deployment.apps/nginx-deploy 
+REVISION  CHANGE-CAUSE
+1         <none>
+2         kubectl set image deploy nginx-deploy nginx-container=nginx:1.91 --record=true
+
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl rollout undo deployment/nginx-deploy
+deployment.apps/nginx-deploy rolled back
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl rollout history deployment/nginx-deploy
+
+
+deployment.apps/nginx-deploy 
+REVISION  CHANGE-CAUSE
+2         kubectl set image deploy nginx-deploy nginx-container=nginx:1.91 --record=true
+3         <none>
+
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl describe deploy nginx-deploy | grep -i image
+    Image:        nginx:1.7.9
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl describe deploy nginx-deploy                
+Name:                   nginx-deploy
+Namespace:              default
+CreationTimestamp:      Sun, 10 Jan 2021 06:56:17 -0800
+Labels:                 app=nginx-app
+Annotations:            deployment.kubernetes.io/revision: 3
+Selector:               app=nginx-app
+Replicas:               3 desired | 3 updated | 3 total | 3 available | 0 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:  app=nginx-app
+  Containers:
+   nginx-container:
+    Image:        nginx:1.7.9
+    Port:         80/TCP
+    Host Port:    0/TCP
+    Environment:  <none>
+    Mounts:       <none>
+  Volumes:        <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Available      True    MinimumReplicasAvailable
+  Progressing    True    NewReplicaSetAvailable
+OldReplicaSets:  <none>
+NewReplicaSet:   nginx-deploy-5878ddd45b (3/3 replicas created)
+Events:
+  Type    Reason             Age    From                   Message
+  ----    ------             ----   ----                   -------
+  Normal  ScalingReplicaSet  28m    deployment-controller  Scaled up replica set nginx-deploy-5878ddd45b to 3
+  Normal  ScalingReplicaSet  3m47s  deployment-controller  Scaled up replica set nginx-deploy-5c6f848db6 to 1
+  Normal  ScalingReplicaSet  51s    deployment-controller  Scaled down replica set nginx-deploy-5c6f848db6 to 0
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl set image deploy nginx-deploy nginx-container=nginx:1.9.1
+deployment.apps/nginx-deploy image updated
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl edit deploy nginx-deploy
+
+
+Edit cancelled, no changes made.
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get all
+NAME                                READY   STATUS    RESTARTS   AGE
+pod/configmap-demo-pod              1/1     Running   0          24h
+pod/envar-demo                      1/1     Running   0          25h
+pod/nginx-deploy-67d7cbb686-rbv5k   1/1     Running   0          29s
+pod/nginx-deploy-67d7cbb686-tx5j9   1/1     Running   0          28s
+pod/nginx-deploy-67d7cbb686-vv9pq   1/1     Running   0          43s
+pod/nginx-pod-configmap-vol         1/1     Running   0          25h
+pod/nginx-pod-secret-vol            1/1     Running   0          23h
+pod/nginx-rc-zk6xd                  1/1     Running   0          111m
+pod/nginx-rc-zv5b9                  1/1     Running   0          111m
+pod/nginx-rs-8g9vm                  1/1     Running   0          75m
+pod/nginx-rs-m7rz8                  1/1     Running   0          75m
+pod/nginx-rs-npx4v                  1/1     Running   0          75m
+pod/redis-pod-configmap-env         1/1     Running   0          24h
+pod/redis-pod-secret-env            1/1     Running   0          23h
+
+NAME                             DESIRED   CURRENT   READY   AGE
+replicationcontroller/nginx-rc   2         2         2       111m
+
+NAME                 TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+service/kubernetes   ClusterIP   10.96.0.1    <none>        443/TCP   14d
+
+NAME                           READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/nginx-deploy   3/3     3            3           30m
+
+NAME                                      DESIRED   CURRENT   READY   AGE
+replicaset.apps/nginx-deploy-5878ddd45b   0         0         0       30m
+replicaset.apps/nginx-deploy-5c6f848db6   0         0         0       6m28s
+replicaset.apps/nginx-deploy-67d7cbb686   3         3         3       44s
+replicaset.apps/nginx-rs                  3         3         3       75m
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl rollout status deployment/nginx-deploy
+deployment "nginx-deploy" successfully rolled out
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get deploy
+NAME           READY   UP-TO-DATE   AVAILABLE   AGE
+nginx-deploy   3/3     3            3           31m
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl describe deploy
+Name:                   nginx-deploy
+Namespace:              default
+CreationTimestamp:      Sun, 10 Jan 2021 06:56:17 -0800
+Labels:                 app=nginx-app
+Annotations:            deployment.kubernetes.io/revision: 4
+Selector:               app=nginx-app
+Replicas:               3 desired | 3 updated | 3 total | 3 available | 0 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:  app=nginx-app
+  Containers:
+   nginx-container:
+    Image:        nginx:1.9.1
+    Port:         80/TCP
+    Host Port:    0/TCP
+    Environment:  <none>
+    Mounts:       <none>
+  Volumes:        <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Available      True    MinimumReplicasAvailable
+  Progressing    True    NewReplicaSetAvailable
+OldReplicaSets:  <none>
+NewReplicaSet:   nginx-deploy-67d7cbb686 (3/3 replicas created)
+Events:
+  Type    Reason             Age    From                   Message
+  ----    ------             ----   ----                   -------
+  Normal  ScalingReplicaSet  31m    deployment-controller  Scaled up replica set nginx-deploy-5878ddd45b to 3
+  Normal  ScalingReplicaSet  7m39s  deployment-controller  Scaled up replica set nginx-deploy-5c6f848db6 to 1
+  Normal  ScalingReplicaSet  4m43s  deployment-controller  Scaled down replica set nginx-deploy-5c6f848db6 to 0
+  Normal  ScalingReplicaSet  115s   deployment-controller  Scaled up replica set nginx-deploy-67d7cbb686 to 1
+  Normal  ScalingReplicaSet  101s   deployment-controller  Scaled down replica set nginx-deploy-5878ddd45b to 2
+  Normal  ScalingReplicaSet  101s   deployment-controller  Scaled up replica set nginx-deploy-67d7cbb686 to 2
+  Normal  ScalingReplicaSet  100s   deployment-controller  Scaled down replica set nginx-deploy-5878ddd45b to 1
+  Normal  ScalingReplicaSet  100s   deployment-controller  Scaled up replica set nginx-deploy-67d7cbb686 to 3
+  Normal  ScalingReplicaSet  99s    deployment-controller  Scaled down replica set nginx-deploy-5878ddd45b to 0
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl describe deploy - yaml
+Error from server (NotFound): deployments.apps "-" not found
+Error from server (NotFound): deployments.apps "yaml" not found
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl describe deploy -o yaml
+Error: unknown shorthand flag: 'o' in -o
+See 'kubectl describe --help' for usage.
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl describe deploy yaml   
+Error from server (NotFound): deployments.apps "yaml" not found
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl describe deploy     
+Name:                   nginx-deploy
+Namespace:              default
+CreationTimestamp:      Sun, 10 Jan 2021 06:56:17 -0800
+Labels:                 app=nginx-app
+Annotations:            deployment.kubernetes.io/revision: 4
+Selector:               app=nginx-app
+Replicas:               3 desired | 3 updated | 3 total | 3 available | 0 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:  app=nginx-app
+  Containers:
+   nginx-container:
+    Image:        nginx:1.9.1
+    Port:         80/TCP
+    Host Port:    0/TCP
+    Environment:  <none>
+    Mounts:       <none>
+  Volumes:        <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Available      True    MinimumReplicasAvailable
+  Progressing    True    NewReplicaSetAvailable
+OldReplicaSets:  <none>
+NewReplicaSet:   nginx-deploy-67d7cbb686 (3/3 replicas created)
+Events:
+  Type    Reason             Age    From                   Message
+  ----    ------             ----   ----                   -------
+  Normal  ScalingReplicaSet  34m    deployment-controller  Scaled up replica set nginx-deploy-5878ddd45b to 3
+  Normal  ScalingReplicaSet  10m    deployment-controller  Scaled up replica set nginx-deploy-5c6f848db6 to 1
+  Normal  ScalingReplicaSet  7m42s  deployment-controller  Scaled down replica set nginx-deploy-5c6f848db6 to 0
+  Normal  ScalingReplicaSet  4m54s  deployment-controller  Scaled up replica set nginx-deploy-67d7cbb686 to 1
+  Normal  ScalingReplicaSet  4m40s  deployment-controller  Scaled down replica set nginx-deploy-5878ddd45b to 2
+  Normal  ScalingReplicaSet  4m40s  deployment-controller  Scaled up replica set nginx-deploy-67d7cbb686 to 2
+  Normal  ScalingReplicaSet  4m39s  deployment-controller  Scaled down replica set nginx-deploy-5878ddd45b to 1
+  Normal  ScalingReplicaSet  4m39s  deployment-controller  Scaled up replica set nginx-deploy-67d7cbb686 to 3
+  Normal  ScalingReplicaSet  4m38s  deployment-controller  Scaled down replica set nginx-deploy-5878ddd45b to 0
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get deploy -o yaml
+apiVersion: v1
+items:
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "4"
+    creationTimestamp: "2021-01-10T14:56:17Z"
+    generation: 4
+    labels:
+      app: nginx-app
+    managedFields:
+    - apiVersion: apps/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:metadata:
+          f:labels:
+            .: {}
+            f:app: {}
+        f:spec:
+          f:progressDeadlineSeconds: {}
+          f:replicas: {}
+          f:revisionHistoryLimit: {}
+          f:selector: {}
+          f:strategy:
+            f:rollingUpdate:
+              .: {}
+              f:maxSurge: {}
+              f:maxUnavailable: {}
+            f:type: {}
+          f:template:
+            f:metadata:
+              f:labels:
+                .: {}
+                f:app: {}
+            f:spec:
+              f:containers:
+                k:{"name":"nginx-container"}:
+                  .: {}
+                  f:imagePullPolicy: {}
+                  f:name: {}
+                  f:ports:
+                    .: {}
+                    k:{"containerPort":80,"protocol":"TCP"}:
+                      .: {}
+                      f:containerPort: {}
+                      f:protocol: {}
+                  f:resources: {}
+                  f:terminationMessagePath: {}
+                  f:terminationMessagePolicy: {}
+              f:dnsPolicy: {}
+              f:restartPolicy: {}
+              f:schedulerName: {}
+              f:securityContext: {}
+              f:terminationGracePeriodSeconds: {}
+      manager: kubectl-create
+      operation: Update
+      time: "2021-01-10T14:56:17Z"
+    - apiVersion: apps/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:spec:
+          f:template:
+            f:spec:
+              f:containers:
+                k:{"name":"nginx-container"}:
+                  f:image: {}
+      manager: kubectl-set
+      operation: Update
+      time: "2021-01-10T15:26:15Z"
+    - apiVersion: apps/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:metadata:
+          f:annotations:
+            .: {}
+            f:deployment.kubernetes.io/revision: {}
+        f:status:
+          f:availableReplicas: {}
+          f:conditions:
+            .: {}
+            k:{"type":"Available"}:
+              .: {}
+              f:lastTransitionTime: {}
+              f:lastUpdateTime: {}
+              f:message: {}
+              f:reason: {}
+              f:status: {}
+              f:type: {}
+            k:{"type":"Progressing"}:
+              .: {}
+              f:lastTransitionTime: {}
+              f:lastUpdateTime: {}
+              f:message: {}
+              f:reason: {}
+              f:status: {}
+              f:type: {}
+          f:observedGeneration: {}
+          f:readyReplicas: {}
+          f:replicas: {}
+          f:updatedReplicas: {}
+      manager: kube-controller-manager
+      operation: Update
+      time: "2021-01-10T15:26:31Z"
+    name: nginx-deploy
+    namespace: default
+    resourceVersion: "84529"
+    uid: 59187238-df86-433e-b3b2-3987f0e9b720
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 3
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app: nginx-app
+    strategy:
+      rollingUpdate:
+        maxSurge: 25%
+        maxUnavailable: 25%
+      type: RollingUpdate
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: nginx-app
+      spec:
+        containers:
+        - image: nginx:1.9.1
+          imagePullPolicy: IfNotPresent
+          name: nginx-container
+          ports:
+          - containerPort: 80
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+  status:
+    availableReplicas: 3
+    conditions:
+    - lastTransitionTime: "2021-01-10T14:56:41Z"
+      lastUpdateTime: "2021-01-10T14:56:41Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    - lastTransitionTime: "2021-01-10T14:56:17Z"
+      lastUpdateTime: "2021-01-10T15:26:31Z"
+      message: ReplicaSet "nginx-deploy-67d7cbb686" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    observedGeneration: 4
+    readyReplicas: 3
+    replicas: 3
+    updatedReplicas: 3
+kind: List
+metadata:
+  resourceVersion: ""
+  selfLink: ""
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl create -f service.yaml 
+service/my-service created
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get svc
+NAME         TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)        AGE
+kubernetes   ClusterIP   10.96.0.1      <none>        443/TCP        14d
+my-service   NodePort    10.101.1.231   <none>        80:31111/TCP   8s
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % 
+
+root@configmap-demo-pod:/config# kubectl get pods
+bash: kubectl: command not found
+root@configmap-demo-pod:/config# exit
+exit
+command terminated with exit code 127
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl exec -it configmap-demo-pod  
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % cd secrets 
+(base) stomar-n@Sudhirs-MacBook-Pro-3 secrets % echo -n 'admin' > username.txt
+(base) stomar-n@Sudhirs-MacBook-Pro-3 secrets % echo -n 'pa$$w00rd' > password.txt
+(base) stomar-n@Sudhirs-MacBook-Pro-3 secrets % kubectl create secret generic nginx-secret-vol --from-file=username.txt --from-file=password.txt
+secret/nginx-secret-vol created
+(base) stomar-n@Sudhirs-MacBook-Pro-3 secrets % kubects get secrets
+zsh: command not found: kubects
+(base) stomar-n@Sudhirs-MacBook-Pro-3 secrets % kubectl get secrets
+NAME                  TYPE                                  DATA   AGE
+default-token-ph5nf   kubernetes.io/service-account-token   3      13d
+nginx-secret-vol      Opaque                                2      62s
+(base) stomar-n@Sudhirs-MacBook-Pro-3 secrets % kubectl describe secret nginx-secret-vol 
+Name:         nginx-secret-vol
+Namespace:    default
+Labels:       <none>
+Annotations:  <none>
+
+Type:  Opaque
+
+Data
+====
+password.txt:  9 bytes
+username.txt:  5 bytes
+(base) stomar-n@Sudhirs-MacBook-Pro-3 secrets % kubectl get secret nginx-secret-vol -o yaml
+apiVersion: v1
+data:
+  password.txt: cGEkJHcwMHJk
+  username.txt: YWRtaW4=
+kind: Secret
+metadata:
+  creationTimestamp: "2021-01-09T15:27:04Z"
+  managedFields:
+  - apiVersion: v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:data:
+        .: {}
+        f:password.txt: {}
+        f:username.txt: {}
+      f:type: {}
+    manager: kubectl-create
+    operation: Update
+    time: "2021-01-09T15:27:04Z"
+  name: nginx-secret-vol
+  namespace: default
+  resourceVersion: "23388"
+  uid: 83aa668e-6403-4f21-a200-95bc4ffc0b53
+type: Opaque
+(base) stomar-n@Sudhirs-MacBook-Pro-3 secrets % cd ..
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl create -f secretpod.yaml 
+pod/nginx-pod-secret-vol created
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubect get pods
+zsh: command not found: kubect
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get pods
+NAME                      READY   STATUS    RESTARTS   AGE
+configmap-demo-pod        1/1     Running   0          41m
+envar-demo                1/1     Running   0          69m
+nginx-pod-configmap-vol   1/1     Running   0          87m
+nginx-pod-secret-vol      1/1     Running   0          13s
+redis-pod-configmap-env   1/1     Running   0          59m
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl describe pod nginx-pod-secret-vol
+Name:         nginx-pod-secret-vol
+Namespace:    default
+Priority:     0
+Node:         minikube/192.168.49.2
+Start Time:   Sat, 09 Jan 2021 07:31:41 -0800
+Labels:       <none>
+Annotations:  <none>
+Status:       Running
+IP:           172.17.0.9
+IPs:
+  IP:  172.17.0.9
+Containers:
+  nginx-container:
+    Container ID:   docker://c6441ac4a65b37973186c3edfb43b54b35790aec039f2920ac6ef7153f59075a
+    Image:          nginx
+    Image ID:       docker-pullable://nginx@sha256:4cf620a5c81390ee209398ecc18e5fb9dd0f5155cd82adcbae532fec94006fb9
+    Port:           <none>
+    Host Port:      <none>
+    State:          Running
+      Started:      Sat, 09 Jan 2021 07:31:44 -0800
+    Ready:          True
+    Restart Count:  0
+    Environment:    <none>
+    Mounts:
+      /etc/confidential from test-vol (ro)
+      /var/run/secrets/kubernetes.io/serviceaccount from default-token-ph5nf (ro)
+Conditions:
+  Type              Status
+  Initialized       True 
+  Ready             True 
+  ContainersReady   True 
+  PodScheduled      True 
+Volumes:
+  test-vol:
+    Type:        Secret (a volume populated by a Secret)
+    SecretName:  nginx-secret-vol
+    Optional:    false
+  default-token-ph5nf:
+    Type:        Secret (a volume populated by a Secret)
+    SecretName:  default-token-ph5nf
+    Optional:    false
+QoS Class:       BestEffort
+Node-Selectors:  <none>
+Tolerations:     node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                 node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type    Reason     Age   From               Message
+  ----    ------     ----  ----               -------
+  Normal  Scheduled  30s   default-scheduler  Successfully assigned default/nginx-pod-secret-vol to minikube
+  Normal  Pulling    29s   kubelet            Pulling image "nginx"
+  Normal  Pulled     27s   kubelet            Successfully pulled image "nginx" in 1.6284888s
+  Normal  Created    27s   kubelet            Created container nginx-container
+  Normal  Started    27s   kubelet            Started container nginx-container
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl exec -it nginx-pod-secret-vol   -- bash
+root@nginx-pod-secret-vol:/# cd /etc/confidential/
+root@nginx-pod-secret-vol:/etc/confidential# ls -la
+total 8
+drwxrwxrwt 3 root root  120 Jan  9 15:31 .
+drwxr-xr-x 1 root root 4096 Jan  9 15:31 ..
+drwxr-xr-x 2 root root   80 Jan  9 15:31 ..2021_01_09_15_31_41.837253976
+lrwxrwxrwx 1 root root   31 Jan  9 15:31 ..data -> ..2021_01_09_15_31_41.837253976
+lrwxrwxrwx 1 root root   19 Jan  9 15:31 password.txt -> ..data/password.txt
+lrwxrwxrwx 1 root root   19 Jan  9 15:31 username.txt -> ..data/username.txt
+root@nginx-pod-secret-vol:/etc/confidential# cat password.txt 
+pa$$w00rdroot@nginx-pod-secret-vol:/etc/confidential# cat username.txt 
+adminroot@nginx-pod-secret-vol:/etc/confidential# exit
+exit
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl -f secrets.yaml 
+Error: unknown shorthand flag: 'f' in -f
+See 'kubectl --help' for usage.
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl create -f secrets.yaml
+secret/redis-secret-env created
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl create -f secretsenv.yaml
+pod/redis-pod-secret-env created
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl exec -it redis-pod-secret-env 
+error: you must specify at least one command for the container
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl exec -it redis-pod-secret-env-- bash
+kubectl exec [POD] [COMMAND] is DEPRECATED and will be removed in a future version. Use kubectl exec [POD] -- [COMMAND] instead.
+Error from server (NotFound): pods "redis-pod-secret-env--" not found
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl exec -it redis-pod-secret-env -- bash
+root@redis-pod-secret-env:/data# ls -la
+total 8
+drwxr-xr-x 2 redis redis 4096 Dec 11 16:24 .
+drwxr-xr-x 1 root  root  4096 Jan  9 15:38 ..
+root@redis-pod-secret-env:/data# env
+KUBERNETES_SERVICE_PORT_HTTPS=443
+KUBERNETES_SERVICE_PORT=443
+HOSTNAME=redis-pod-secret-env
+REDIS_DOWNLOAD_SHA=dc2bdcf81c620e9f09cfd12e85d3bc631c897b2db7a55218fd8a65eaa37f86dd
+PWD=/data
+HOME=/root
+KUBERNETES_PORT_443_TCP=tcp://10.96.0.1:443
+REDIS_VERSION=6.0.9
+SECRET_USERNAME=admin
+GOSU_VERSION=1.12
+TERM=xterm
+REDIS_DOWNLOAD_URL=http://download.redis.io/releases/redis-6.0.9.tar.gz
+SHLVL=1
+KUBERNETES_PORT_443_TCP_PROTO=tcp
+KUBERNETES_PORT_443_TCP_ADDR=10.96.0.1
+KUBERNETES_SERVICE_HOST=10.96.0.1
+KUBERNETES_PORT=tcp://10.96.0.1:443
+KUBERNETES_PORT_443_TCP_PORT=443
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+SECRET_PASSWORD=pa$$w00rd
+_=/usr/bin/env
+root@redis-pod-secret-env:/data# exit
+exit
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl describe pod redis-pod-secret-env
+Name:         redis-pod-secret-env
+Namespace:    default
+Priority:     0
+Node:         minikube/192.168.49.2
+Start Time:   Sat, 09 Jan 2021 07:38:15 -0800
+Labels:       <none>
+Annotations:  <none>
+Status:       Running
+IP:           172.17.0.10
+IPs:
+  IP:  172.17.0.10
+Containers:
+  redis-container:
+    Container ID:   docker://de50dc3480ebc367278fddb124c5b0005707b68968cd8ac6151ad6dc0445c387
+    Image:          redis
+    Image ID:       docker-pullable://redis@sha256:0f724af268d0d3f5fb1d6b33fc22127ba5cbca2d58523b286ed3122db0dc5381
+    Port:           <none>
+    Host Port:      <none>
+    State:          Running
+      Started:      Sat, 09 Jan 2021 07:38:18 -0800
+    Ready:          True
+    Restart Count:  0
+    Environment:
+      SECRET_USERNAME:  <set to the key 'username' in secret 'redis-secret-env'>  Optional: false
+      SECRET_PASSWORD:  <set to the key 'password' in secret 'redis-secret-env'>  Optional: false
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from default-token-ph5nf (ro)
+Conditions:
+  Type              Status
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl create -f rc.yaml
+error: no objects passed to create
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl create -f rc.yaml
+replicationcontroller/nginx-rc created
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get rc
+NAME       DESIRED   CURRENT   READY   AGE
+nginx-rc   3         3         3       103s
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl create -f rc-2.yaml
+Error from server (BadRequest): error when creating "rc-2.yaml": pod in version "v1" cannot be handled as a Pod: no kind "pod" is registered for version "v1" in scheme "k8s.io/kubernetes/pkg/api/legacyscheme/scheme.go:30"
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl create -f rc-2.yaml
+error: error validating "rc-2.yaml": error validating data: ValidationError(Pod.spec): unknown field "image" in io.k8s.api.core.v1.PodSpec; if you choose to ignore these errors, turn validation off with --validate=false
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl create -f rc-2.yaml
+pod/pod1 created
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get pods
+NAME                      READY   STATUS    RESTARTS   AGE
+configmap-demo-pod        1/1     Running   0          22h
+envar-demo                1/1     Running   0          23h
+nginx-pod-configmap-vol   1/1     Running   0          23h
+nginx-pod-secret-vol      1/1     Running   0          22h
+nginx-rc-rh4wv            1/1     Running   0          3m20s
+nginx-rc-zk6xd            1/1     Running   0          3m20s
+nginx-rc-zv5b9            1/1     Running   0          3m20s
+redis-pod-configmap-env   1/1     Running   0          23h
+redis-pod-secret-env      1/1     Running   0          22h
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get pods -o wide
+NAME                      READY   STATUS    RESTARTS   AGE     IP            NODE       NOMINATED NODE   READINESS GATES
+configmap-demo-pod        1/1     Running   0          22h     172.17.0.8    minikube   <none>           <none>
+envar-demo                1/1     Running   0          23h     172.17.0.6    minikube   <none>           <none>
+nginx-pod-configmap-vol   1/1     Running   0          23h     172.17.0.5    minikube   <none>           <none>
+nginx-pod-secret-vol      1/1     Running   0          22h     172.17.0.9    minikube   <none>           <none>
+nginx-rc-rh4wv            1/1     Running   0          3m44s   172.17.0.13   minikube   <none>           <none>
+nginx-rc-zk6xd            1/1     Running   0          3m44s   172.17.0.11   minikube   <none>           <none>
+nginx-rc-zv5b9            1/1     Running   0          3m44s   172.17.0.12   minikube   <none>           <none>
+redis-pod-configmap-env   1/1     Running   0          23h     172.17.0.7    minikube   <none>           <none>
+redis-pod-secret-env      1/1     Running   0          22h     172.17.0.10   minikube   <none>           <none>
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl scale rc nginx-rc --replicas=10
+replicationcontroller/nginx-rc scaled
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get pods -o wide               
+NAME                      READY   STATUS              RESTARTS   AGE    IP            NODE       NOMINATED NODE   READINESS GATES
+configmap-demo-pod        1/1     Running             0          22h    172.17.0.8    minikube   <none>           <none>
+envar-demo                1/1     Running             0          23h    172.17.0.6    minikube   <none>           <none>
+nginx-pod-configmap-vol   1/1     Running             0          23h    172.17.0.5    minikube   <none>           <none>
+nginx-pod-secret-vol      1/1     Running             0          22h    172.17.0.9    minikube   <none>           <none>
+nginx-rc-ch6vm            0/1     ContainerCreating   0          5s     <none>        minikube   <none>           <none>
+nginx-rc-fk6bl            0/1     ContainerCreating   0          5s     <none>        minikube   <none>           <none>
+nginx-rc-g5msd            1/1     Running             0          5s     172.17.0.15   minikube   <none>           <none>
+nginx-rc-jsfzn            0/1     ContainerCreating   0          5s     <none>        minikube   <none>           <none>
+nginx-rc-k27sb            0/1     ContainerCreating   0          5s     <none>        minikube   <none>           <none>
+nginx-rc-lljjx            0/1     ContainerCreating   0          5s     <none>        minikube   <none>           <none>
+nginx-rc-mksw5            0/1     ContainerCreating   0          5s     <none>        minikube   <none>           <none>
+nginx-rc-rh4wv            1/1     Running             0          7m8s   172.17.0.13   minikube   <none>           <none>
+nginx-rc-zk6xd            1/1     Running             0          7m8s   172.17.0.11   minikube   <none>           <none>
+nginx-rc-zv5b9            1/1     Running             0          7m8s   172.17.0.12   minikube   <none>           <none>
+redis-pod-configmap-env   1/1     Running             0          23h    172.17.0.7    minikube   <none>           <none>
+redis-pod-secret-env      1/1     Running             0          22h    172.17.0.10   minikube   <none>           <none>
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl scale rc nginx-rc --replicas=2 
+replicationcontroller/nginx-rc scaled
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get pods -o wide              
+NAME                      READY   STATUS        RESTARTS   AGE     IP            NODE       NOMINATED NODE   READINESS GATES
+configmap-demo-pod        1/1     Running       0          22h     172.17.0.8    minikube   <none>           <none>
+envar-demo                1/1     Running       0          23h     172.17.0.6    minikube   <none>           <none>
+nginx-pod-configmap-vol   1/1     Running       0          23h     172.17.0.5    minikube   <none>           <none>
+nginx-pod-secret-vol      1/1     Running       0          22h     172.17.0.9    minikube   <none>           <none>
+nginx-rc-ch6vm            0/1     Terminating   0          30s     172.17.0.19   minikube   <none>           <none>
+nginx-rc-fk6bl            0/1     Terminating   0          30s     172.17.0.16   minikube   <none>           <none>
+nginx-rc-g5msd            0/1     Terminating   0          30s     172.17.0.15   minikube   <none>           <none>
+nginx-rc-jsfzn            1/1     Terminating   0          30s     172.17.0.14   minikube   <none>           <none>
+nginx-rc-k27sb            0/1     Terminating   0          30s     172.17.0.18   minikube   <none>           <none>
+nginx-rc-lljjx            0/1     Terminating   0          30s     172.17.0.17   minikube   <none>           <none>
+nginx-rc-mksw5            0/1     Terminating   0          30s     172.17.0.20   minikube   <none>           <none>
+nginx-rc-rh4wv            0/1     Terminating   0          7m33s   172.17.0.13   minikube   <none>           <none>
+nginx-rc-zk6xd            1/1     Running       0          7m33s   172.17.0.11   minikube   <none>           <none>
+nginx-rc-zv5b9            1/1     Running       0          7m33s   172.17.0.12   minikube   <none>           <none>
+redis-pod-configmap-env   1/1     Running       0          23h     172.17.0.7    minikube   <none>           <none>
+redis-pod-secret-env      1/1     Running       0          22h     172.17.0.10   minikube   <none>           <none>
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get pods -o wide
+NAME                      READY   STATUS    RESTARTS   AGE     IP            NODE       NOMINATED NODE   READINESS GATES
+configmap-demo-pod        1/1     Running   0          22h     172.17.0.8    minikube   <none>           <none>
+envar-demo                1/1     Running   0          23h     172.17.0.6    minikube   <none>           <none>
+nginx-pod-configmap-vol   1/1     Running   0          23h     172.17.0.5    minikube   <none>           <none>
+nginx-pod-secret-vol      1/1     Running   0          22h     172.17.0.9    minikube   <none>           <none>
+nginx-rc-zk6xd            1/1     Running   0          9m28s   172.17.0.11   minikube   <none>           <none>
+nginx-rc-zv5b9            1/1     Running   0          9m28s   172.17.0.12   minikube   <none>           <none>
+redis-pod-configmap-env   1/1     Running   0          23h     172.17.0.7    minikube   <none>           <none>
+redis-pod-secret-env      1/1     Running   0          22h     172.17.0.10   minikube   <none>           <none>
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get rc -o wide
+NAME       DESIRED   CURRENT   READY   AGE   CONTAINERS        IMAGES   SELECTOR
+nginx-rc   2         2         2       13m   nginx-container   nginx    app=nginx-app
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get pods -o wide --watch
+NAME                      READY   STATUS    RESTARTS   AGE   IP            NODE       NOMINATED NODE   READINESS GATES
+configmap-demo-pod        1/1     Running   0          23h   172.17.0.8    minikube   <none>           <none>
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get all
+NAME                          READY   STATUS    RESTARTS   AGE
+pod/configmap-demo-pod        1/1     Running   0          24h
+pod/envar-demo                1/1     Running   0          24h
+pod/nginx-pod-configmap-vol   1/1     Running   0          24h
+pod/nginx-pod-secret-vol      1/1     Running   0          23h
+pod/nginx-rc-zk6xd            1/1     Running   0          79m
+pod/nginx-rc-zv5b9            1/1     Running   0          79m
+pod/nginx-rs-8g9vm            1/1     Running   0          44m
+pod/nginx-rs-m7rz8            1/1     Running   0          44m
+pod/nginx-rs-npx4v            1/1     Running   0          44m
+pod/redis-pod-configmap-env   1/1     Running   0          24h
+pod/redis-pod-secret-env      1/1     Running   0          23h
+
+NAME                             DESIRED   CURRENT   READY   AGE
+replicationcontroller/nginx-rc   2         2         2       79m
+
+NAME                 TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+service/kubernetes   ClusterIP   10.96.0.1    <none>        443/TCP   14d
+
+NAME                       DESIRED   CURRENT   READY   AGE
+replicaset.apps/nginx-rs   3         3         3       44m
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl create -f blueegreen-1.yaml 
+deployment.apps/nginx-deploy created
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get deploy
+NAME           READY   UP-TO-DATE   AVAILABLE   AGE
+nginx-deploy   3/3     3            3           20m
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get deploy -o wide
+NAME           READY   UP-TO-DATE   AVAILABLE   AGE   CONTAINERS        IMAGES        SELECTOR
+nginx-deploy   3/3     3            3           20m   nginx-container   nginx:1.7.9   app=nginx-app
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get rs            
+NAME                      DESIRED   CURRENT   READY   AGE
+nginx-deploy-5878ddd45b   3         3         3       21m
+nginx-rs                  3         3         3       65m
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get pods
+NAME                            READY   STATUS    RESTARTS   AGE
+configmap-demo-pod              1/1     Running   0          24h
+envar-demo                      1/1     Running   0          24h
+nginx-deploy-5878ddd45b-hvwqm   1/1     Running   0          21m
+nginx-deploy-5878ddd45b-smzqb   1/1     Running   0          21m
+nginx-deploy-5878ddd45b-zv62j   1/1     Running   0          21m
+nginx-pod-configmap-vol         1/1     Running   0          25h
+nginx-pod-secret-vol            1/1     Running   0          23h
+nginx-rc-zk6xd                  1/1     Running   0          101m
+nginx-rc-zv5b9                  1/1     Running   0          101m
+nginx-rs-8g9vm                  1/1     Running   0          66m
+nginx-rs-m7rz8                  1/1     Running   0          66m
+nginx-rs-npx4v                  1/1     Running   0          66m
+redis-pod-configmap-env         1/1     Running   0          24h
+redis-pod-secret-env            1/1     Running   0          23h
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl describe deployment
+Name:                   nginx-deploy
+Namespace:              default
+CreationTimestamp:      Sun, 10 Jan 2021 06:56:17 -0800
+Labels:                 app=nginx-app
+Annotations:            deployment.kubernetes.io/revision: 1
+Selector:               app=nginx-app
+Replicas:               3 desired | 3 updated | 3 total | 3 available | 0 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:  app=nginx-app
+  Containers:
+   nginx-container:
+    Image:        nginx:1.7.9
+    Port:         80/TCP
+    Host Port:    0/TCP
+    Environment:  <none>
+    Mounts:       <none>
+  Volumes:        <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Available      True    MinimumReplicasAvailable
+  Progressing    True    NewReplicaSetAvailable
+OldReplicaSets:  <none>
+NewReplicaSet:   nginx-deploy-5878ddd45b (3/3 replicas created)
+Events:
+  Type    Reason             Age   From                   Message
+  ----    ------             ----  ----                   -------
+  Normal  ScalingReplicaSet  21m   deployment-controller  Scaled up replica set nginx-deploy-5878ddd45b to 3
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl set image deploy nginx-deploy nginx-container=nginx:1.91 --record
+deployment.apps/nginx-deploy image updated
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get all
+NAME                                READY   STATUS         RESTARTS   AGE
+pod/configmap-demo-pod              1/1     Running        0          24h
+pod/envar-demo                      1/1     Running        0          24h
+pod/nginx-deploy-5878ddd45b-hvwqm   1/1     Running        0          25m
+pod/nginx-deploy-5878ddd45b-smzqb   1/1     Running        0          25m
+pod/nginx-deploy-5878ddd45b-zv62j   1/1     Running        0          25m
+pod/nginx-deploy-5c6f848db6-xs529   0/1     ErrImagePull   0          60s
+pod/nginx-pod-configmap-vol         1/1     Running        0          25h
+pod/nginx-pod-secret-vol            1/1     Running        0          23h
+pod/nginx-rc-zk6xd                  1/1     Running        0          105m
+pod/nginx-rc-zv5b9                  1/1     Running        0          105m
+pod/nginx-rs-8g9vm                  1/1     Running        0          70m
+pod/nginx-rs-m7rz8                  1/1     Running        0          70m
+pod/nginx-rs-npx4v                  1/1     Running        0          70m
+pod/redis-pod-configmap-env         1/1     Running        0          24h
+pod/redis-pod-secret-env            1/1     Running        0          23h
+
+NAME                             DESIRED   CURRENT   READY   AGE
+replicationcontroller/nginx-rc   2         2         2       105m
+
+NAME                 TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+service/kubernetes   ClusterIP   10.96.0.1    <none>        443/TCP   14d
+
+NAME                           READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/nginx-deploy   3/3     1            3           25m
+
+NAME                                      DESIRED   CURRENT   READY   AGE
+replicaset.apps/nginx-deploy-5878ddd45b   3         3         3       25m
+replicaset.apps/nginx-deploy-5c6f848db6   1         1         0       60s
+replicaset.apps/nginx-rs                  3         3         3       70m
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl describe pod pod/nginx-deploy-5c6f848db6-xs529
+error: there is no need to specify a resource type as a separate argument when passing arguments in resource/name form (e.g. 'kubectl get resource/<resource_name>' instead of 'kubectl get resource resource/<resource_name>'
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl describe pod/nginx-deploy-5c6f848db6-xs529 
+Name:         nginx-deploy-5c6f848db6-xs529
+Namespace:    default
+Priority:     0
+Node:         minikube/192.168.49.2
+Start Time:   Sun, 10 Jan 2021 07:20:31 -0800
+Labels:       app=nginx-app
+              pod-template-hash=5c6f848db6
+Annotations:  <none>
+Status:       Pending
+IP:           172.17.0.19
+IPs:
+  IP:           172.17.0.19
+Controlled By:  ReplicaSet/nginx-deploy-5c6f848db6
+Containers:
+  nginx-container:
+    Container ID:   
+    Image:          nginx:1.91
+    Image ID:       
+    Port:           80/TCP
+    Host Port:      0/TCP
+    State:          Waiting
+      Reason:       ImagePullBackOff
+    Ready:          False
+    Restart Count:  0
+    Environment:    <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from default-token-ph5nf (ro)
+Conditions:
+  Type              Status
+  Initialized       True 
+  Ready             False 
+  ContainersReady   False 
+  PodScheduled      True 
+Volumes:
+  default-token-ph5nf:
+    Type:        Secret (a volume populated by a Secret)
+    SecretName:  default-token-ph5nf
+    Optional:    false
+QoS Class:       BestEffort
+Node-Selectors:  <none>
+Tolerations:     node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                 node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason     Age                 From               Message
+  ----     ------     ----                ----               -------
+  Normal   Scheduled  105s                default-scheduler  Successfully assigned default/nginx-deploy-5c6f848db6-xs529 to minikube
+  Normal   BackOff    26s (x5 over 101s)  kubelet            Back-off pulling image "nginx:1.91"
+  Warning  Failed     26s (x5 over 101s)  kubelet            Error: ImagePullBackOff
+  Normal   Pulling    14s (x4 over 105s)  kubelet            Pulling image "nginx:1.91"
+  Warning  Failed     9s (x4 over 101s)   kubelet            Failed to pull image "nginx:1.91": rpc error: code = Unknown desc = Error response from daemon: manifest for nginx:1.91 not found: manifest unknown: manifest unknown
+  Warning  Failed     9s (x4 over 101s)   kubelet            Error: ErrImagePull
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl rollout status deployment/nginx-deploy
+Waiting for deployment "nginx-deploy" rollout to finish: 1 out of 3 new replicas have been updated...
+^C%                                                                                                                                                                                                                          
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl rollout history deployment/nginx-deploy
+
+
+deployment.apps/nginx-deploy 
+REVISION  CHANGE-CAUSE
+1         <none>
+2         kubectl set image deploy nginx-deploy nginx-container=nginx:1.91 --record=true
+
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl rollout undo deployment/nginx-deploy
+deployment.apps/nginx-deploy rolled back
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl rollout history deployment/nginx-deploy
+
+
+deployment.apps/nginx-deploy 
+REVISION  CHANGE-CAUSE
+2         kubectl set image deploy nginx-deploy nginx-container=nginx:1.91 --record=true
+3         <none>
+
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl describe deploy nginx-deploy | grep -i image
+    Image:        nginx:1.7.9
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl describe deploy nginx-deploy                
+Name:                   nginx-deploy
+Namespace:              default
+CreationTimestamp:      Sun, 10 Jan 2021 06:56:17 -0800
+Labels:                 app=nginx-app
+Annotations:            deployment.kubernetes.io/revision: 3
+Selector:               app=nginx-app
+Replicas:               3 desired | 3 updated | 3 total | 3 available | 0 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:  app=nginx-app
+  Containers:
+   nginx-container:
+    Image:        nginx:1.7.9
+    Port:         80/TCP
+    Host Port:    0/TCP
+    Environment:  <none>
+    Mounts:       <none>
+  Volumes:        <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Available      True    MinimumReplicasAvailable
+  Progressing    True    NewReplicaSetAvailable
+OldReplicaSets:  <none>
+NewReplicaSet:   nginx-deploy-5878ddd45b (3/3 replicas created)
+Events:
+  Type    Reason             Age    From                   Message
+  ----    ------             ----   ----                   -------
+  Normal  ScalingReplicaSet  28m    deployment-controller  Scaled up replica set nginx-deploy-5878ddd45b to 3
+  Normal  ScalingReplicaSet  3m47s  deployment-controller  Scaled up replica set nginx-deploy-5c6f848db6 to 1
+  Normal  ScalingReplicaSet  51s    deployment-controller  Scaled down replica set nginx-deploy-5c6f848db6 to 0
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl set image deploy nginx-deploy nginx-container=nginx:1.9.1
+deployment.apps/nginx-deploy image updated
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl edit deploy nginx-deploy
+
+
+Edit cancelled, no changes made.
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get all
+NAME                                READY   STATUS    RESTARTS   AGE
+pod/configmap-demo-pod              1/1     Running   0          24h
+pod/envar-demo                      1/1     Running   0          25h
+pod/nginx-deploy-67d7cbb686-rbv5k   1/1     Running   0          29s
+pod/nginx-deploy-67d7cbb686-tx5j9   1/1     Running   0          28s
+pod/nginx-deploy-67d7cbb686-vv9pq   1/1     Running   0          43s
+pod/nginx-pod-configmap-vol         1/1     Running   0          25h
+pod/nginx-pod-secret-vol            1/1     Running   0          23h
+pod/nginx-rc-zk6xd                  1/1     Running   0          111m
+pod/nginx-rc-zv5b9                  1/1     Running   0          111m
+pod/nginx-rs-8g9vm                  1/1     Running   0          75m
+pod/nginx-rs-m7rz8                  1/1     Running   0          75m
+pod/nginx-rs-npx4v                  1/1     Running   0          75m
+pod/redis-pod-configmap-env         1/1     Running   0          24h
+pod/redis-pod-secret-env            1/1     Running   0          23h
+
+NAME                             DESIRED   CURRENT   READY   AGE
+replicationcontroller/nginx-rc   2         2         2       111m
+
+NAME                 TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+service/kubernetes   ClusterIP   10.96.0.1    <none>        443/TCP   14d
+
+NAME                           READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/nginx-deploy   3/3     3            3           30m
+
+NAME                                      DESIRED   CURRENT   READY   AGE
+replicaset.apps/nginx-deploy-5878ddd45b   0         0         0       30m
+replicaset.apps/nginx-deploy-5c6f848db6   0         0         0       6m28s
+replicaset.apps/nginx-deploy-67d7cbb686   3         3         3       44s
+replicaset.apps/nginx-rs                  3         3         3       75m
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl rollout status deployment/nginx-deploy
+deployment "nginx-deploy" successfully rolled out
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get deploy
+NAME           READY   UP-TO-DATE   AVAILABLE   AGE
+nginx-deploy   3/3     3            3           31m
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl describe deploy
+Name:                   nginx-deploy
+Namespace:              default
+CreationTimestamp:      Sun, 10 Jan 2021 06:56:17 -0800
+Labels:                 app=nginx-app
+Annotations:            deployment.kubernetes.io/revision: 4
+Selector:               app=nginx-app
+Replicas:               3 desired | 3 updated | 3 total | 3 available | 0 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:  app=nginx-app
+  Containers:
+   nginx-container:
+    Image:        nginx:1.9.1
+    Port:         80/TCP
+    Host Port:    0/TCP
+    Environment:  <none>
+    Mounts:       <none>
+  Volumes:        <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Available      True    MinimumReplicasAvailable
+  Progressing    True    NewReplicaSetAvailable
+OldReplicaSets:  <none>
+NewReplicaSet:   nginx-deploy-67d7cbb686 (3/3 replicas created)
+Events:
+  Type    Reason             Age    From                   Message
+  ----    ------             ----   ----                   -------
+  Normal  ScalingReplicaSet  31m    deployment-controller  Scaled up replica set nginx-deploy-5878ddd45b to 3
+  Normal  ScalingReplicaSet  7m39s  deployment-controller  Scaled up replica set nginx-deploy-5c6f848db6 to 1
+  Normal  ScalingReplicaSet  4m43s  deployment-controller  Scaled down replica set nginx-deploy-5c6f848db6 to 0
+  Normal  ScalingReplicaSet  115s   deployment-controller  Scaled up replica set nginx-deploy-67d7cbb686 to 1
+  Normal  ScalingReplicaSet  101s   deployment-controller  Scaled down replica set nginx-deploy-5878ddd45b to 2
+  Normal  ScalingReplicaSet  101s   deployment-controller  Scaled up replica set nginx-deploy-67d7cbb686 to 2
+  Normal  ScalingReplicaSet  100s   deployment-controller  Scaled down replica set nginx-deploy-5878ddd45b to 1
+  Normal  ScalingReplicaSet  100s   deployment-controller  Scaled up replica set nginx-deploy-67d7cbb686 to 3
+  Normal  ScalingReplicaSet  99s    deployment-controller  Scaled down replica set nginx-deploy-5878ddd45b to 0
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl describe deploy - yaml
+Error from server (NotFound): deployments.apps "-" not found
+Error from server (NotFound): deployments.apps "yaml" not found
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl describe deploy -o yaml
+Error: unknown shorthand flag: 'o' in -o
+See 'kubectl describe --help' for usage.
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl describe deploy yaml   
+Error from server (NotFound): deployments.apps "yaml" not found
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl describe deploy     
+Name:                   nginx-deploy
+Namespace:              default
+CreationTimestamp:      Sun, 10 Jan 2021 06:56:17 -0800
+Labels:                 app=nginx-app
+Annotations:            deployment.kubernetes.io/revision: 4
+Selector:               app=nginx-app
+Replicas:               3 desired | 3 updated | 3 total | 3 available | 0 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:  app=nginx-app
+  Containers:
+   nginx-container:
+    Image:        nginx:1.9.1
+    Port:         80/TCP
+    Host Port:    0/TCP
+    Environment:  <none>
+    Mounts:       <none>
+  Volumes:        <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Available      True    MinimumReplicasAvailable
+  Progressing    True    NewReplicaSetAvailable
+OldReplicaSets:  <none>
+NewReplicaSet:   nginx-deploy-67d7cbb686 (3/3 replicas created)
+Events:
+  Type    Reason             Age    From                   Message
+  ----    ------             ----   ----                   -------
+  Normal  ScalingReplicaSet  34m    deployment-controller  Scaled up replica set nginx-deploy-5878ddd45b to 3
+  Normal  ScalingReplicaSet  10m    deployment-controller  Scaled up replica set nginx-deploy-5c6f848db6 to 1
+  Normal  ScalingReplicaSet  7m42s  deployment-controller  Scaled down replica set nginx-deploy-5c6f848db6 to 0
+  Normal  ScalingReplicaSet  4m54s  deployment-controller  Scaled up replica set nginx-deploy-67d7cbb686 to 1
+  Normal  ScalingReplicaSet  4m40s  deployment-controller  Scaled down replica set nginx-deploy-5878ddd45b to 2
+  Normal  ScalingReplicaSet  4m40s  deployment-controller  Scaled up replica set nginx-deploy-67d7cbb686 to 2
+  Normal  ScalingReplicaSet  4m39s  deployment-controller  Scaled down replica set nginx-deploy-5878ddd45b to 1
+  Normal  ScalingReplicaSet  4m39s  deployment-controller  Scaled up replica set nginx-deploy-67d7cbb686 to 3
+  Normal  ScalingReplicaSet  4m38s  deployment-controller  Scaled down replica set nginx-deploy-5878ddd45b to 0
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get deploy -o yaml
+apiVersion: v1
+items:
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "4"
+    creationTimestamp: "2021-01-10T14:56:17Z"
+    generation: 4
+    labels:
+      app: nginx-app
+    managedFields:
+    - apiVersion: apps/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:metadata:
+          f:labels:
+            .: {}
+            f:app: {}
+        f:spec:
+          f:progressDeadlineSeconds: {}
+          f:replicas: {}
+          f:revisionHistoryLimit: {}
+          f:selector: {}
+          f:strategy:
+            f:rollingUpdate:
+              .: {}
+              f:maxSurge: {}
+              f:maxUnavailable: {}
+            f:type: {}
+          f:template:
+            f:metadata:
+              f:labels:
+                .: {}
+                f:app: {}
+            f:spec:
+              f:containers:
+                k:{"name":"nginx-container"}:
+                  .: {}
+                  f:imagePullPolicy: {}
+                  f:name: {}
+                  f:ports:
+                    .: {}
+                    k:{"containerPort":80,"protocol":"TCP"}:
+                      .: {}
+                      f:containerPort: {}
+                      f:protocol: {}
+                  f:resources: {}
+                  f:terminationMessagePath: {}
+                  f:terminationMessagePolicy: {}
+              f:dnsPolicy: {}
+              f:restartPolicy: {}
+              f:schedulerName: {}
+              f:securityContext: {}
+              f:terminationGracePeriodSeconds: {}
+      manager: kubectl-create
+      operation: Update
+      time: "2021-01-10T14:56:17Z"
+    - apiVersion: apps/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:spec:
+          f:template:
+            f:spec:
+              f:containers:
+                k:{"name":"nginx-container"}:
+                  f:image: {}
+      manager: kubectl-set
+      operation: Update
+      time: "2021-01-10T15:26:15Z"
+    - apiVersion: apps/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:metadata:
+          f:annotations:
+            .: {}
+            f:deployment.kubernetes.io/revision: {}
+        f:status:
+          f:availableReplicas: {}
+          f:conditions:
+            .: {}
+            k:{"type":"Available"}:
+              .: {}
+              f:lastTransitionTime: {}
+              f:lastUpdateTime: {}
+              f:message: {}
+              f:reason: {}
+              f:status: {}
+              f:type: {}
+            k:{"type":"Progressing"}:
+              .: {}
+              f:lastTransitionTime: {}
+              f:lastUpdateTime: {}
+              f:message: {}
+              f:reason: {}
+              f:status: {}
+              f:type: {}
+          f:observedGeneration: {}
+          f:readyReplicas: {}
+          f:replicas: {}
+          f:updatedReplicas: {}
+      manager: kube-controller-manager
+      operation: Update
+      time: "2021-01-10T15:26:31Z"
+    name: nginx-deploy
+    namespace: default
+    resourceVersion: "84529"
+    uid: 59187238-df86-433e-b3b2-3987f0e9b720
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 3
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app: nginx-app
+    strategy:
+      rollingUpdate:
+        maxSurge: 25%
+        maxUnavailable: 25%
+      type: RollingUpdate
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: nginx-app
+      spec:
+        containers:
+        - image: nginx:1.9.1
+          imagePullPolicy: IfNotPresent
+          name: nginx-container
+          ports:
+          - containerPort: 80
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+  status:
+    availableReplicas: 3
+    conditions:
+    - lastTransitionTime: "2021-01-10T14:56:41Z"
+      lastUpdateTime: "2021-01-10T14:56:41Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    - lastTransitionTime: "2021-01-10T14:56:17Z"
+      lastUpdateTime: "2021-01-10T15:26:31Z"
+      message: ReplicaSet "nginx-deploy-67d7cbb686" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    observedGeneration: 4
+    readyReplicas: 3
+    replicas: 3
+    updatedReplicas: 3
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl create -f daemon.yaml 
+daemonset.apps/fluentd-ds created
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get ds
+NAME         DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR   AGE
+fluentd-ds   1         1         1       1            1           <none>          106s
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get nodes
+NAME       STATUS   ROLES                  AGE   VERSION
+minikube   Ready    control-plane,master   14d   v1.20.0
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl create -f daemon2.yaml
+daemonset.apps/nginx-ds created
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get pods
+NAME                            READY   STATUS    RESTARTS   AGE
+configmap-demo-pod              1/1     Running   0          25h
+envar-demo                      1/1     Running   0          25h
+fluentd-ds-dd9n6                1/1     Running   0          16m
+nginx-deploy-67d7cbb686-rbv5k   1/1     Running   0          47m
+nginx-deploy-67d7cbb686-tx5j9   1/1     Running   0          47m
+nginx-deploy-67d7cbb686-vv9pq   1/1     Running   0          47m
+nginx-pod-configmap-vol         1/1     Running   0          26h
+nginx-pod-secret-vol            1/1     Running   0          24h
+nginx-rc-zk6xd                  1/1     Running   0          157m
+nginx-rc-zv5b9                  1/1     Running   0          157m
+nginx-rs-8g9vm                  1/1     Running   0          122m
+nginx-rs-m7rz8                  1/1     Running   0          122m
+nginx-rs-npx4v                  1/1     Running   0          122m
+redis-pod-configmap-env         1/1     Running   0          25h
+redis-pod-secret-env            1/1     Running   0          24h
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % curl -L https://github.com/kubernetes/kompose/releases/download/v1.21.0/kompose-linux-amd64 -o kompose
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100   643  100   643    0     0   2321      0 --:--:-- --:--:-- --:--:--  2321
+100 51.4M  100 51.4M    0     0  3037k      0  0:00:17  0:00:17 --:--:-- 1564k
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % mv kompose /usr/local/bin/
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % chmod 777 /usr/local/bin/kompose
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kompose convert
+zsh: exec format error: kompose
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % ls -la
+total 416
+drwxr-xr-x  35 stomar-n  staff   1120 Jan 10 08:26 .
+drwxr-xr-x  18 stomar-n  staff    576 Jan 10 06:41 ..
+drwxr-xr-x  14 stomar-n  staff    448 Jan 10 07:56 .git
+-rw-r--r--   1 stomar-n  staff    200 Jan  2 05:39 README.md
+-rw-r--r--   1 stomar-n  staff    455 Jan  2 06:52 Untitled
+-rw-r--r--   1 stomar-n  staff    357 Jan 10 06:55 blueegreen-1.yaml
+-rw-r--r--   1 stomar-n  staff    213 Jan  2 06:12 clusteripservice.yaml
+-rw-r--r--   1 stomar-n  staff    419 Jan  9 06:30 cmenv.yaml
+-rw-r--r--   1 stomar-n  staff   1749 Jan  3 08:47 commands.txt
+-rw-r--r--   1 stomar-n  staff    515 Jan  9 06:00 config-map-yaml.yaml
+-rw-r--r--   1 stomar-n  staff    515 Jan  9 06:02 config-map.yaml
+-rw-r--r--   1 stomar-n  staff    404 Jan  9 06:47 configmap.yaml
+-rw-r--r--   1 stomar-n  staff    298 Jan 10 07:55 daemon.yaml
+-rw-r--r--   1 stomar-n  staff    296 Jan 10 08:13 daemon2.yaml
+-rw-r--r--   1 stomar-n  staff     52 Jan 10 08:26 docker-compose.yaml
+-rw-r--r--   1 stomar-n  staff    332 Jan  9 06:21 env.yaml
+-rw-r--r--   1 stomar-n  staff     16 Jan  9 06:02 file-a.txt
+-rw-r--r--   1 stomar-n  staff     16 Jan  9 06:02 file-b.txt
+-rw-r--r--   1 stomar-n  staff   1224 Jan  9 06:49 gamepod.yaml
+-rw-r--r--   1 stomar-n  staff    382 Jan  2 06:40 ingress.yaml
+-rw-r--r--   1 stomar-n  staff    232 Jan  2 06:03 nodeportservice.yaml
+-rw-r--r--   1 stomar-n  staff    437 Jan  9 06:01 pod.yaml
+-rw-r--r--   1 stomar-n  staff    153 Jan 10 05:39 rc-2.yaml
+-rw-r--r--   1 stomar-n  staff    327 Jan 10 05:35 rc.yaml
+-rw-r--r--   1 stomar-n  staff    439 Jan 10 06:11 rs.yaml
+-rw-r--r--   1 stomar-n  staff    300 Jan  9 07:30 secretpod.yaml
+drwxr-xr-x   4 stomar-n  staff    128 Jan  9 07:26 secrets
+-rw-r--r--   1 stomar-n  staff    127 Jan  9 07:36 secrets.yaml
+-rw-r--r--   1 stomar-n  staff    426 Jan  9 07:38 secretsenv.yaml
+-rw-r--r--   1 stomar-n  staff    203 Jan 10 07:39 service.yaml
+-rw-r--r--   1 stomar-n  staff  18398 Jan 10 05:34 teminal-01092021-2
+-rw-r--r--   1 stomar-n  staff  14816 Jan  9 07:18 terminal-01092021
+-rw-r--r--   1 stomar-n  staff  19242 Jan 10 06:20 terminal-01102021
+-rw-r--r--   1 stomar-n  staff  42331 Jan 10 07:56 terminal-01102021-2
+-rw-r--r--   1 stomar-n  staff    155 Jan  2 05:44 vi.yaml
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % chmod 777 ./docker-compose.yaml 
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % mv kompose /usr/local/bin/      
+mv: kompose: No such file or directory
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kompose convert                
+zsh: exec format error: kompose
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kompose convert ./docker-compose.yaml 
+zsh: exec format error: kompose
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl create -f db-deployment.yaml 
+deployment.apps/db created
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % 
