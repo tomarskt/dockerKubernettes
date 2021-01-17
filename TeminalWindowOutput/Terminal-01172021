@@ -1,0 +1,635 @@
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.1/aio/deploy/recommended.yaml
+namespace/kubernetes-dashboard unchanged
+serviceaccount/kubernetes-dashboard unchanged
+service/kubernetes-dashboard unchanged
+secret/kubernetes-dashboard-certs unchanged
+secret/kubernetes-dashboard-csrf configured
+secret/kubernetes-dashboard-key-holder unchanged
+configmap/kubernetes-dashboard-settings unchanged
+role.rbac.authorization.k8s.io/kubernetes-dashboard unchanged
+clusterrole.rbac.authorization.k8s.io/kubernetes-dashboard unchanged
+rolebinding.rbac.authorization.k8s.io/kubernetes-dashboard unchanged
+deployment.apps/kubernetes-dashboard unchanged
+service/dashboard-metrics-scraper unchanged
+deployment.apps/dashboard-metrics-scraper unchanged
+The ClusterRoleBinding "kubernetes-dashboard" is invalid: roleRef: Invalid value: rbac.RoleRef{APIGroup:"rbac.authorization.k8s.io", Kind:"ClusterRole", Name:"kubernetes-dashboard"}: cannot change roleRef
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get svc kubernetes-dashboard -n kubernetes-dashboard
+NAME                   TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)         AGE
+kubernetes-dashboard   NodePort   10.100.96.163   <none>        443:30833/TCP   20d
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get all --all
+Error: unknown flag: --all
+See 'kubectl get --help' for usage.
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get all      
+NAME                 TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+service/kubernetes   ClusterIP   10.96.0.1    <none>        443/TCP   2m29s
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl edit svc kubernetes-dashboard -n kubernetes-dashboard
+Edit cancelled, no changes made.
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get all                                              
+NAME                 TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+service/kubernetes   ClusterIP   10.96.0.1    <none>        443/TCP   3m33s
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get svc kubernetes-dashboard -n kubernetes-dashboard
+NAME                   TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)         AGE
+kubernetes-dashboard   NodePort   10.100.96.163   <none>        443:30833/TCP   20d
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get nodes
+NAME       STATUS   ROLES                  AGE   VERSION
+minikube   Ready    control-plane,master   20d   v1.20.0
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get nodes -o wide
+NAME       STATUS   ROLES                  AGE   VERSION   INTERNAL-IP    EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION      CONTAINER-RUNTIME
+minikube   Ready    control-plane,master   20d   v1.20.0   192.168.49.2   <none>        Ubuntu 20.04.1 LTS   4.19.121-linuxkit   docker://20.10.0
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get nodes -o wide                                                                                 
+NAME       STATUS   ROLES                  AGE   VERSION   INTERNAL-IP    EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION      CONTAINER-RUNTIME
+minikube   Ready    control-plane,master   20d   v1.20.0   192.168.49.2   <none>        Ubuntu 20.04.1 LTS   4.19.121-linuxkit   docker://20.10.0
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get svc kubernetes-dashboard -n kubernetes-dashboard
+NAME                   TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)         AGE
+kubernetes-dashboard   NodePort   10.100.96.163   <none>        443:30833/TCP   20d
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get svc kubernetes-dashboard -n kubernetes-dashboard
+NAME                   TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)         AGE
+kubernetes-dashboard   NodePort   10.100.96.163   <none>        443:30833/TCP   20d
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl delete -n kubernetes-dashboard
+error: You must provide one or more resources by argument or filename.
+Example resource specifications include:
+   '-f rsrc.yaml'
+   '--filename=rsrc.json'
+   '<resource> <name>'
+   '<resource>'
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl delete ns kubernetes-dashboard
+namespace "kubernetes-dashboard" deleted
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get svc kubernetes-dashboard -n kubernetes-dashboard
+Error from server (NotFound): namespaces "kubernetes-dashboard" not found
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get all all
+error: you must specify only one resource
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get all --all
+Error: unknown flag: --all
+See 'kubectl get --help' for usage.
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get --all    
+Error: unknown flag: --all
+See 'kubectl get --help' for usage.
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get -all 
+Error: unknown shorthand flag: 'a' in -all
+See 'kubectl get --help' for usage.
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get.
+Error: unknown command "get." for "kubectl"
+
+Did you mean this?
+        set
+        get
+
+Run 'kubectl --help' for usage.
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get 
+You must specify the type of resource to get. Use "kubectl api-resources" for a complete list of supported resources.
+
+error: Required resource not specified.
+Use "kubectl explain <resource>" for a detailed description of that resource (e.g. kubectl explain pods).
+See 'kubectl get -h' for help and examples
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get all
+NAME                 TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+service/kubernetes   ClusterIP   10.96.0.1    <none>        443/TCP   2m44s
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.1/aio/deploy/recommended.yaml
+namespace/kubernetes-dashboard created
+serviceaccount/kubernetes-dashboard created
+service/kubernetes-dashboard created
+secret/kubernetes-dashboard-certs created
+secret/kubernetes-dashboard-csrf created
+secret/kubernetes-dashboard-key-holder created
+configmap/kubernetes-dashboard-settings created
+role.rbac.authorization.k8s.io/kubernetes-dashboard created
+clusterrole.rbac.authorization.k8s.io/kubernetes-dashboard unchanged
+rolebinding.rbac.authorization.k8s.io/kubernetes-dashboard created
+deployment.apps/kubernetes-dashboard created
+service/dashboard-metrics-scraper created
+deployment.apps/dashboard-metrics-scraper created
+The ClusterRoleBinding "kubernetes-dashboard" is invalid: roleRef: Invalid value: rbac.RoleRef{APIGroup:"rbac.authorization.k8s.io", Kind:"ClusterRole", Name:"kubernetes-dashboard"}: cannot change roleRef
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get all                                                                                           
+NAME                 TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+service/kubernetes   ClusterIP   10.96.0.1    <none>        443/TCP   3m13s
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get all -n kubernetes-dashboard
+NAME                                             READY   STATUS    RESTARTS   AGE
+pod/dashboard-metrics-scraper-7b59f7d4df-tgbn9   1/1     Running   0          22s
+pod/kubernetes-dashboard-7d958d944-dwpgb         1/1     Running   0          22s
+
+NAME                                TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)    AGE
+service/dashboard-metrics-scraper   ClusterIP   10.100.0.197   <none>        8000/TCP   22s
+service/kubernetes-dashboard        ClusterIP   10.98.74.36    <none>        443/TCP    22s
+
+NAME                                        READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/dashboard-metrics-scraper   1/1     1            1           22s
+deployment.apps/kubernetes-dashboard        1/1     1            1           22s
+
+NAME                                                   DESIRED   CURRENT   READY   AGE
+replicaset.apps/dashboard-metrics-scraper-7b59f7d4df   1         1         1       22s
+replicaset.apps/kubernetes-dashboard-7d958d944         1         1         1       22s
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get svc kubernetes-dashboard -n kubernetes-dashboard
+NAME                   TYPE        CLUSTER-IP    EXTERNAL-IP   PORT(S)   AGE
+kubernetes-dashboard   ClusterIP   10.98.74.36   <none>        443/TCP   44s
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl edit svc kubernetes-dashboard -n kubernetes-dashboard
+service/kubernetes-dashboard edited
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get svc kubernetes-dashboard -n kubernetes-dashboard 
+NAME                   TYPE       CLUSTER-IP    EXTERNAL-IP   PORT(S)         AGE
+kubernetes-dashboard   NodePort   10.98.74.36   <none>        443:32474/TCP   79s
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % 
+
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl create -f ./jobs/job-01162021.yaml 
+The connection to the server 127.0.0.1:55000 was refused - did you specify the right host or port?
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get svc
+The connection to the server 127.0.0.1:55000 was refused - did you specify the right host or port?
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % docker ps -a
+Error response from daemon: dial unix docker.raw.sock: connect: connection refused
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % docker ps -a
+CONTAINER ID   IMAGE                                           COMMAND                  CREATED        STATUS                      PORTS                                                                                                      NAMES
+4942dba706dd   gcr.io/k8s-minikube/kicbase:v0.0.15-snapshot4   "/usr/local/bin/entr…"   2 weeks ago    Exited (255) 3 days ago     127.0.0.1:55003->22/tcp, 127.0.0.1:55002->2376/tcp, 127.0.0.1:55001->5000/tcp, 127.0.0.1:55000->8443/tcp   minikube
+6563086c8ed0   nginx                                           "/docker-entrypoint.…"   3 weeks ago    Exited (255) 2 weeks ago                                                                                                               ng1
+868d6426112b   ubuntu                                          "/bin/bash"              3 weeks ago    Exited (255) 2 weeks ago                                                                                                               ubu1
+ab35edbfde0a   7e0bb3716874                                    "/bin/bash"              2 months ago   Exited (1) 2 months ago                                                                                                                angry_keller
+d1b24d50f960   a705cf6f1597                                    "/bin/bash"              2 months ago   Exited (0) 2 months ago                                                                                                                wizardly_feynman
+c5360fb8b40e   fdd50108c75e                                    "/bin/bash"              2 months ago   Exited (0) 2 months ago                                                                                                                priceless_bouman
+4b29251c646d   99aff8db6c14                                    "/bin/sh -c 'bash -c…"   2 months ago   Exited (127) 2 months ago                                                                                                              inspiring_elion
+5548d884556b   c82202887e57                                    "/bin/sh -c 'bash -c…"   2 months ago   Exited (127) 2 months ago                                                                                                              heuristic_wilbur
+cf4283faedd4   c82202887e57                                    "/bin/sh -c 'rbenv -…"   2 months ago   Exited (127) 2 months ago                                                                                                              confident_franklin
+77d9c530342d   c82202887e57                                    "/bin/bash"              2 months ago   Exited (0) 2 months ago                                                                                                                mystifying_sammet
+f836165ca23b   c82202887e57                                    "/bin/bash"              2 months ago   Exited (1) 2 months ago                                                                                                                jovial_austin
+4fd1e94eb878   a8cc82c4a2c4                                    "/bin/sh -c 'apt-get…"   2 months ago   Exited (100) 2 months ago                                                                                                              epic_black
+5b9bacd31d53   a8cc82c4a2c4                                    "/bin/sh -c 'apt-get…"   2 months ago   Exited (100) 2 months ago                                                                                                              friendly_solomon
+cdf0bdf21887   c82202887e57                                    "/bin/sh -c 'type rb…"   2 months ago   Exited (1) 2 months ago                                                                                                                friendly_khorana
+b5f1d4b66398   4391362cedf9                                    "/bin/sh -c '/bin/ba…"   2 months ago   Exited (1) 2 months ago                                                                                                                distracted_albattani
+f9938e4a86d1   4391362cedf9                                    "/bin/sh -c 'type rb…"   2 months ago   Exited (127) 2 months ago                                                                                                              bold_chatelet
+fc8f6600e3f3   a8201cca6bd3                                    "/bin/sh -c 'source …"   2 months ago   Exited (127) 2 months ago                                                                                                              serene_haibt
+fc3838c03d6e   7783e4cb7392                                    "/bin/sh -c 'apt-get…"   2 months ago   Exited (1) 2 months ago                                                                                                                eager_darwin
+44bc2457efc1   1d588489f747                                    "/bin/sh -c 'bash -c…"   2 months ago   Exited (1) 2 months ago                                                                                                                friendly_sutherland
+7ccab62baa95   74c30e1a515f                                    "/bin/bash"              2 months ago   Exited (0) 2 months ago                                                                                                                heuristic_heisenberg
+27c8d79e582c   74c30e1a515f                                    "/bin/bash"              2 months ago   Exited (130) 2 months ago                                                                                                              nervous_kalam
+0a3e194d35f3   74c30e1a515f                                    "--entrypoint="          2 months ago   Created                                                                                                                                stupefied_tereshkova
+0d28b98edee4   74c30e1a515f                                    "--entrypoint="          2 months ago   Created                                                                                                                                vibrant_northcutt
+b09786a23d74   74c30e1a515f                                    "--entrypoint=bash"      2 months ago   Created                                                                                                                                friendly_robinson
+83064bd50706   74c30e1a515f                                    "--entrypoint=sh"        2 months ago   Created                                                                                                                                sweet_franklin
+502eb1734ba2   74c30e1a515f                                    "--entrypoint=/bash"     2 months ago   Created                                                                                                                                recursing_meitner
+41496764cf2e   74c30e1a515f                                    "--entrypoint=/bin/b…"   2 months ago   Created                                                                                                                                hardcore_chatelet
+caaaa195a298   74c30e1a515f                                    "--entrypoint=/bin/sh"   2 months ago   Created                                                                                                                                stoic_leakey
+c66feaac8012   36eb2be395ec                                    "/bin/sh -c 'rbenv i…"   2 months ago   Exited (1) 2 months ago                                                                                                                admiring_tesla
+f51b9a3de4cd   f11563c8b07d                                    "/bin/sh -c /install…"   3 months ago   Exited (100) 3 months ago                                                                                                              nervous_hamilton
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get svc
+The connection to the server 127.0.0.1:55000 was refused - did you specify the right host or port?
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl create -f ./jobs/job-01162021.yaml
+The connection to the server 127.0.0.1:55000 was refused - did you specify the right host or port?
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get po -A
+The connection to the server 127.0.0.1:55000 was refused - did you specify the right host or port?
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get services hello-minikube
+The connection to the server 127.0.0.1:55000 was refused - did you specify the right host or port?
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % minikube start
+😄  minikube v1.16.0 on Darwin 11.1
+✨  Using the docker driver based on existing profile
+👍  Starting control plane node minikube in cluster minikube
+🔄  Restarting existing docker container for "minikube" ...
+🐳  Preparing Kubernetes v1.20.0 on Docker 20.10.0 ...
+🔎  Verifying Kubernetes components...
+🌟  Enabled addons: default-storageclass, storage-provisioner
+🏄  Done! kubectl is now configured to use "minikube" cluster and "default" namespace by default
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl create -f ./jobs/job-01162021.yaml
+job.batch/countdown created
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get cronjobs
+No resources found in default namespace.
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get pods    
+NAME                            READY   STATUS      RESTARTS   AGE
+configmap-demo-pod              1/1     Running     1          6d23h
+countdown-zf9tj                 0/1     Completed   0          33s
+db-56d5bc876f-xmzxr             1/1     Running     1          5d21h
+envar-demo                      1/1     Running     1          6d23h
+fluentd-ds-dd9n6                1/1     Running     1          5d21h
+nginx-deploy-67d7cbb686-rbv5k   1/1     Running     1          5d22h
+nginx-deploy-67d7cbb686-tx5j9   1/1     Running     1          5d22h
+nginx-deploy-67d7cbb686-vv9pq   1/1     Running     1          5d22h
+nginx-pod-configmap-vol         1/1     Running     1          6d23h
+nginx-pod-secret-vol            1/1     Running     1          6d22h
+nginx-rc-zk6xd                  1/1     Running     1          6d
+nginx-rc-zv5b9                  1/1     Running     1          6d
+nginx-rs-8g9vm                  1/1     Running     1          5d23h
+nginx-rs-m7rz8                  1/1     Running     1          5d23h
+nginx-rs-npx4v                  1/1     Running     1          5d23h
+redis-pod-configmap-env         0/1     Error       0          6d23h
+redis-pod-secret-env            0/1     Error       0          6d22h
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get cronjobs
+No resources found in default namespace.
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl logs -f countdown-zf9tj  
+9
+8
+7
+6
+5
+4
+3
+2
+1
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get pods                 
+NAME                            READY   STATUS      RESTARTS   AGE
+configmap-demo-pod              1/1     Running     1          6d23h
+countdown-zf9tj                 0/1     Completed   0          89s
+db-56d5bc876f-xmzxr             1/1     Running     1          5d21h
+envar-demo                      1/1     Running     1          6d23h
+fluentd-ds-dd9n6                1/1     Running     1          5d21h
+nginx-deploy-67d7cbb686-rbv5k   1/1     Running     1          5d22h
+nginx-deploy-67d7cbb686-tx5j9   1/1     Running     1          5d22h
+nginx-deploy-67d7cbb686-vv9pq   1/1     Running     1          5d22h
+nginx-pod-configmap-vol         1/1     Running     1          6d23h
+nginx-pod-secret-vol            1/1     Running     1          6d22h
+nginx-rc-zk6xd                  1/1     Running     1          6d
+nginx-rc-zv5b9                  1/1     Running     1          6d
+nginx-rs-8g9vm                  1/1     Running     1          5d23h
+nginx-rs-m7rz8                  1/1     Running     1          5d23h
+nginx-rs-npx4v                  1/1     Running     1          5d23h
+redis-pod-configmap-env         0/1     Error       0          6d23h
+redis-pod-secret-env            0/1     Error       0          6d22h
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl create -f ./jobs/jobs-cron.yaml   
+cronjob.batch/cronjob created
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get cronjobs                   
+NAME      SCHEDULE    SUSPEND   ACTIVE   LAST SCHEDULE   AGE
+cronjob   * * * * *   True      0        <none>          6s
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get cronjobs
+NAME      SCHEDULE    SUSPEND   ACTIVE   LAST SCHEDULE   AGE
+cronjob   * * * * *   True      0        <none>          27s
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get pods                       
+NAME                            READY   STATUS      RESTARTS   AGE
+configmap-demo-pod              1/1     Running     1          6d23h
+countdown-zf9tj                 0/1     Completed   0          9m31s
+db-56d5bc876f-xmzxr             1/1     Running     1          5d21h
+envar-demo                      1/1     Running     1          6d23h
+fluentd-ds-dd9n6                1/1     Running     1          5d22h
+nginx-deploy-67d7cbb686-rbv5k   1/1     Running     1          5d22h
+nginx-deploy-67d7cbb686-tx5j9   1/1     Running     1          5d22h
+nginx-deploy-67d7cbb686-vv9pq   1/1     Running     1          5d22h
+nginx-pod-configmap-vol         1/1     Running     1          6d23h
+nginx-pod-secret-vol            1/1     Running     1          6d22h
+nginx-rc-zk6xd                  1/1     Running     1          6d
+nginx-rc-zv5b9                  1/1     Running     1          6d
+nginx-rs-8g9vm                  1/1     Running     1          5d23h
+nginx-rs-m7rz8                  1/1     Running     1          5d23h
+nginx-rs-npx4v                  1/1     Running     1          5d23h
+redis-pod-configmap-env         0/1     Error       0          6d23h
+redis-pod-secret-env            0/1     Error       0          6d22h
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get cronjobs
+NAME      SCHEDULE    SUSPEND   ACTIVE   LAST SCHEDULE   AGE
+cronjob   * * * * *   True      0        <none>          5m49s
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % ip
+zsh: command not found: ip
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % ip a
+zsh: command not found: ip
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % cat /etc/hosts
+##
+# Host Database
+#
+# localhost is used to configure the loopback interface
+# when the system is booting.  Do not change this entry.
+##
+127.0.0.1       localhost
+255.255.255.255 broadcasthost
+::1             localhost
+# Added by Docker Desktop
+# To allow the same kube context to work on the host and the container:
+127.0.0.1 kubernetes.docker.internal
+# End of section
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl create -f ./mount/hostpath.yaml    
+pod/nginx-hostpath created
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % ls -la
+total 8
+drwxr-xr-x   9 stomar-n  staff  288 Jan 16 06:26 .
+drwxr-xr-x  18 stomar-n  staff  576 Jan 10 06:41 ..
+drwxr-xr-x  14 stomar-n  staff  448 Jan 16 05:33 .git
+drwxr-xr-x  31 stomar-n  staff  992 Jan 16 05:30 Before01162021
+-rw-r--r--   1 stomar-n  staff  200 Jan  2 05:39 README.md
+drwxr-xr-x   7 stomar-n  staff  224 Jan 16 05:31 TeminalWindowOutput
+drwxr-xr-x   4 stomar-n  staff  128 Jan 16 05:56 jobs
+drwxr-xr-x   3 stomar-n  staff   96 Jan 16 06:26 mount
+drwxr-xr-x   2 stomar-n  staff   64 Jan 16 05:30 secrets
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl gets pods -o wide
+Error: unknown command "gets" for "kubectl"
+
+Did you mean this?
+        set
+        get
+
+Run 'kubectl --help' for usage.
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get pods -o wide 
+NAME                            READY   STATUS      RESTARTS   AGE     IP            NODE       NOMINATED NODE   READINESS GATES
+configmap-demo-pod              1/1     Running     1          6d23h   172.17.0.7    minikube   <none>           <none>
+countdown-zf9tj                 0/1     Completed   0          36m     172.17.0.19   minikube   <none>           <none>
+db-56d5bc876f-xmzxr             1/1     Running     1          5d21h   172.17.0.18   minikube   <none>           <none>
+envar-demo                      1/1     Running     1          7d      172.17.0.6    minikube   <none>           <none>
+fluentd-ds-dd9n6                1/1     Running     1          5d22h   172.17.0.17   minikube   <none>           <none>
+nginx-deploy-67d7cbb686-rbv5k   1/1     Running     1          5d23h   172.17.0.16   minikube   <none>           <none>
+nginx-deploy-67d7cbb686-tx5j9   1/1     Running     1          5d23h   172.17.0.15   minikube   <none>           <none>
+nginx-deploy-67d7cbb686-vv9pq   1/1     Running     1          5d23h   172.17.0.14   minikube   <none>           <none>
+nginx-hostpath                  1/1     Running     0          95s     172.17.0.19   minikube   <none>           <none>
+nginx-pod-configmap-vol         1/1     Running     1          7d      172.17.0.5    minikube   <none>           <none>
+nginx-pod-secret-vol            1/1     Running     1          6d22h   172.17.0.8    minikube   <none>           <none>
+nginx-rc-zk6xd                  1/1     Running     1          6d      172.17.0.10   minikube   <none>           <none>
+nginx-rc-zv5b9                  1/1     Running     1          6d      172.17.0.9    minikube   <none>           <none>
+nginx-rs-8g9vm                  1/1     Running     1          6d      172.17.0.11   minikube   <none>           <none>
+nginx-rs-m7rz8                  1/1     Running     1          6d      172.17.0.13   minikube   <none>           <none>
+nginx-rs-npx4v                  1/1     Running     1          6d      172.17.0.12   minikube   <none>           <none>
+redis-pod-configmap-env         0/1     Error       0          6d23h   <none>        minikube   <none>           <none>
+redis-pod-secret-env            0/1     Error       0          6d22h   <none>        minikube   <none>           <none>
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl exec -it nginx-hostpath -- bash
+root@nginx-hostpath:/# ls -la
+total 92
+drwxr-xr-x   1 root root 4096 Jan 16 14:27 .
+drwxr-xr-x   1 root root 4096 Jan 16 14:27 ..
+-rwxr-xr-x   1 root root    0 Jan 16 14:27 .dockerenv
+drwxr-xr-x   2 root root 4096 Jan 11 00:00 bin
+drwxr-xr-x   2 root root 4096 Nov 22 12:37 boot
+drwxr-xr-x   5 root root  360 Jan 16 14:27 dev
+drwxr-xr-x   1 root root 4096 Jan 12 10:17 docker-entrypoint.d
+-rwxrwxr-x   1 root root 1202 Jan 12 10:16 docker-entrypoint.sh
+drwxr-xr-x   1 root root 4096 Jan 16 14:27 etc
+drwxr-xr-x   2 root root 4096 Nov 22 12:37 home
+drwxr-xr-x   1 root root 4096 Jan 12 10:17 lib
+drwxr-xr-x   2 root root 4096 Jan 11 00:00 lib64
+drwxr-xr-x   2 root root 4096 Jan 11 00:00 media
+drwxr-xr-x   2 root root 4096 Jan 11 00:00 mnt
+drwxr-xr-x   2 root root 4096 Jan 11 00:00 opt
+dr-xr-xr-x 260 root root    0 Jan 16 14:27 proc
+drwx------   2 root root 4096 Jan 11 00:00 root
+drwxr-xr-x   1 root root 4096 Jan 16 14:27 run
+drwxr-xr-x   2 root root 4096 Jan 11 00:00 sbin
+drwxr-xr-x   2 root root 4096 Jan 11 00:00 srv
+dr-xr-xr-x  13 root root    0 Jan 16 14:27 sys
+drwxr-xr-x   2 root root 4096 Jan 16 14:27 test-mnt
+drwxrwxrwt   1 root root 4096 Jan 12 10:17 tmp
+drwxr-xr-x   1 root root 4096 Jan 11 00:00 usr
+drwxr-xr-x   1 root root 4096 Jan 11 00:00 var
+root@nginx-hostpath:/# cd test-mnt/
+root@nginx-hostpath:/test-mnt# ls-la
+bash: ls-la: command not found
+root@nginx-hostpath:/test-mnt# ls -la
+total 8
+drwxr-xr-x 2 root root 4096 Jan 16 14:27 .
+drwxr-xr-x 1 root root 4096 Jan 16 14:27 ..
+root@nginx-hostpath:/test-mnt# 
+root@nginx-hostpath:/test-mnt# tocuh 1 2 3 4 5
+bash: tocuh: command not found
+root@nginx-hostpath:/test-mnt# touch 1 2 3 4 5
+root@nginx-hostpath:/test-mnt# ls -la
+total 8
+drwxr-xr-x 2 root root 4096 Jan 16 14:31 .
+drwxr-xr-x 1 root root 4096 Jan 16 14:27 ..
+-rw-r--r-- 1 root root    0 Jan 16 14:31 1
+-rw-r--r-- 1 root root    0 Jan 16 14:31 2
+-rw-r--r-- 1 root root    0 Jan 16 14:31 3
+-rw-r--r-- 1 root root    0 Jan 16 14:31 4
+-rw-r--r-- 1 root root    0 Jan 16 14:31 5
+root@nginx-hostpath:/test-mnt# command terminated with exit code 137
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get ns
+NAME                   STATUS   AGE
+default                Active   20d
+kube-node-lease        Active   20d
+kube-public            Active   20d
+kube-system            Active   20d
+kubernetes-dashboard   Active   20d
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl create ns itextech
+namespace/itextech created
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get ns                         
+NAME                   STATUS   AGE
+default                Active   20d
+itextech               Active   5s
+kube-node-lease        Active   20d
+kube-public            Active   20d
+kube-system            Active   20d
+kubernetes-dashboard   Active   20d
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl delete ns itextech
+namespace "itextech" deleted
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubeconfig
+zsh: command not found: kubeconfig
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get --all
+Error: unknown flag: --all
+See 'kubectl get --help' for usage.
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get      
+You must specify the type of resource to get. Use "kubectl api-resources" for a complete list of supported resources.
+
+error: Required resource not specified.
+Use "kubectl explain <resource>" for a detailed description of that resource (e.g. kubectl explain pods).
+See 'kubectl get -h' for help and examples
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get all
+NAME                                READY   STATUS    RESTARTS   AGE
+pod/db-56d5bc876f-ltfk2             1/1     Running   0          61m
+pod/fluentd-ds-pndc5                1/1     Running   0          60m
+pod/nginx-deploy-67d7cbb686-j6xdc   1/1     Running   0          61m
+pod/nginx-deploy-67d7cbb686-mb9zt   1/1     Running   0          61m
+pod/nginx-deploy-67d7cbb686-vxmjg   1/1     Running   0          61m
+pod/nginx-rc-fhh24                  1/1     Running   0          61m
+pod/nginx-rc-mq2zb                  1/1     Running   0          61m
+pod/nginx-rs-frgvk                  1/1     Running   0          61m
+pod/nginx-rs-rqsh7                  1/1     Running   0          61m
+pod/nginx-rs-xd7sz                  1/1     Running   0          61m
+
+NAME                             DESIRED   CURRENT   READY   AGE
+replicationcontroller/nginx-rc   2         2         2       6d2h
+
+NAME                 TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)        AGE
+service/kubernetes   ClusterIP   10.96.0.1      <none>        443/TCP        20d
+service/my-service   NodePort    10.101.1.231   <none>        80:31111/TCP   6d
+
+NAME                        DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR   AGE
+daemonset.apps/fluentd-ds   1         1         1       1            1           <none>          5d23h
+daemonset.apps/nginx-ds     0         0         0       0            0           disktype=ssd    5d23h
+
+NAME                           READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/db             1/1     1            1           5d23h
+deployment.apps/nginx-deploy   3/3     3            3           6d
+
+NAME                                      DESIRED   CURRENT   READY   AGE
+replicaset.apps/db-56d5bc876f             1         1         1       5d23h
+replicaset.apps/nginx-deploy-5878ddd45b   0         0         0       6d
+replicaset.apps/nginx-deploy-5c6f848db6   0         0         0       6d
+replicaset.apps/nginx-deploy-67d7cbb686   3         3         3       6d
+replicaset.apps/nginx-rs                  3         3         3       6d1h
+
+NAME                  COMPLETIONS   DURATION   AGE
+job.batch/countdown   1/1           11s        119m
+
+NAME                    SCHEDULE    SUSPEND   ACTIVE   LAST SCHEDULE   AGE
+cronjob.batch/cronjob   * * * * *   True      0        <none>          114m
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl create ns itextech
+namespace/itextech created
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get ns
+NAME                   STATUS   AGE
+default                Active   20d
+itextech               Active   6s
+kube-node-lease        Active   20d
+kube-public            Active   20d
+kube-system            Active   20d
+kubernetes-dashboard   Active   20d
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % ls -la
+total 8
+drwxr-xr-x   9 stomar-n  staff  288 Jan 16 06:26 .
+drwxr-xr-x  18 stomar-n  staff  576 Jan 10 06:41 ..
+drwxr-xr-x  14 stomar-n  staff  448 Jan 16 05:33 .git
+drwxr-xr-x  31 stomar-n  staff  992 Jan 16 05:30 Before01162021
+-rw-r--r--   1 stomar-n  staff  200 Jan  2 05:39 README.md
+drwxr-xr-x   7 stomar-n  staff  224 Jan 16 05:31 TeminalWindowOutput
+drwxr-xr-x   4 stomar-n  staff  128 Jan 16 05:56 jobs
+drwxr-xr-x   6 stomar-n  staff  192 Jan 16 06:45 mount
+drwxr-xr-x   2 stomar-n  staff   64 Jan 16 05:30 secrets
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get config
+error: the server doesn't have a resource type "config"
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl config view
+apiVersion: v1
+clusters:
+- cluster:
+    certificate-authority: /Users/stomar-n/.minikube/ca.crt
+    server: https://127.0.0.1:55000
+  name: minikube
+contexts:
+- context:
+    cluster: minikube
+    namespace: default
+    user: minikube
+  name: minikube
+current-context: minikube
+kind: Config
+preferences: {}
+users:
+- name: minikube
+  user:
+    client-certificate: /Users/stomar-n/.minikube/profiles/minikube/client.crt
+    client-key: /Users/stomar-n/.minikube/profiles/minikube/client.key
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get-context
+Error: unknown command "get-context" for "kubectl"
+Run 'kubectl --help' for usage.
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl config current-context
+minikube
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl config get-contexts   
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.1/aio/deploy/recommended.yaml
+namespace/kubernetes-dashboard configured
+serviceaccount/kubernetes-dashboard configured
+service/kubernetes-dashboard configured
+secret/kubernetes-dashboard-certs configured
+secret/kubernetes-dashboard-csrf configured
+secret/kubernetes-dashboard-key-holder configured
+configmap/kubernetes-dashboard-settings configured
+role.rbac.authorization.k8s.io/kubernetes-dashboard configured
+clusterrole.rbac.authorization.k8s.io/kubernetes-dashboard configured
+rolebinding.rbac.authorization.k8s.io/kubernetes-dashboard configured
+deployment.apps/kubernetes-dashboard configured
+service/dashboard-metrics-scraper configured
+deployment.apps/dashboard-metrics-scraper configured
+The ClusterRoleBinding "kubernetes-dashboard" is invalid: roleRef: Invalid value: rbac.RoleRef{APIGroup:"rbac.authorization.k8s.io", Kind:"ClusterRole", Name:"kubernetes-dashboard"}: cannot change roleRef
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get svc kubernetes-dashboard -n kubernetes-dashboard
+NAME                   TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)   AGE
+kubernetes-dashboard   ClusterIP   10.100.96.163   <none>        443/TCP   20d
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl edit svc kubernetes-dashboard -n kubernetes-dashboard
+service/kubernetes-dashboard edited
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl create serviceaccount cluster-admin-dashboard-sa
+
+
+serviceaccount/cluster-admin-dashboard-sa created
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl create clusterrolebinding cluster-admin-dashboard-sa --clusterrole=cluster-admin --serviceaccount=default:cluster-admin-dashboard-sa
+clusterrolebinding.rbac.authorization.k8s.io/cluster-admin-dashboard-sa created
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get pods -n kubernetes-dashboard -o wide
+NAME                                         READY   STATUS    RESTARTS   AGE   IP            NODE       NOMINATED NODE   READINESS GATES
+dashboard-metrics-scraper-7b59f7d4df-x58f5   1/1     Running   0          93s   172.17.0.10   minikube   <none>           <none>
+kubernetes-dashboard-7d958d944-58vf2         1/1     Running   0          93s   172.17.0.6    minikube   <none>           <none>
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get svc kubernetes-dashboard -n kubernetes-dashboard
+NAME                   TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)         AGE
+kubernetes-dashboard   NodePort   10.100.96.163   <none>        443:30833/TCP   20d
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % TOKEN=$(kubectl describe secret $(kubectl -n kube-system get secret | awk '/^cluster-admin-dashboard-sa-  token-/{print $1}') | awk '$1=="token:"{print $2}')
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % echo $TOKEN
+eyJhbGciOiJSUzI1NiIsImtpZCI6IlZvc0NiSkx0NlJyUEI2dnZlY1psRUlXQWgxcm0zbWlGalhiMGhIQ3pvMVkifQ.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJkZWZhdWx0Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZWNyZXQubmFtZSI6ImNsdXN0ZXItYWRtaW4tZGFzaGJvYXJkLXNhLXRva2VuLTlmcmxsIiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQubmFtZSI6ImNsdXN0ZXItYWRtaW4tZGFzaGJvYXJkLXNhIiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQudWlkIjoiMGY5YTIwYzQtZjk0Yy00OWMzLWIxNDktMzkwZjcxZjY3MzRmIiwic3ViIjoic3lzdGVtOnNlcnZpY2VhY2NvdW50OmRlZmF1bHQ6Y2x1c3Rlci1hZG1pbi1kYXNoYm9hcmQtc2EifQ.KAfSTB9jawFZcLf5_pk8i33RZT_6hnLdm_VzYK0cQaS_I7N8UjbJchaI91Scu0bEBRUNqdsk-Ic4Z619kDwWhMRK0_sXuWJ1Tdsf52YMxAzPNg6-nuinzWVGzPtYqwbusUDkZYeb9KpljJ0kpCl7mqIkIvHdmmQQK5QJWWFX8IDhelZTnT2PFh4683xT_ac4q7uGd4kJ_bf1MIxCmpodr7LAfLDZyloEKQLf02oiy86UbF3KZH6QcfCjtWiP75WTCM0fUNhNiH8tmA0XkJhPv4DLwGx6a7nSxp43Ipgm9GbT-Qa8nS2nl2hl5P_2ksdjX1GQcaj7ZwjQimbd5ZJwNw
+eyJhbGciOiJSUzI1NiIsImtpZCI6IlZvc0NiSkx0NlJyUEI2dnZlY1psRUlXQWgxcm0zbWlGalhiMGhIQ3pvMVkifQ.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJkZWZhdWx0Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZWNyZXQubmFtZSI6ImRlZmF1bHQtdG9rZW4tcGg1bmYiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC5uYW1lIjoiZGVmYXVsdCIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1hY2NvdW50LnVpZCI6IjM4ZjYzYmJiLWFiMGItNGUxNi1hMmRlLTNjMGIxOTk3N2U2ZiIsInN1YiI6InN5c3RlbTpzZXJ2aWNlYWNjb3VudDpkZWZhdWx0OmRlZmF1bHQifQ.qKR4dRtIau6ZjPsRYtdAIlXjRHN85Spu9xTsy-X3-jitwJSfqwqrXUrMUlONsevGM8-iDF3ETlZ0P-COR4Ongh0JjJFMmx1obCstU4wnb_90a-kwpSD-wBiD7jrurIQajaZ-WEzLRlt6ULv8c3tdcSQoeoBH30JPYg0fz57nke67vdGzXYHewYFv3JUxAMQ-FV-Gz8u1YNmzSVbdF8p6oVOhmjMEBxrPStYkgZ8D8fc6MF1xafj25i8KL6Z0fIln-F7yLASdr2hBBr5sIGzZQ1xFQF3xUwauurYoHFu8PMNYhddXRIrHYCtnEUCXrSSQEswrIf105alGk1696HD_LA
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get pods -n kubernetes-dashboard -o wide
+NAME                                         READY   STATUS    RESTARTS   AGE     IP            NODE       NOMINATED NODE   READINESS GATES
+dashboard-metrics-scraper-7b59f7d4df-x58f5   1/1     Running   0          4m20s   172.17.0.10   minikube   <none>           <none>
+kubernetes-dashboard-7d958d944-58vf2         1/1     Running   0          4m20s   172.17.0.6    minikube   <none>           <none>
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get all -n kubernetes-dashboard -o wide
+NAME                                             READY   STATUS    RESTARTS   AGE     IP            NODE       NOMINATED NODE   READINESS GATES
+pod/dashboard-metrics-scraper-7b59f7d4df-x58f5   1/1     Running   0          6m25s   172.17.0.10   minikube   <none>           <none>
+pod/kubernetes-dashboard-7d958d944-58vf2         1/1     Running   0          6m25s   172.17.0.6    minikube   <none>           <none>
+
+NAME                                TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)         AGE   SELECTOR
+service/dashboard-metrics-scraper   ClusterIP   10.98.77.162    <none>        8000/TCP        20d   k8s-app=dashboard-metrics-scraper
+service/kubernetes-dashboard        NodePort    10.100.96.163   <none>        443:30833/TCP   20d   k8s-app=kubernetes-dashboard
+
+NAME                                        READY   UP-TO-DATE   AVAILABLE   AGE   CONTAINERS                  IMAGES                                SELECTOR
+deployment.apps/dashboard-metrics-scraper   1/1     1            1           20d   dashboard-metrics-scraper   kubernetesui/metrics-scraper:v1.0.4   k8s-app=dashboard-metrics-scraper
+deployment.apps/kubernetes-dashboard        1/1     1            1           20d   kubernetes-dashboard        kubernetesui/dashboard:v2.0.1         k8s-app=kubernetes-dashboard
+
+NAME                                                   DESIRED   CURRENT   READY   AGE     CONTAINERS                  IMAGES                                SELECTOR
+replicaset.apps/dashboard-metrics-scraper-7b59f7d4df   1         1         1       6m25s   dashboard-metrics-scraper   kubernetesui/metrics-scraper:v1.0.4   k8s-app=dashboard-metrics-scraper,pod-template-hash=7b59f7d4df
+replicaset.apps/dashboard-metrics-scraper-c95fcf479    0         0         0       20d     dashboard-metrics-scraper   kubernetesui/metrics-scraper:v1.0.4   k8s-app=dashboard-metrics-scraper,pod-template-hash=c95fcf479
+replicaset.apps/kubernetes-dashboard-6cff4c7c4f        0         0         0       20d     kubernetes-dashboard        kubernetesui/dashboard:v2.1.0         k8s-app=kubernetes-dashboard,pod-template-hash=6cff4c7c4f
+replicaset.apps/kubernetes-dashboard-7d958d944         1         1         1       6m25s   kubernetes-dashboard        kubernetesui/dashboard:v2.0.1         k8s-app=kubernetes-dashboard,pod-template-hash=7d958d944
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get all -n kubernetes-dashboard -o wide
+NAME                                             READY   STATUS    RESTARTS   AGE   IP            NODE       NOMINATED NODE   READINESS GATES
+pod/dashboard-metrics-scraper-7b59f7d4df-x58f5   1/1     Running   0          10m   172.17.0.10   minikube   <none>           <none>
+pod/kubernetes-dashboard-7d958d944-58vf2         1/1     Running   0          10m   172.17.0.6    minikube   <none>           <none>
+
+NAME                                TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)         AGE   SELECTOR
+service/dashboard-metrics-scraper   ClusterIP   10.98.77.162    <none>        8000/TCP        20d   k8s-app=dashboard-metrics-scraper
+service/kubernetes-dashboard        NodePort    10.100.96.163   <none>        443:30833/TCP   20d   k8s-app=kubernetes-dashboard
+
+NAME                                        READY   UP-TO-DATE   AVAILABLE   AGE   CONTAINERS                  IMAGES                                SELECTOR
+deployment.apps/dashboard-metrics-scraper   1/1     1            1           20d   dashboard-metrics-scraper   kubernetesui/metrics-scraper:v1.0.4   k8s-app=dashboard-metrics-scraper
+deployment.apps/kubernetes-dashboard        1/1     1            1           20d   kubernetes-dashboard        kubernetesui/dashboard:v2.0.1         k8s-app=kubernetes-dashboard
+
+NAME                                                   DESIRED   CURRENT   READY   AGE   CONTAINERS                  IMAGES                                SELECTOR
+replicaset.apps/dashboard-metrics-scraper-7b59f7d4df   1         1         1       10m   dashboard-metrics-scraper   kubernetesui/metrics-scraper:v1.0.4   k8s-app=dashboard-metrics-scraper,pod-template-hash=7b59f7d4df
+replicaset.apps/dashboard-metrics-scraper-c95fcf479    0         0         0       20d   dashboard-metrics-scraper   kubernetesui/metrics-scraper:v1.0.4   k8s-app=dashboard-metrics-scraper,pod-template-hash=c95fcf479
+replicaset.apps/kubernetes-dashboard-6cff4c7c4f        0         0         0       20d   kubernetes-dashboard        kubernetesui/dashboard:v2.1.0         k8s-app=kubernetes-dashboard,pod-template-hash=6cff4c7c4f
+replicaset.apps/kubernetes-dashboard-7d958d944         1         1         1       10m   kubernetes-dashboard        kubernetesui/dashboard:v2.0.1         k8s-app=kubernetes-dashboard,pod-template-hash=7d958d944
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get svc kubernetes-dashboard -n kubernetes-dashboard
+NAME                   TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)         AGE
+kubernetes-dashboard   NodePort   10.100.96.163   <none>        443:30833/TCP   20d
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl delete -all
+Error: unknown shorthand flag: 'a' in -all
+See 'kubectl delete --help' for usage.
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl delete all 
+error: resource(s) were provided, but no name, label selector, or --all flag specified
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl delete --all
+error: at least one resource must be specified to use a selector
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl delete all --all
+pod "db-56d5bc876f-ltfk2" deleted
+pod "fluentd-ds-pndc5" deleted
+pod "nginx-deploy-67d7cbb686-j6xdc" deleted
+pod "nginx-deploy-67d7cbb686-mb9zt" deleted
+pod "nginx-deploy-67d7cbb686-vxmjg" deleted
+pod "nginx-rc-fhh24" deleted
+pod "nginx-rc-mq2zb" deleted
+pod "nginx-rs-frgvk" deleted
+pod "nginx-rs-rqsh7" deleted
+pod "nginx-rs-xd7sz" deleted
+replicationcontroller "nginx-rc" deleted
+service "kubernetes" deleted
+service "my-service" deleted
+daemonset.apps "fluentd-ds" deleted
+daemonset.apps "nginx-ds" deleted
+deployment.apps "db" deleted
+deployment.apps "nginx-deploy" deleted
+replicaset.apps "nginx-deploy-5878ddd45b" deleted
+replicaset.apps "nginx-rs" deleted
+job.batch "countdown" deleted
+cronjob.batch "cronjob" deleted
+
+
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % 
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % 
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl delete all --all
+service "kubernetes" deleted
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get all
+NAME                 TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+service/kubernetes   ClusterIP   10.96.0.1    <none>        443/TCP   3s
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl delete all      
+error: resource(s) were provided, but no name, label selector, or --all flag specified
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl delete all --all
+service "kubernetes" deleted
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl delete all --all
+service "kubernetes" deleted
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl delete all --all
+No resources found
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % 
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl delete all --all
+No resources found
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % 
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % 
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl delete all --all
+No resources found
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl delete all --all
+service "kubernetes" deleted
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get all         
+No resources found in default namespace.
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % 
