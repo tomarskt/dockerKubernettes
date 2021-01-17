@@ -1,0 +1,38 @@
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get pv
+No resources found
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl create -f ./mount/pv.yaml 
+persistentvolume/pv-hostpath created
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl create -f ./mount/pvc.yaml
+persistentvolumeclaim/pvc-hostpath created
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get pv                    
+NAME          CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS   CLAIM                  STORAGECLASS   REASON   AGE
+pv-hostpath   1Gi        RWO            Retain           Bound    default/pvc-hostpath   manual                  10s
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get pvc
+NAME           STATUS   VOLUME        CAPACITY   ACCESS MODES   STORAGECLASS   AGE
+pvc-hostpath   Bound    pv-hostpath   1Gi        RWO            manual         7s
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl create -f ./mount/pod-pv.yaml 
+pod/busybox created
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl exec -it busybox  touch /mydata/test.txt
+kubectl exec [POD] [COMMAND] is DEPRECATED and will be removed in a future version. Use kubectl exec [POD] -- [COMMAND] instead.
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl exec -it busybox  -- touch /mydata/test.txt
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl delete pod --all
+pod "busybox" deleted
+pod "configmap-demo-pod" deleted
+pod "countdown-zf9tj" deleted
+pod "db-56d5bc876f-xmzxr" deleted
+pod "envar-demo" deleted
+pod "fluentd-ds-dd9n6" deleted
+pod "nginx-deploy-67d7cbb686-rbv5k" deleted
+pod "nginx-deploy-67d7cbb686-tx5j9" deleted
+pod "nginx-deploy-67d7cbb686-vv9pq" deleted
+pod "nginx-hostpath" deleted
+pod "nginx-pod-configmap-vol" deleted
+pod "nginx-pod-secret-vol" deleted
+pod "nginx-rc-zk6xd" deleted
+pod "nginx-rc-zv5b9" deleted
+pod "nginx-rs-8g9vm" deleted
+pod "nginx-rs-m7rz8" deleted
+pod "nginx-rs-npx4v" deleted
+pod "redis-pod-configmap-env" deleted
+pod "redis-pod-secret-env" deleted
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % 
