@@ -1,0 +1,987 @@
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes %  helm repo add stable https://kubernetes-charts.storage.googleapis.com/
+
+Error: repo "https://kubernetes-charts.storage.googleapis.com/" is no longer available; try "https://charts.helm.sh/stable" instead
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % helm repo add stable https://charts.helm.sh/stable
+"stable" has been added to your repositories
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % helm help
+The Kubernetes package manager
+
+Common actions for Helm:
+
+- helm search:    search for charts
+- helm pull:      download a chart to your local directory to view
+- helm install:   upload the chart to Kubernetes
+- helm list:      list releases of charts
+
+Environment variables:
+
+| Name                               | Description                                                                       |
+|------------------------------------|-----------------------------------------------------------------------------------|
+| $HELM_CACHE_HOME                   | set an alternative location for storing cached files.                             |
+| $HELM_CONFIG_HOME                  | set an alternative location for storing Helm configuration.                       |
+| $HELM_DATA_HOME                    | set an alternative location for storing Helm data.                                |
+| $HELM_DEBUG                        | indicate whether or not Helm is running in Debug mode                             |
+| $HELM_DRIVER                       | set the backend storage driver. Values are: configmap, secret, memory, postgres   |
+| $HELM_DRIVER_SQL_CONNECTION_STRING | set the connection string the SQL storage driver should use.                      |
+| $HELM_MAX_HISTORY                  | set the maximum number of helm release history.                                   |
+| $HELM_NAMESPACE                    | set the namespace used for the helm operations.                                   |
+| $HELM_NO_PLUGINS                   | disable plugins. Set HELM_NO_PLUGINS=1 to disable plugins.                        |
+| $HELM_PLUGINS                      | set the path to the plugins directory                                             |
+| $HELM_REGISTRY_CONFIG              | set the path to the registry config file.                                         |
+| $HELM_REPOSITORY_CACHE             | set the path to the repository cache directory                                    |
+| $HELM_REPOSITORY_CONFIG            | set the path to the repositories file.                                            |
+| $KUBECONFIG                        | set an alternative Kubernetes configuration file (default "~/.kube/config")       |
+| $HELM_KUBEAPISERVER                | set the Kubernetes API Server Endpoint for authentication                         |
+| $HELM_KUBECAFILE                   | set the Kubernetes certificate authority file.                                    |
+| $HELM_KUBEASGROUPS                 | set the Groups to use for impersonation using a comma-separated list.             |
+| $HELM_KUBEASUSER                   | set the Username to impersonate for the operation.                                |
+| $HELM_KUBECONTEXT                  | set the name of the kubeconfig context.                                           |
+| $HELM_KUBETOKEN                    | set the Bearer KubeToken used for authentication.                                 |
+
+Helm stores cache, configuration, and data based on the following configuration order:
+
+- If a HELM_*_HOME environment variable is set, it will be used
+- Otherwise, on systems supporting the XDG base directory specification, the XDG variables will be used
+- When no other location is set a default location will be used based on the operating system
+
+By default, the default directories depend on the Operating System. The defaults are listed below:
+
+| Operating System | Cache Path                | Configuration Path             | Data Path               |
+|------------------|---------------------------|--------------------------------|-------------------------|
+| Linux            | $HOME/.cache/helm         | $HOME/.config/helm             | $HOME/.local/share/helm |
+| macOS            | $HOME/Library/Caches/helm | $HOME/Library/Preferences/helm | $HOME/Library/helm      |
+| Windows          | %TEMP%\helm               | %APPDATA%\helm                 | %APPDATA%\helm          |
+
+Usage:
+  helm [command]
+
+Available Commands:
+  completion  generate autocompletion scripts for the specified shell
+  create      create a new chart with the given name
+  dependency  manage a chart's dependencies
+  env         helm client environment information
+  get         download extended information of a named release
+  help        Help about any command
+  history     fetch release history
+  install     install a chart
+  lint        examine a chart for possible issues
+  list        list releases
+  package     package a chart directory into a chart archive
+  plugin      install, list, or uninstall Helm plugins
+  pull        download a chart from a repository and (optionally) unpack it in local directory
+  repo        add, list, remove, update, and index chart repositories
+  rollback    roll back a release to a previous revision
+  search      search for a keyword in charts
+  show        show information of a chart
+  status      display the status of the named release
+  template    locally render templates
+  test        run tests for a release
+  uninstall   uninstall a release
+  upgrade     upgrade a release
+  verify      verify that a chart at the given path has been signed and is valid
+  version     print the client version information
+
+Flags:
+      --debug                       enable verbose output
+  -h, --help                        help for helm
+      --kube-apiserver string       the address and the port for the Kubernetes API server
+      --kube-as-group stringArray   group to impersonate for the operation, this flag can be repeated to specify multiple groups.
+      --kube-as-user string         username to impersonate for the operation
+      --kube-ca-file string         the certificate authority file for the Kubernetes API server connection
+      --kube-context string         name of the kubeconfig context to use
+      --kube-token string           bearer token used for authentication
+      --kubeconfig string           path to the kubeconfig file
+  -n, --namespace string            namespace scope for this request
+      --registry-config string      path to the registry config file (default "/Users/stomar-n/Library/Preferences/helm/registry.json")
+      --repository-cache string     path to the file containing cached repository indexes (default "/Users/stomar-n/Library/Caches/helm/repository")
+      --repository-config string    path to the file containing repository names and URLs (default "/Users/stomar-n/Library/Preferences/helm/repositories.yaml")
+
+Use "helm [command] --help" for more information about a command.
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % helm search repo stable
+NAME                                    CHART VERSION   APP VERSION             DESCRIPTION                                       
+stable/acs-engine-autoscaler            2.2.2           2.1.1                   DEPRECATED Scales worker nodes within agent pools 
+stable/aerospike                        0.3.5           v4.5.0.5                DEPRECATED A Helm chart for Aerospike in Kubern...
+stable/airflow                          7.13.3          1.10.12                 DEPRECATED - please use: https://github.com/air...
+stable/ambassador                       5.3.2           0.86.1                  DEPRECATED A Helm chart for Datawire Ambassador   
+stable/anchore-engine                   1.7.0           0.7.3                   Anchore container analysis and policy evaluatio...
+stable/apm-server                       2.1.7           7.0.0                   DEPRECATED The server receives data from the El...
+stable/ark                              4.2.2           0.10.2                  DEPRECATED A Helm chart for ark                   
+stable/artifactory                      7.3.2           6.1.0                   DEPRECATED Universal Repository Manager support...
+stable/artifactory-ha                   0.4.2           6.2.0                   DEPRECATED Universal Repository Manager support...
+stable/atlantis                         3.12.4          v0.14.0                 DEPRECATED A Helm chart for Atlantis https://ww...
+stable/auditbeat                        1.1.2           6.7.0                   DEPRECATED A lightweight shipper to audit the a...
+stable/aws-cluster-autoscaler           0.3.4                                   DEPRECATED Scales worker nodes within autoscali...
+stable/aws-iam-authenticator            0.1.5           1.0                     DEPRECATED A Helm chart for aws-iam-authenticator 
+stable/bitcoind                         1.0.2           0.17.1                  DEPRECATED Bitcoin is an innovative payment net...
+stable/bookstack                        1.2.4           0.27.5                  DEPRECATED BookStack is a simple, self-hosted, ...
+stable/buildkite                        0.2.4           3                       DEPRECATED Agent for Buildkite                    
+stable/burrow                           1.5.4           0.29.0                  DEPRECATED Burrow is a permissionable smart con...
+stable/centrifugo                       3.2.2           2.4.0                   DEPRECATED Centrifugo is a real-time messaging ...
+stable/cerebro                          1.9.5           0.9.2                   DEPRECATED A Helm chart for Cerebro - a web adm...
+stable/cert-manager                     v0.6.7          v0.6.2                  A Helm chart for cert-manager                     
+stable/chaoskube                        3.3.2           0.21.0                  DEPRECATED Chaoskube periodically kills random ...
+stable/chartmuseum                      2.14.2          0.12.0                  DEPRECATED Host your own Helm Chart Repository    
+stable/chronograf                       1.1.1           1.7.12                  DEPRECATED Open-source web application written ...
+stable/clamav                           1.0.7           1.6                     DEPRECATED An Open-Source antivirus engine for ...
+stable/cloudserver                      1.0.7           8.1.5                   DEPRECATED An open-source Node.js implementatio...
+stable/cluster-autoscaler               8.0.0           1.17.1                  Scales worker nodes within autoscaling groups.    
+stable/cluster-overprovisioner          0.4.1           1.0                     Installs the a deployment that overprovisions t...
+stable/cockroachdb                      3.0.8           19.2.5                  DEPRECATED -- CockroachDB is a scalable, surviv...
+stable/collabora-code                   1.0.8           4.0.3.1                 DEPRECATED A Helm chart for Collabora Office - ...
+stable/concourse                        8.3.7           5.6.0                   DEPRECATED Concourse is a simple and scalable C...
+stable/consul                           3.9.6           1.5.3                   Highly available and distributed service discov...
+stable/contour                          0.2.2           v0.15.0                 DEPRECATED Contour Ingress controller for Kuber...
+stable/coredns                          1.13.8          1.7.1                   DEPRECATED CoreDNS is a DNS server that chains ...
+stable/cosbench                         1.0.3           0.0.6                   DEPRECATED A benchmark tool for cloud object st...
+stable/coscale                          1.0.2           3.16.0                  DEPRECATED CoScale Agent                          
+stable/couchbase-operator               1.0.4           1.2.2                   DEPRECATED A Helm chart to deploy the Couchbase...
+stable/couchdb                          2.3.0           2.3.1                   DEPRECATED A database featuring seamless multi-...
+stable/dask                             3.1.1           1.1.5                   DEPRECATED Distributed computation in Python wi...
+stable/dask-distributed                 2.0.2                                   DEPRECATED: Distributed computation in Python     
+stable/datadog                          2.3.42          7                       DEPRECATED Datadog Agent                          
+stable/dex                              2.15.2          2.24.0                  DEPRECATED OpenID Connect Identity (OIDC) and O...
+stable/distributed-jmeter               1.0.3           3.3                     DEPRECATED A Distributed JMeter Helm chart        
+stable/distributed-tensorflow           1.2.2           1.7.0                   DEPRECATED A Helm chart for running distributed...
+stable/distribution                     0.4.3           1.1.0                   DEPRECATED A Helm chart for JFrog Distribution    
+stable/dmarc2logstash                   1.3.1           1.0.3                   DEPRECATED Provides a POP3-polled DMARC XML rep...
+stable/docker-registry                  1.9.6           2.7.1                   DEPRECATED A Helm chart for Docker Registry       
+stable/dokuwiki                         6.0.11          0.20180422.201901061035 DEPRECATED DokuWiki is a standards-compliant, s...
+stable/drone                            2.7.2           1.6.5                   Drone is a Continuous Delivery system built on ...
+stable/drupal                           6.2.12          8.8.3                   DEPRECATED One of the most versatile open sourc...
+stable/efs-provisioner                  0.13.2          v2.4.0                  DEPRECATED A Helm chart for the AWS EFS externa...
+stable/elastabot                        1.2.1           1.1.0                   DEPRECATED A Helm chart for Elastabot - a Slack...
+stable/elastalert                       1.5.1           0.2.4                   DEPRECATED ElastAlert is a simple framework for...
+stable/elastic-stack                    2.0.6           6                       DEPRECATED A Helm chart for ELK                   
+stable/elasticsearch                    1.32.5          6.8.6                   DEPRECATED Flexible and powerful open source, d...
+stable/elasticsearch-curator            2.2.3           5.7.6                   DEPRECATED A Helm chart for Elasticsearch Curator 
+stable/elasticsearch-exporter           3.7.1           1.1.0                   DEPRECATED Elasticsearch stats exporter for Pro...
+stable/envoy                            1.9.4           1.11.2                  DEPRECATED Envoy is an open source edge and ser...
+stable/etcd-operator                    0.11.2          0.9.4                   DEPRECATED CoreOS etcd-operator Helm chart for ...
+stable/ethereum                         1.0.2           v1.7.3                  DEPRECATED private Ethereum network Helm chart ...
+stable/eventrouter                      0.3.2           0.3                     DEPRECATED A Helm chart for eventruter (https:/...
+stable/express-gateway                  1.6.6           1.16.9                  DEPRECATED Express Gateway is an API Gateway th...
+stable/external-dns                     2.20.4          0.7.0                   DEPRECATED ExternalDNS is a Kubernetes addon th...
+stable/factorio                         1.0.2           0.15.39                 DEPRECATED Factorio dedicated server.             
+stable/falco                            1.1.8           0.0.1                   DEPRECATED - incubator/falco                      
+stable/filebeat                         4.0.2           7.4.0                   DEPRECATED A Helm chart to collect Kubernetes l...
+stable/fluent-bit                       2.10.3          1.3.7                   DEPRECATED Fast and Lightweight Log/Data Forwar...
+stable/fluentd                          2.5.3           v2.4.0                  DEPRECATED A Fluentd Elasticsearch Helm chart f...
+stable/fluentd-elasticsearch            2.0.7           2.3.2                   DEPRECATED! - A Fluentd Helm chart for Kubernet...
+stable/g2                               0.3.3           0.5.0                   DEPRECATED G2 by AppsCode - Gearman in Golang     
+stable/gangway                          0.4.5           3.3.0                   DEPRECATED An application that can be used to e...
+stable/gce-ingress                      1.2.2           1.4.0                   DEPRECATED A GCE Ingress Controller               
+stable/gcloud-endpoints                 0.1.2           1                       DEPRECATED Develop, deploy, protect and monitor...
+stable/gcloud-sqlproxy                  0.6.1           1.11                    DEPRECATED Google Cloud SQL Proxy                 
+stable/gcp-night-king                   1.0.4           1                       DEPRECATED A Helm chart for GCP Night King        
+stable/ghost                            9.1.13          3.9.0                   DEPRECATED A simple, powerful publishing platfo...
+stable/gitlab-ce                        0.2.3           9.4.1                   GitLab Community Edition                          
+stable/gitlab-ee                        0.2.3           9.4.1                   GitLab Enterprise Edition                         
+stable/gocd                             1.32.0          20.8.0                  GoCD is an open-source continuous delivery serv...
+stable/goldpinger                       2.0.4           2.0.0                   DEPRECATED Goldpinger makes calls between its i...
+stable/grafana                          5.5.7           7.1.1                   DEPRECATED - The leading tool for querying and ...
+stable/graphite                         0.2.2           1.1.5-3                 DEPRECATED! - Graphite metrics server             
+stable/graylog                          1.6.12          3.1                     DEPRECATED - Graylog is the centralized log man...
+stable/hackmd                           2.0.3           1.3.0-alpine            DEPRECATED - Realtime collaborative markdown no...
+stable/hadoop                           1.1.4           2.9.0                   DEPRECATED - The Apache Hadoop software library...
+stable/hazelcast                        3.3.2           4.0.1                   DEPRECATED Hazelcast IMDG is the most widely us...
+stable/hazelcast-jet                    1.6.2           4.1                     DEPRECATED Hazelcast Jet is an application embe...
+stable/heapster                         1.0.4           1.5.4                   DEPRECATED - Heapster enables Container Cluster...
+stable/heartbeat                        1.2.2           6.7.0                   DEPRECATED - A Helm chart to periodically check...
+stable/helm-exporter                    0.3.3           0.4.0                   DEPRECATED Exports helm release stats to promet...
+stable/hl-composer                      1.0.14          0.20.0                  DEPRECATED - Hyperledger Composer REST Server c...
+stable/hlf-ca                           1.2.3           1.4.3                   DEPRECATED - Hyperledger Fabric Certificate Aut...
+stable/hlf-couchdb                      1.0.9           0.4.10                  DEPRECATED - CouchDB instance for Hyperledger F...
+stable/hlf-ord                          1.4.3           1.4.3                   DEPRECATED - Hyperledger Fabric Orderer chart (...
+stable/hlf-peer                         1.6.3           1.4.3                   DEPRECATED - Hyperledger Fabric Peer chart (the...
+stable/hoard                            1.0.2           6.0.0                   DEPRECATED - Hoard is a stateless, deterministi...
+stable/home-assistant                   0.13.4          0.108.7                 Home Assistant                                    
+stable/horovod                          1.0.2           0.12.1                  DEPRECATED - A Helm chart for deploying Horovod   
+stable/hubot                            1.0.4           3.3.2                   DEPRECATED - Hubot chatbot for Slack              
+stable/ignite                           1.2.2           2.7.6                   DEPRECATED - Apache Ignite is an open-source di...
+stable/inbucket                         3.1.2           2.0.0                   DEPRECATED - Inbucket is an email testing appli...
+stable/influxdb                         4.3.2           1.7.9                   DEPRECATED Scalable datastore for metrics, even...
+stable/ingressmonitorcontroller         1.0.50          1.0.47                  DEPRECATED - IngressMonitorController chart tha...
+stable/instana-agent                    1.0.35          1.1                     DEPRECATED - Instana Agent for Kubernetes         
+stable/ipfs                             0.4.4           v0.4.22                 DEPRECATED - A Helm chart for the Interplanetar...
+stable/jaeger-operator                  2.12.2          1.15.1                  jaeger-operator Helm chart for Kubernetes         
+stable/janusgraph                       0.2.6           1.0                     DEPRECATED - Open source, scalable graph database.
+stable/jasperreports                    7.0.11          7.2.0                   DEPRECATED The JasperReports server can be used...
+stable/jenkins                          2.5.4           lts                     DEPRECATED - Open source continuous integration...
+stable/joomla                           7.1.11          3.9.15                  DEPRECATED PHP content management system (CMS) ...
+stable/k8s-spot-rescheduler             0.4.6           v0.3.0                  DEPRECATED - A k8s-spot-rescheduler Helm chart ...
+stable/k8s-spot-termination-handler     1.4.11          1.13.7-1                DEPRECATED - The K8s Spot Termination handler h...
+stable/kafka-manager                    2.3.5           1.3.3.22                DEPRECATED - A tool for managing Apache Kafka.    
+stable/kanister-operator                0.3.2           0.10.0                  DEPRECATED - Kanister-operator Helm chart for K...
+stable/kapacitor                        1.2.2           1.5.2                   DEPRECATED InfluxDB's native data processing en...
+stable/karma                            1.7.2           v0.72                   DEPRECATED - A Helm chart for Karma - an UI for...
+stable/katafygio                        1.0.3           0.8.1                   DEPRECATED - Continuously backup Kubernetes obj...
+stable/keel                             0.6.1           0.9.5                   DEPRECATED Open source, tool for automating Kub...
+stable/keycloak                         4.10.1          5.0.0                   DEPRECATED - Open Source Identity and Access Ma...
+stable/kiam                             2.5.3           3.3                     DEPRECATED Integrate AWS IAM with Kubernetes      
+stable/kibana                           3.2.8           6.7.0                   DEPRECATED - Kibana is an open source data visu...
+stable/kong                             0.36.7          1.4                     DEPRECATED The Cloud-Native Ingress and API-man...
+stable/kube-hunter                      1.0.5           312                     DEPRECATED - A Helm chart for Kube-hunter         
+stable/kube-lego                        0.4.2           v0.1.6                  DEPRECATED Automatically requests certificates ...
+stable/kube-ops-view                    1.2.4           20.4.0                  DEPRECATED - Kubernetes Operational View - read...
+stable/kube-slack                       1.3.4           v4.2.0                  DEPRECATED - Chart for kube-slack, a monitoring...
+stable/kube-state-metrics               2.9.4           1.9.7                   DEPRECATED - Install kube-state-metrics to gene...
+stable/kube2iam                         2.5.3           0.10.9                  DEPRECATED - Provide IAM credentials to pods ba...
+stable/kubed                            0.3.3           0.4.0                   DEPRECATED Kubed by AppsCode - Kubernetes daemon  
+stable/kubedb                           0.1.3           0.8.0-beta.2            DEPRECATED KubeDB by AppsCode - Making running ...
+stable/kuberhealthy                     1.2.7           v1.0.2                  DEPRECATED. Please use https://comcast.github.i...
+stable/kubernetes-dashboard             1.11.1          1.10.1                  DEPRECATED! - General-purpose web UI for Kubern...
+stable/kuberos                          0.2.3           2018-07-03              DEPRECATED - An OIDC authentication helper for ...
+stable/kubewatch                        1.0.9           0.0.4                   DEPRECATED Kubewatch notifies your slack rooms ...
+stable/kured                            1.6.0           1.4.0                   DEPRECATED - A Helm chart for kured               
+stable/lamp                             1.1.6           7                       DEPRECATED - Modular and transparent LAMP stack...
+stable/linkerd                          0.4.3           1.1.2                   DEPRECATED - Service mesh for cloud native apps   
+stable/locust                           1.2.3           0.9.0                   DEPRECATED - A modern load testing framework      
+stable/logdna-agent                     2.0.2           2.1.9                   DEPRECATED - Run this, get logs. All cluster co...
+stable/logstash                         2.4.3           7.1.1                   DEPRECATED - Logstash is an open source, server...
+stable/luigi                            2.7.8           2.7.2                   DEPRECATED Luigi is a Python module that helps ...
+stable/magento                          6.0.0           2.3.1                   DEPRECATED A feature-rich flexible e-commerce s...
+stable/magic-ip-address                 0.1.2           0.9.0                   DEPRECATED - A Helm chart to assign static IP a...
+stable/magic-namespace                  0.6.0           2.8.1                   Elegantly enables a Tiller per namespace in RBA...
+stable/mailhog                          2.3.1           1.0.0                   DEPRECATED - An e-mail testing tool for developers
+stable/mariadb                          7.3.14          10.3.22                 DEPRECATED Fast, reliable, scalable, and easy t...
+stable/mattermost-team-edition          3.1.2           5.9.0                   Mattermost Team Edition server.                   
+stable/mcrouter                         1.0.6           0.36.0                  DEPRECATED - Mcrouter is a memcached protocol r...
+stable/mediawiki                        9.1.9           1.34.0                  DEPRECATED Extremely powerful, scalable softwar...
+stable/memcached                        3.2.5           1.5.20                  DEPRECATED - Free & open source, high-performan...
+stable/mercure                          4.0.3           0.10.0                  DEPRECATED - The Mercure hub allows to push dat...
+stable/metabase                         0.13.2          v0.36.3                 DEPRECATED - The easy, open source way for ever...
+stable/metallb                          0.12.1          0.8.1                   DEPRECATED MetalLB is a load-balancer implement...
+stable/metricbeat                       1.7.3           6.7.0                   DEPRECATED - A Helm chart to collect Kubernetes...
+stable/metrics-server                   2.11.4          0.3.6                   DEPRECATED - Metrics Server is a cluster-wide a...
+stable/minecraft                        1.2.5           1.14.4                  Minecraft server                                  
+stable/minio                            5.0.33          master                  DEPRECATED MinIO is a high performance data inf...
+stable/mission-control                  0.4.4           3.1.2                   DEPRECATED A Helm chart for JFrog Mission Control 
+stable/mongodb                          7.8.10          4.2.4                   DEPRECATED NoSQL document-oriented database tha...
+stable/mongodb-replicaset               3.17.2          3.6                     DEPRECATED - NoSQL document-oriented database t...
+stable/moodle                           7.2.8           3.8.2                   DEPRECATED Moodle is a learning platform design...
+stable/msoms                            0.2.2           1.0.0-30                DEPRECATED - A chart for deploying omsagent as ...
+stable/mssql-linux                      0.11.4          14.0.3023.8             DEPRECATED - SQL Server 2017 Linux Helm Chart     
+stable/mysql                            1.6.9           5.7.30                  DEPRECATED - Fast, reliable, scalable, and easy...
+stable/mysqldump                        2.6.2           2.4.1                   DEPRECATED! - A Helm chart to help backup MySQL...
+stable/namerd                           0.2.2           0.9.1                   DEPRECATED - Service that manages routing for m...
+stable/nats                             4.3.7           2.1.4                   DEPRECATED An open-source, cloud-native messagi...
+stable/neo4j                            3.0.1           4.0.4                   DEPRECATED Neo4j is the world's leading graph d...
+stable/newrelic-infrastructure          0.13.36         1.21.0                  DEPRECATED - A Helm chart to deploy the New Rel...
+stable/nextcloud                        1.12.1          17.0.0                  DEPRECATED - A file sharing server that puts th...
+stable/nfs-client-provisioner           1.2.11          3.1.0                   DEPRECATED - nfs-client is an automatic provisi...
+stable/nfs-server-provisioner           1.1.3           2.3.0                   DEPRECATED - nfs-server-provisioner is an out-o...
+stable/nginx-ingress                    1.41.3          v0.34.1                 DEPRECATED! An nginx Ingress controller that us...
+stable/nginx-ldapauth-proxy             0.1.6           1.13.5                  DEPRECATED - nginx proxy with ldapauth            
+stable/nginx-lego                       0.3.1                                   Chart for nginx-ingress-controller and kube-lego  
+stable/node-problem-detector            1.8.3           v0.8.1                  DEPRECATED - Installs the node-problem-detector...
+stable/node-red                         1.4.3           1.0.4                   Node-RED is low-code programming for event-driv...
+stable/oauth2-proxy                     3.2.5           5.1.0                   DEPRECATED - A reverse proxy that provides auth...
+stable/odoo                             13.0.5          12.0.20200215           DEPRECATED A suite of web based open source bus...
+stable/opa                              1.14.6          0.15.1                  DEPRECATED - Open source, general-purpose polic...
+stable/opencart                         7.0.8           3.0.3-2                 DEPRECATED A free and open source e-commerce pl...
+stable/openebs                          1.11.1          1.11.0                  DEPRECATED Containerized Storage for Containers   
+stable/openiban                         1.0.2           1.0.1                   DEPRECATED - OpenIBAN is a self-hosted, free an...
+stable/openldap                         1.2.7           2.4.48                  DEPRECATED - Community developed LDAP software    
+stable/openvpn                          4.2.5           1.1.0                   DEPRECATED - A Helm chart to install an openvpn...
+stable/orangehrm                        7.0.10          4.3.4-0                 DEPRECATED OrangeHRM is a free HR management sy...
+stable/osclass                          7.0.10          3.7.4                   DEPRECATED Osclass is a php script that allows ...
+stable/owncloud                         8.1.8           10.4.0                  DEPRECATED A file sharing server that puts the ...
+stable/pachyderm                        0.2.3           1.8.6                   DEPRECATED - Pachyderm is a large-scale contain...
+stable/parse                            10.3.10         3.10.0                  DEPRECATED Parse is a platform that enables use...
+stable/percona                          1.2.3           5.7.26                  DEPRECATED - free, fully compatible, enhanced, ...
+stable/percona-xtradb-cluster           1.0.8           5.7.19                  DEPRECATED - free, fully compatible, enhanced, ...
+stable/pgadmin                          1.2.3           4.18.0                  DEPRECATED - moved to new repo, see source for ...
+stable/phabricator                      9.0.13          2020.7.0                DEPRECATED Collection of open source web applic...
+stable/phpbb                            7.0.10          3.3.0                   DEPRECATED Community forum that supports the no...
+stable/phpmyadmin                       4.3.5           5.0.1                   DEPRECATED phpMyAdmin is an mysql administratio...
+stable/pomerium                         4.2.6           0.5.2                   DEPRECATED - see https://helm.pomerium.io         
+stable/postgresql                       8.6.4           11.7.0                  DEPRECATED Chart for PostgreSQL, an object-rela...
+stable/prestashop                       9.1.11          1.7.6-4                 DEPRECATED A popular open source ecommerce solu...
+stable/presto                           0.2.3           329                     DEPRECATED - Distributed SQL query engine for r...
+stable/prisma                           1.2.4           1.29.1                  DEPRECATED Prisma turns your database into a re...
+stable/prometheus                       11.12.1         2.20.1                  DEPRECATED Prometheus is a monitoring system an...
+stable/prometheus-adapter               2.5.1           v0.7.0                  DEPRECATED A Helm chart for k8s prometheus adapter
+stable/prometheus-blackbox-exporter     4.3.1           0.16.0                  DEPRECATED Prometheus Blackbox Exporter           
+stable/prometheus-cloudwatch-exporter   0.8.4           0.8.0                   DEPRECATED A Helm chart for prometheus cloudwat...
+stable/prometheus-consul-exporter       0.1.6           0.4.0                   DEPRECATED A Helm chart for the Prometheus Cons...
+stable/prometheus-couchdb-exporter      0.1.2           1.0                     DEPRECATED A Helm chart to export the metrics f...
+stable/prometheus-mongodb-exporter      2.8.1           v0.10.0                 DEPRECATED A Prometheus exporter for MongoDB me...
+stable/prometheus-mysql-exporter        0.7.1           v0.11.0                 DEPRECATED A Helm chart for prometheus mysql ex...
+stable/prometheus-nats-exporter         2.5.1           0.6.2                   DEPRECATED A Helm chart for prometheus-nats-exp...
+stable/prometheus-node-exporter         1.11.2          1.0.1                   DEPRECATED A Helm chart for prometheus node-exp...
+stable/prometheus-operator              9.3.2           0.38.1                  DEPRECATED Provides easy monitoring definitions...
+stable/prometheus-postgres-exporter     1.3.1           0.8.0                   DEPRECATED A Helm chart for prometheus postgres...
+stable/prometheus-pushgateway           1.4.3           1.2.0                   DEPRECATED A Helm chart for prometheus pushgateway
+stable/prometheus-rabbitmq-exporter     0.5.6           v0.29.0                 DEPRECATED Rabbitmq metrics exporter for promet...
+stable/prometheus-redis-exporter        3.5.1           1.3.4                   DEPRECATED Prometheus exporter for Redis metrics  
+stable/prometheus-snmp-exporter         0.0.6           0.14.0                  DEPRECATED Prometheus SNMP Exporter               
+stable/prometheus-to-sd                 0.3.1           0.5.2                   DEPRECATED Scrape metrics stored in prometheus ...
+stable/quassel                          0.2.13          0.13.1                  DEPRECATED - Quassel IRC is a modern, cross-pla...
+stable/rabbitmq                         6.18.2          3.8.2                   DEPRECATED Open source message broker software ...
+stable/rabbitmq-ha                      1.47.1          3.8.7                   DEPRECATED - Highly available RabbitMQ cluster,...
+stable/redis                            10.5.7          5.0.7                   DEPRECATED Open source, advanced key-value stor...
+stable/redis-ha                         4.4.6           5.0.6                   DEPRECATED - Highly available Kubernetes implem...
+stable/redmine                          14.1.12         4.1.0                   DEPRECATED A flexible project management web ap...
+stable/reloader                         1.3.0           v0.0.41                 DEPRECATED - Reloader chart that runs on kubern...
+stable/rethinkdb                        1.1.4           0.1.0                   DEPRECATED - The open-source database for the r...
+stable/risk-advisor                     2.0.6           1.0.0                   DEPRECATED - Risk Advisor add-on module for Kub...
+stable/rocketchat                       2.0.10          3.6.0                   DEPRECATED - Prepare to take off with the ultim...
+stable/rookout                          0.1.2           1.0                     DEPRECATED - A Helm chart for Rookout agent on ...
+stable/sapho                            0.2.4           8-jre8                  DEPRECATED A micro application development and ...
+stable/satisfy                          1.1.2           3.0.4                   DEPRECATED - Composer repo hosting with Satisfy   
+stable/schema-registry-ui               0.4.4           v0.9.5                  DEPRECATED - This is a web tool for the conflue...
+stable/sealed-secrets                   1.12.2          0.13.1                  DEPRECATED - A Helm chart for Sealed Secrets      
+stable/searchlight                      0.3.3           5.0.0                   DEPRECATED Searchlight by AppsCode - Alerts for...
+stable/selenium                         1.2.3           3.141.59                DEPRECATED - Chart for selenium grid              
+stable/sematext-agent                   1.0.31          1.0                     DEPRECATED Helm chart for deploying Sematext Ag...
+stable/sematext-docker-agent            1.0.1           1.31.53                 DEPRECATED Sematext Docker Agent                  
+stable/sensu                            0.2.5           0.28                    DEPRECATED Sensu monitoring framework backed by...
+stable/sentry                           4.3.3           9.1.2                   DEPRECATED - Sentry is a cross-platform crash r...
+stable/seq                              2.3.2           2020                    DEPRECATED - Seq is the easiest way for develop...
+stable/signalfx-agent                   0.3.1           3.6.1                   DEPRECATED The SignalFx Kubernetes agent          
+stable/signalsciences                   2.0.2           4.5.0                   DEPRECATED - SignalSciences is a web applicatio...
+stable/socat-tunneller                  0.1.2           1.0                     DEPRECATED - A Helm chart for socat-tunneller     
+stable/sonarqube                        4.0.1           7.9.2                   DEPRECATED SonarQube is an open sourced code qu...
+stable/sonatype-nexus                   1.23.1          3.20.1-01               DEPRECATED - Sonatype Nexus is an open source r...
+stable/spark                            1.0.5           1.5.1                   DEPRECATED - Fast and general-purpose cluster c...
+stable/spark-history-server             1.4.3           2.4.0                   DEPRECATED - A Helm chart for Spark History Server
+stable/spartakus                        1.1.8           1.0.0                   DEPRECATED - Collect information about Kubernet...
+stable/spinnaker                        2.2.6           1.16.2                  DEPRECATED - Open source, multi-cloud continuou...
+stable/spotify-docker-gc                1.0.2           latest                  DEPRECATED - A simple Docker container and imag...
+stable/spring-cloud-data-flow           2.8.1           2.6.0                   DEPRECATED Toolkit for building data processing...
+stable/stackdriver-exporter             1.3.2           0.6.0                   DEPRECATED - Stackdriver exporter for Prometheus  
+stable/stash                            0.5.3           0.7.0-rc.1              DEPRECATED Stash by AppsCode - Backup your Kube...
+stable/stellar-core                     1.0.2           10.0.0                  DEPRECATED Backbone node of the Stellar cryptoc...
+stable/stolon                           1.6.5           0.16.0                  DEPRECATED - Stolon - PostgreSQL cloud native H...
+stable/sugarcrm                         1.0.7           6.5.26                  DEPRECATED SugarCRM enables businesses to creat...
+stable/suitecrm                         8.0.11          7.11.12                 DEPRECATED SuiteCRM is a completely open source...
+stable/sumokube                         1.0.2           latest                  DEPRECATED - Sumologic Log Collector              
+stable/sumologic-fluentd                2.1.2           2.4.2                   DEPRECATED - Sumologic Log Collector              
+stable/superset                         1.1.13          0.36.0                  DEPRECATED - Apache Superset (incubating) is a ...
+stable/swift                            0.6.3           0.7.3                   DEPRECATED swift by AppsCode - Ajax friendly He...
+stable/sysdig                           1.7.16          10.0.0                  Sysdig Monitor and Secure agent                   
+stable/telegraf                         1.6.1           1.12                    DEPRECATED Telegraf is an agent written in Go f...
+stable/tensorflow-notebook              0.1.5           1.6.0                   DEPRECATED - A Helm chart for tensorflow notebo...
+stable/tensorflow-serving               1.1.2           1.14.0                  DEPRECATED - TensorFlow Serving is an open-sour...
+stable/terracotta                       1.1.2           5.6.0                   DEPRECATED - Terracotta Ehcache is an improved ...
+stable/testlink                         7.1.7           1.9.20                  DEPRECATED Web-based test management system tha...
+stable/tomcat                           0.4.3           7.0                     DEPRECATED - Deploy a basic tomcat application ...
+stable/traefik                          1.87.7          1.7.26                  DEPRECATED - A Traefik based Kubernetes ingress...
+stable/uchiwa                           1.0.2           0.22                    DEPRECATED Dashboard for the Sensu monitoring f...
+stable/unbound                          1.1.4           1.6.7                   DEPRECATED - Unbound is a fast caching DNS reso...
+stable/unifi                            0.10.2          5.12.35                 DEPRECATED - Ubiquiti Network's Unifi Controller  
+stable/vault-operator                   0.1.4           0.1.9                   DEPRECATED - CoreOS vault-operator Helm chart f...
+stable/velero                           2.7.4           1.2.0                   A Helm chart for velero                           
+stable/verdaccio                        0.7.8           3.11.6                  DEPRECATED - A lightweight private npm proxy re...
+stable/voyager                          3.2.4           6.0.0                   DEPRECATED Voyager by AppsCode - Secure Ingress...
+stable/vsphere-cpi                      0.2.3           1.2.1                   DEPRECATED - A Helm chart for vSphere Cloud Pro...
+stable/wavefront                        1.1.2           1.0.3                   DEPRECATED Wavefront Kubernetes collector         
+stable/weave-cloud                      0.3.9           1.4.0                   DEPRECATED - Weave Cloud is a add-on to Kuberne...
+stable/weave-scope                      1.1.12          1.12.0                  DEPRECATED - A Helm chart for the Weave Scope c...
+stable/wordpress                        9.0.3           5.3.2                   DEPRECATED Web publishing platform for building...
+stable/xray                             0.4.3           2.3.0                   DEPRECATED Universal component scan for securit...
+stable/zeppelin                         1.1.3           0.7.2                   DEPRECATED - Web-based notebook that enables da...
+stable/zetcd                            0.1.11          0.0.3                   DEPRECATED CoreOS zetcd Helm chart for Kubernetes 
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % helm repo update
+Hang tight while we grab the latest from your chart repositories...
+...Successfully got an update from the "stable" chart repository
+Update Complete. ⎈Happy Helming!⎈
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes %  helm search repo stable promethus
+No results found
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes %  helm search repo stable/promethus
+No results found
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % helm install prometheus stable/prometheus-operator
+WARNING: This chart is deprecated
+W0123 06:12:43.337944   50671 warnings.go:70] apiextensions.k8s.io/v1beta1 CustomResourceDefinition is deprecated in v1.16+, unavailable in v1.22+; use apiextensions.k8s.io/v1 CustomResourceDefinition
+W0123 06:12:43.357454   50671 warnings.go:70] apiextensions.k8s.io/v1beta1 CustomResourceDefinition is deprecated in v1.16+, unavailable in v1.22+; use apiextensions.k8s.io/v1 CustomResourceDefinition
+W0123 06:12:43.573805   50671 warnings.go:70] apiextensions.k8s.io/v1beta1 CustomResourceDefinition is deprecated in v1.16+, unavailable in v1.22+; use apiextensions.k8s.io/v1 CustomResourceDefinition
+W0123 06:12:43.589840   50671 warnings.go:70] apiextensions.k8s.io/v1beta1 CustomResourceDefinition is deprecated in v1.16+, unavailable in v1.22+; use apiextensions.k8s.io/v1 CustomResourceDefinition
+W0123 06:12:43.609286   50671 warnings.go:70] apiextensions.k8s.io/v1beta1 CustomResourceDefinition is deprecated in v1.16+, unavailable in v1.22+; use apiextensions.k8s.io/v1 CustomResourceDefinition
+W0123 06:12:43.774280   50671 warnings.go:70] apiextensions.k8s.io/v1beta1 CustomResourceDefinition is deprecated in v1.16+, unavailable in v1.22+; use apiextensions.k8s.io/v1 CustomResourceDefinition
+W0123 06:12:45.868223   50671 warnings.go:70] apiextensions.k8s.io/v1beta1 CustomResourceDefinition is deprecated in v1.16+, unavailable in v1.22+; use apiextensions.k8s.io/v1 CustomResourceDefinition
+W0123 06:12:45.887223   50671 warnings.go:70] apiextensions.k8s.io/v1beta1 CustomResourceDefinition is deprecated in v1.16+, unavailable in v1.22+; use apiextensions.k8s.io/v1 CustomResourceDefinition
+W0123 06:12:45.986919   50671 warnings.go:70] apiextensions.k8s.io/v1beta1 CustomResourceDefinition is deprecated in v1.16+, unavailable in v1.22+; use apiextensions.k8s.io/v1 CustomResourceDefinition
+W0123 06:12:46.003484   50671 warnings.go:70] apiextensions.k8s.io/v1beta1 CustomResourceDefinition is deprecated in v1.16+, unavailable in v1.22+; use apiextensions.k8s.io/v1 CustomResourceDefinition
+W0123 06:12:46.061711   50671 warnings.go:70] apiextensions.k8s.io/v1beta1 CustomResourceDefinition is deprecated in v1.16+, unavailable in v1.22+; use apiextensions.k8s.io/v1 CustomResourceDefinition
+W0123 06:12:46.098095   50671 warnings.go:70] apiextensions.k8s.io/v1beta1 CustomResourceDefinition is deprecated in v1.16+, unavailable in v1.22+; use apiextensions.k8s.io/v1 CustomResourceDefinition
+manifest_sorter.go:192: info: skipping unknown hook: "crd-install"
+manifest_sorter.go:192: info: skipping unknown hook: "crd-install"
+manifest_sorter.go:192: info: skipping unknown hook: "crd-install"
+manifest_sorter.go:192: info: skipping unknown hook: "crd-install"
+manifest_sorter.go:192: info: skipping unknown hook: "crd-install"
+manifest_sorter.go:192: info: skipping unknown hook: "crd-install"
+W0123 06:12:49.405265   50671 warnings.go:70] rbac.authorization.k8s.io/v1beta1 ClusterRole is deprecated in v1.17+, unavailable in v1.22+; use rbac.authorization.k8s.io/v1 ClusterRole
+W0123 06:12:49.476160   50671 warnings.go:70] rbac.authorization.k8s.io/v1beta1 ClusterRoleBinding is deprecated in v1.17+, unavailable in v1.22+; use rbac.authorization.k8s.io/v1 ClusterRoleBinding
+W0123 06:12:49.496621   50671 warnings.go:70] rbac.authorization.k8s.io/v1beta1 Role is deprecated in v1.17+, unavailable in v1.22+; use rbac.authorization.k8s.io/v1 Role
+W0123 06:12:49.506400   50671 warnings.go:70] rbac.authorization.k8s.io/v1beta1 RoleBinding is deprecated in v1.17+, unavailable in v1.22+; use rbac.authorization.k8s.io/v1 RoleBinding
+W0123 06:12:49.658127   50671 warnings.go:70] admissionregistration.k8s.io/v1beta1 MutatingWebhookConfiguration is deprecated in v1.16+, unavailable in v1.22+; use admissionregistration.k8s.io/v1 MutatingWebhookConfiguration
+W0123 06:12:49.888585   50671 warnings.go:70] admissionregistration.k8s.io/v1beta1 ValidatingWebhookConfiguration is deprecated in v1.16+, unavailable in v1.22+; use admissionregistration.k8s.io/v1 ValidatingWebhookConfiguration
+W0123 06:13:01.063659   50671 warnings.go:70] rbac.authorization.k8s.io/v1beta1 ClusterRole is deprecated in v1.17+, unavailable in v1.22+; use rbac.authorization.k8s.io/v1 ClusterRole
+W0123 06:13:01.078464   50671 warnings.go:70] rbac.authorization.k8s.io/v1beta1 ClusterRoleBinding is deprecated in v1.17+, unavailable in v1.22+; use rbac.authorization.k8s.io/v1 ClusterRoleBinding
+W0123 06:13:01.085849   50671 warnings.go:70] rbac.authorization.k8s.io/v1beta1 Role is deprecated in v1.17+, unavailable in v1.22+; use rbac.authorization.k8s.io/v1 Role
+W0123 06:13:01.141916   50671 warnings.go:70] rbac.authorization.k8s.io/v1beta1 RoleBinding is deprecated in v1.17+, unavailable in v1.22+; use rbac.authorization.k8s.io/v1 RoleBinding
+W0123 06:13:01.841441   50671 warnings.go:70] admissionregistration.k8s.io/v1beta1 MutatingWebhookConfiguration is deprecated in v1.16+, unavailable in v1.22+; use admissionregistration.k8s.io/v1 MutatingWebhookConfiguration
+W0123 06:13:03.284148   50671 warnings.go:70] admissionregistration.k8s.io/v1beta1 ValidatingWebhookConfiguration is deprecated in v1.16+, unavailable in v1.22+; use admissionregistration.k8s.io/v1 ValidatingWebhookConfiguration
+NAME: prometheus
+LAST DEPLOYED: Sat Jan 23 06:12:48 2021
+NAMESPACE: default
+STATUS: deployed
+REVISION: 1
+NOTES:
+*******************
+*** DEPRECATED ****
+*******************
+* stable/prometheus-operator chart is deprecated.
+* Further development has moved to https://github.com/prometheus-community/helm-charts
+* The chart has been renamed kube-prometheus-stack to more clearly reflect
+* that it installs the `kube-prometheus` project stack, within which Prometheus
+* Operator is only one component.
+
+The Prometheus Operator has been installed. Check its status by running:
+  kubectl --namespace default get pods -l "release=prometheus"
+
+Visit https://github.com/coreos/prometheus-operator for instructions on how
+to create & configure Alertmanager and Prometheus instances using the Operator.
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl --namespace default get pods -l "release=prometheus"
+NAME                                                   READY   STATUS    RESTARTS   AGE
+prometheus-prometheus-node-exporter-mcfwf              1/1     Running   0          111s
+prometheus-prometheus-oper-operator-6d9c4bdb9f-sbvqw   2/2     Running   0          111s
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl --namespace default get pods -l "release=prometheus"
+NAME                                                   READY   STATUS    RESTARTS   AGE
+prometheus-prometheus-node-exporter-mcfwf              1/1     Running   0          2m29s
+prometheus-prometheus-oper-operator-6d9c4bdb9f-sbvqw   2/2     Running   0          2m29s
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % helm uninstall prometheus stable/prometheus-operator
+W0123 06:16:06.463606   50940 warnings.go:70] rbac.authorization.k8s.io/v1beta1 RoleBinding is deprecated in v1.17+, unavailable in v1.22+; use rbac.authorization.k8s.io/v1 RoleBinding
+W0123 06:16:06.477484   50940 warnings.go:70] rbac.authorization.k8s.io/v1beta1 Role is deprecated in v1.17+, unavailable in v1.22+; use rbac.authorization.k8s.io/v1 Role
+W0123 06:16:06.487319   50940 warnings.go:70] rbac.authorization.k8s.io/v1beta1 ClusterRoleBinding is deprecated in v1.17+, unavailable in v1.22+; use rbac.authorization.k8s.io/v1 ClusterRoleBinding
+W0123 06:16:06.541579   50940 warnings.go:70] rbac.authorization.k8s.io/v1beta1 ClusterRole is deprecated in v1.17+, unavailable in v1.22+; use rbac.authorization.k8s.io/v1 ClusterRole
+W0123 06:16:07.362419   50940 warnings.go:70] admissionregistration.k8s.io/v1beta1 MutatingWebhookConfiguration is deprecated in v1.16+, unavailable in v1.22+; use admissionregistration.k8s.io/v1 MutatingWebhookConfiguration
+W0123 06:16:07.724381   50940 warnings.go:70] admissionregistration.k8s.io/v1beta1 ValidatingWebhookConfiguration is deprecated in v1.16+, unavailable in v1.22+; use admissionregistration.k8s.io/v1 ValidatingWebhookConfiguration
+release "prometheus" uninstalled
+Error: uninstall: Release name is invalid: stable/prometheus-operator
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl --namespace default get pods -l "release=prometheus"
+No resources found in default namespace.
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % helm create chart
+Creating chart
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % ls
+Before01162021          TeminalWindowOutput     chart                   jobs                    john.key                secrets
+README.md               Untitled.code-workspace components.yaml         john.csr                mount
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % cd chart 
+(base) stomar-n@Sudhirs-MacBook-Pro-3 chart % ls -la
+total 24
+drwxr-xr-x   7 stomar-n  staff   224 Jan 23 06:17 .
+drwxr-xr-x  14 stomar-n  staff   448 Jan 23 06:17 ..
+-rw-r--r--   1 stomar-n  staff   349 Jan 23 06:17 .helmignore
+-rw-r--r--   1 stomar-n  staff  1141 Jan 23 06:17 Chart.yaml
+drwxr-xr-x   2 stomar-n  staff    64 Jan 23 06:17 charts
+drwxr-xr-x  10 stomar-n  staff   320 Jan 23 06:17 templates
+-rw-r--r--   1 stomar-n  staff  1798 Jan 23 06:17 values.yaml
+(base) stomar-n@Sudhirs-MacBook-Pro-3 chart % cd ..
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % helm install chart
+Error: must either provide a name or specify --generate-name
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % helm install chart ./chart
+NAME: chart
+LAST DEPLOYED: Sat Jan 23 06:21:49 2021
+NAMESPACE: default
+STATUS: deployed
+REVISION: 1
+NOTES:
+1. Get the application URL by running these commands:
+  export POD_NAME=$(kubectl get pods --namespace default -l "app.kubernetes.io/name=chart,app.kubernetes.io/instance=chart" -o jsonpath="{.items[0].metadata.name}")
+  export CONTAINER_PORT=$(kubectl get pod --namespace default $POD_NAME -o jsonpath="{.spec.containers[0].ports[0].containerPort}")
+  echo "Visit http://127.0.0.1:8080 to use your application"
+  kubectl --namespace default port-forward $POD_NAME 8080:$CONTAINER_PORT
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get pods
+NAME                     READY   STATUS              RESTARTS   AGE
+chart-7f8d75f474-krh28   0/1     Running             0          9s
+pod20                    0/1     ContainerCreating   0          10s
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubctl get svc
+zsh: command not found: kubctl
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get svc
+NAME         TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)        AGE
+chart        ClusterIP   10.107.199.129   <none>        80/TCP         40s
+kubernetes   ClusterIP   10.96.0.1        <none>        443/TCP        6d
+my-service   NodePort    10.96.118.59     <none>        80:31111/TCP   40s
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % helm list
+NAME    NAMESPACE       REVISION        UPDATED                                 STATUS          CHART           APP VERSION
+chart   default         1               2021-01-23 06:21:49.412127 -0800 PST    deployed        chart-0.1.0     1.16.0     
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % helm --help
+The Kubernetes package manager
+
+Common actions for Helm:
+
+- helm search:    search for charts
+- helm pull:      download a chart to your local directory to view
+- helm install:   upload the chart to Kubernetes
+- helm list:      list releases of charts
+
+Environment variables:
+
+| Name                               | Description                                                                       |
+|------------------------------------|-----------------------------------------------------------------------------------|
+| $HELM_CACHE_HOME                   | set an alternative location for storing cached files.                             |
+| $HELM_CONFIG_HOME                  | set an alternative location for storing Helm configuration.                       |
+| $HELM_DATA_HOME                    | set an alternative location for storing Helm data.                                |
+| $HELM_DEBUG                        | indicate whether or not Helm is running in Debug mode                             |
+| $HELM_DRIVER                       | set the backend storage driver. Values are: configmap, secret, memory, postgres   |
+| $HELM_DRIVER_SQL_CONNECTION_STRING | set the connection string the SQL storage driver should use.                      |
+| $HELM_MAX_HISTORY                  | set the maximum number of helm release history.                                   |
+| $HELM_NAMESPACE                    | set the namespace used for the helm operations.                                   |
+| $HELM_NO_PLUGINS                   | disable plugins. Set HELM_NO_PLUGINS=1 to disable plugins.                        |
+| $HELM_PLUGINS                      | set the path to the plugins directory                                             |
+| $HELM_REGISTRY_CONFIG              | set the path to the registry config file.                                         |
+| $HELM_REPOSITORY_CACHE             | set the path to the repository cache directory                                    |
+| $HELM_REPOSITORY_CONFIG            | set the path to the repositories file.                                            |
+| $KUBECONFIG                        | set an alternative Kubernetes configuration file (default "~/.kube/config")       |
+| $HELM_KUBEAPISERVER                | set the Kubernetes API Server Endpoint for authentication                         |
+| $HELM_KUBECAFILE                   | set the Kubernetes certificate authority file.                                    |
+| $HELM_KUBEASGROUPS                 | set the Groups to use for impersonation using a comma-separated list.             |
+| $HELM_KUBEASUSER                   | set the Username to impersonate for the operation.                                |
+| $HELM_KUBECONTEXT                  | set the name of the kubeconfig context.                                           |
+| $HELM_KUBETOKEN                    | set the Bearer KubeToken used for authentication.                                 |
+
+Helm stores cache, configuration, and data based on the following configuration order:
+
+- If a HELM_*_HOME environment variable is set, it will be used
+- Otherwise, on systems supporting the XDG base directory specification, the XDG variables will be used
+- When no other location is set a default location will be used based on the operating system
+
+By default, the default directories depend on the Operating System. The defaults are listed below:
+
+| Operating System | Cache Path                | Configuration Path             | Data Path               |
+|------------------|---------------------------|--------------------------------|-------------------------|
+| Linux            | $HOME/.cache/helm         | $HOME/.config/helm             | $HOME/.local/share/helm |
+| macOS            | $HOME/Library/Caches/helm | $HOME/Library/Preferences/helm | $HOME/Library/helm      |
+| Windows          | %TEMP%\helm               | %APPDATA%\helm                 | %APPDATA%\helm          |
+
+Usage:
+  helm [command]
+
+Available Commands:
+  completion  generate autocompletion scripts for the specified shell
+  create      create a new chart with the given name
+  dependency  manage a chart's dependencies
+  env         helm client environment information
+  get         download extended information of a named release
+  help        Help about any command
+  history     fetch release history
+  install     install a chart
+  lint        examine a chart for possible issues
+  list        list releases
+  package     package a chart directory into a chart archive
+  plugin      install, list, or uninstall Helm plugins
+  pull        download a chart from a repository and (optionally) unpack it in local directory
+  repo        add, list, remove, update, and index chart repositories
+  rollback    roll back a release to a previous revision
+  search      search for a keyword in charts
+  show        show information of a chart
+  status      display the status of the named release
+  template    locally render templates
+  test        run tests for a release
+  uninstall   uninstall a release
+  upgrade     upgrade a release
+  verify      verify that a chart at the given path has been signed and is valid
+  version     print the client version information
+
+Flags:
+      --debug                       enable verbose output
+  -h, --help                        help for helm
+      --kube-apiserver string       the address and the port for the Kubernetes API server
+      --kube-as-group stringArray   group to impersonate for the operation, this flag can be repeated to specify multiple groups.
+      --kube-as-user string         username to impersonate for the operation
+      --kube-ca-file string         the certificate authority file for the Kubernetes API server connection
+      --kube-context string         name of the kubeconfig context to use
+      --kube-token string           bearer token used for authentication
+      --kubeconfig string           path to the kubeconfig file
+  -n, --namespace string            namespace scope for this request
+      --registry-config string      path to the registry config file (default "/Users/stomar-n/Library/Preferences/helm/registry.json")
+      --repository-cache string     path to the file containing cached repository indexes (default "/Users/stomar-n/Library/Caches/helm/repository")
+      --repository-config string    path to the file containing repository names and URLs (default "/Users/stomar-n/Library/Preferences/helm/repositories.yaml")
+
+Use "helm [command] --help" for more information about a command.
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % helm uninstall chart ./chart 
+release "chart" uninstalled
+Error: uninstall: Release name is invalid: ./chart
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % helm --help                 
+The Kubernetes package manager
+
+Common actions for Helm:
+
+- helm search:    search for charts
+- helm pull:      download a chart to your local directory to view
+- helm install:   upload the chart to Kubernetes
+- helm list:      list releases of charts
+
+Environment variables:
+
+| Name                               | Description                                                                       |
+|------------------------------------|-----------------------------------------------------------------------------------|
+| $HELM_CACHE_HOME                   | set an alternative location for storing cached files.                             |
+| $HELM_CONFIG_HOME                  | set an alternative location for storing Helm configuration.                       |
+| $HELM_DATA_HOME                    | set an alternative location for storing Helm data.                                |
+| $HELM_DEBUG                        | indicate whether or not Helm is running in Debug mode                             |
+| $HELM_DRIVER                       | set the backend storage driver. Values are: configmap, secret, memory, postgres   |
+| $HELM_DRIVER_SQL_CONNECTION_STRING | set the connection string the SQL storage driver should use.                      |
+| $HELM_MAX_HISTORY                  | set the maximum number of helm release history.                                   |
+| $HELM_NAMESPACE                    | set the namespace used for the helm operations.                                   |
+| $HELM_NO_PLUGINS                   | disable plugins. Set HELM_NO_PLUGINS=1 to disable plugins.                        |
+| $HELM_PLUGINS                      | set the path to the plugins directory                                             |
+| $HELM_REGISTRY_CONFIG              | set the path to the registry config file.                                         |
+| $HELM_REPOSITORY_CACHE             | set the path to the repository cache directory                                    |
+| $HELM_REPOSITORY_CONFIG            | set the path to the repositories file.                                            |
+| $KUBECONFIG                        | set an alternative Kubernetes configuration file (default "~/.kube/config")       |
+| $HELM_KUBEAPISERVER                | set the Kubernetes API Server Endpoint for authentication                         |
+| $HELM_KUBECAFILE                   | set the Kubernetes certificate authority file.                                    |
+| $HELM_KUBEASGROUPS                 | set the Groups to use for impersonation using a comma-separated list.             |
+| $HELM_KUBEASUSER                   | set the Username to impersonate for the operation.                                |
+| $HELM_KUBECONTEXT                  | set the name of the kubeconfig context.                                           |
+| $HELM_KUBETOKEN                    | set the Bearer KubeToken used for authentication.                                 |
+
+Helm stores cache, configuration, and data based on the following configuration order:
+
+- If a HELM_*_HOME environment variable is set, it will be used
+- Otherwise, on systems supporting the XDG base directory specification, the XDG variables will be used
+- When no other location is set a default location will be used based on the operating system
+
+By default, the default directories depend on the Operating System. The defaults are listed below:
+
+| Operating System | Cache Path                | Configuration Path             | Data Path               |
+|------------------|---------------------------|--------------------------------|-------------------------|
+| Linux            | $HOME/.cache/helm         | $HOME/.config/helm             | $HOME/.local/share/helm |
+| macOS            | $HOME/Library/Caches/helm | $HOME/Library/Preferences/helm | $HOME/Library/helm      |
+| Windows          | %TEMP%\helm               | %APPDATA%\helm                 | %APPDATA%\helm          |
+
+Usage:
+  helm [command]
+
+Available Commands:
+  completion  generate autocompletion scripts for the specified shell
+  create      create a new chart with the given name
+  dependency  manage a chart's dependencies
+  env         helm client environment information
+  get         download extended information of a named release
+  help        Help about any command
+  history     fetch release history
+  install     install a chart
+  lint        examine a chart for possible issues
+  list        list releases
+  package     package a chart directory into a chart archive
+  plugin      install, list, or uninstall Helm plugins
+  pull        download a chart from a repository and (optionally) unpack it in local directory
+  repo        add, list, remove, update, and index chart repositories
+  rollback    roll back a release to a previous revision
+  search      search for a keyword in charts
+  show        show information of a chart
+  status      display the status of the named release
+  template    locally render templates
+  test        run tests for a release
+  uninstall   uninstall a release
+  upgrade     upgrade a release
+  verify      verify that a chart at the given path has been signed and is valid
+  version     print the client version information
+
+Flags:
+      --debug                       enable verbose output
+  -h, --help                        help for helm
+      --kube-apiserver string       the address and the port for the Kubernetes API server
+      --kube-as-group stringArray   group to impersonate for the operation, this flag can be repeated to specify multiple groups.
+      --kube-as-user string         username to impersonate for the operation
+      --kube-ca-file string         the certificate authority file for the Kubernetes API server connection
+      --kube-context string         name of the kubeconfig context to use
+      --kube-token string           bearer token used for authentication
+      --kubeconfig string           path to the kubeconfig file
+  -n, --namespace string            namespace scope for this request
+      --registry-config string      path to the registry config file (default "/Users/stomar-n/Library/Preferences/helm/registry.json")
+      --repository-cache string     path to the file containing cached repository indexes (default "/Users/stomar-n/Library/Caches/helm/repository")
+      --repository-config string    path to the file containing repository names and URLs (default "/Users/stomar-n/Library/Preferences/helm/repositories.yaml")
+
+Use "helm [command] --help" for more information about a command.
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % helm list                   
+
+NAME    NAMESPACE       REVISION        UPDATED STATUS  CHART   APP VERSION
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % 
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl version --short
+Client Version: v1.19.3
+Server Version: v1.20.0
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % sudo apt-mark unhold kubeadm kubelet
+
+Password:
+sudo: apt-mark: command not found
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % brew install kubectl 
+Updating Homebrew...
+==> Auto-updated Homebrew!
+Updated 2 taps (homebrew/core and homebrew/cask).
+==> Updated Formulae
+Updated 2 formulae.
+==> Updated Casks
+Updated 2 casks.
+
+==> Downloading https://homebrew.bintray.com/bottles/kubernetes-cli-1.20.2.big_sur.bottle.tar.gz
+==> Downloading from https://d29vzk4ow07wi7.cloudfront.net/58049cbdcae1b674d62aa1ad4cb5d9b667ac01080574c0fe5c9e126f8fde1eb6?response-content-disposition=attachment%3Bfilename%3D%22kubernetes-cli-1.20.2.big_s
+######################################################################## 100.0%
+==> Pouring kubernetes-cli-1.20.2.big_sur.bottle.tar.gz
+Error: The `brew link` step did not complete successfully
+The formula built, but is not symlinked into /usr/local
+Could not symlink bin/kubectl
+Target /usr/local/bin/kubectl
+already exists. You may want to remove it:
+  rm '/usr/local/bin/kubectl'
+
+To force the link and overwrite all conflicting files:
+  brew link --overwrite kubernetes-cli
+
+To list all files that would be deleted:
+  brew link --overwrite --dry-run kubernetes-cli
+
+Possible conflicting files are:
+/usr/local/bin/kubectl -> /Applications/Docker.app/Contents/Resources/bin/kubectl
+==> Caveats
+zsh completions have been installed to:
+  /usr/local/share/zsh/site-functions
+==> Summary
+🍺  /usr/local/Cellar/kubernetes-cli/1.20.2: 246 files, 46.1MB
+Removing: /usr/local/Cellar/kubernetes-cli/1.20.1... (246 files, 46.1MB)
+==> Upgrading 1 dependent:
+minikube 1.16.0 -> 1.17.0
+==> Upgrading minikube 1.16.0 -> 1.17.0 
+==> Downloading https://homebrew.bintray.com/bottles/minikube-1.17.0.big_sur.bottle.tar.gz
+==> Downloading from https://d29vzk4ow07wi7.cloudfront.net/9543a3d3316da0e7727938b4c517e5dc18958328c8c0b2cfc9998685819fc9e3?response-content-disposition=attachment%3Bfilename%3D%22minikube-1.17.0.big_sur.bot
+######################################################################## 100.0%
+==> Pouring minikube-1.17.0.big_sur.bottle.tar.gz
+==> Caveats
+zsh completions have been installed to:
+  /usr/local/share/zsh/site-functions
+==> Summary
+🍺  /usr/local/Cellar/minikube/1.17.0: 8 files, 64.3MB
+Removing: /usr/local/Cellar/minikube/1.16.0... (8 files, 64.6MB)
+==> Checking for dependents of upgraded formulae...
+==> No broken dependents found!
+==> Caveats
+==> kubernetes-cli
+zsh completions have been installed to:
+  /usr/local/share/zsh/site-functions
+==> minikube
+zsh completions have been installed to:
+  /usr/local/share/zsh/site-functions
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl version --short             
+Client Version: v1.19.3
+Server Version: v1.20.0
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % brew install kubectl --update
+Usage: brew install [options] formula|cask
+
+Install a formula or cask. Additional options specific to a formula may be
+appended to the command.
+
+Unless HOMEBREW_NO_INSTALL_CLEANUP is set, brew cleanup will then be run for
+the installed formulae or, every 30 days, for all formulae.
+
+  -d, --debug                      If brewing fails, open an interactive
+                                   debugging session with access to IRB or a
+                                   shell inside the temporary build directory.
+  -f, --force                      Install formulae without checking for
+                                   previously installed keg-only or
+                                   non-migrated versions. When installing
+                                   casks, overwrite existing files (binaries
+                                   and symlinks are excluded, unless
+                                   originally from the same cask).
+  -v, --verbose                    Print the verification and postinstall
+                                   steps.
+      --formula, --formulae        Treat all named arguments as formulae.
+      --env                        If std is passed, use the standard build
+                                   environment instead of superenv. If super
+                                   is passed, use superenv even if the formula
+                                   specifies the standard build environment.
+      --ignore-dependencies        An unsupported Homebrew development flag to
+                                   skip installing any dependencies of any
+                                   kind. If the dependencies are not already
+                                   present, the formula will have issues. If
+                                   you're not developing Homebrew, consider
+                                   adjusting your PATH rather than using this
+                                   flag.
+      --only-dependencies          Install the dependencies with specified
+                                   options but do not install the formula
+                                   itself.
+      --cc                         Attempt to compile using the specified
+                                   compiler, which should be the name of the
+                                   compiler's executable, e.g. gcc-7 for GCC
+                                   7. In order to use LLVM's clang, specify
+                                   llvm_clang. To use the Apple-provided
+                                   clang, specify clang. This option will
+                                   only accept compilers that are provided by
+                                   Homebrew or bundled with macOS. Please do
+                                   not file issues if you encounter errors
+                                   while using this option.
+  -s, --build-from-source          Compile formula from source even if a
+                                   bottle is provided. Dependencies will still
+                                   be installed from bottles if they are
+                                   available.
+      --force-bottle               Install from a bottle if it exists for the
+                                   current or newest version of macOS, even if
+                                   it would not normally be used for
+                                   installation.
+      --include-test               Install testing dependencies required to
+                                   run brew test formula.
+      --HEAD                       If formula defines it, install the HEAD
+                                   version, aka. master, trunk, unstable.
+      --fetch-HEAD                 Fetch the upstream repository to detect if
+                                   the HEAD installation of the formula is
+                                   outdated. Otherwise, the repository's HEAD
+                                   will only be checked for updates when a new
+                                   stable or development version has been
+                                   released.
+      --keep-tmp                   Retain the temporary files created during
+                                   installation.
+      --build-bottle               Prepare the formula for eventual bottling
+                                   during installation, skipping any
+                                   post-install steps.
+      --bottle-arch                Optimise bottles for the specified
+                                   architecture rather than the oldest
+                                   architecture supported by the version of
+                                   macOS the bottles are built on.
+      --display-times              Print install times for each formula at the
+                                   end of the run.
+  -i, --interactive                Download and patch formula, then open a
+                                   shell. This allows the user to run
+                                   ./configure --help and otherwise
+                                   determine how to turn the software package
+                                   into a Homebrew package.
+  -g, --git                        Create a Git repository, useful for
+                                   creating patches to the software.
+      --cask, --casks              Treat all named arguments as casks.
+      --[no-]binaries              Disable/enable linking of helper
+                                   executables (default: enabled).
+      --require-sha                Require all casks to have a checksum.
+      --[no-]quarantine            Disable/enable quarantining of downloads
+                                   (default: enabled).
+      --skip-cask-deps             Skip installing cask dependencies.
+      --appdir                     Target location for Applications (default:
+                                   /Applications).
+      --colorpickerdir             Target location for Color Pickers (default:
+                                   ~/Library/ColorPickers).
+      --prefpanedir                Target location for Preference Panes
+                                   (default: ~/Library/PreferencePanes).
+      --qlplugindir                Target location for QuickLook Plugins
+                                   (default: ~/Library/QuickLook).
+      --mdimporterdir              Target location for Spotlight Plugins
+                                   (default: ~/Library/Spotlight).
+      --dictionarydir              Target location for Dictionaries (default:
+                                   ~/Library/Dictionaries).
+      --fontdir                    Target location for Fonts (default:
+                                   ~/Library/Fonts).
+      --servicedir                 Target location for Services (default:
+                                   ~/Library/Services).
+      --input-methoddir            Target location for Input Methods (default:
+                                   ~/Library/Input Methods).
+      --internet-plugindir         Target location for Internet Plugins
+                                   (default: ~/Library/Internet Plug-Ins).
+      --audio-unit-plugindir       Target location for Audio Unit Plugins
+                                   (default:
+                                   ~/Library/Audio/Plug-Ins/Components).
+      --vst-plugindir              Target location for VST Plugins (default:
+                                   ~/Library/Audio/Plug-Ins/VST).
+      --vst3-plugindir             Target location for VST3 Plugins (default:
+                                   ~/Library/Audio/Plug-Ins/VST3).
+      --screen-saverdir            Target location for Screen Savers (default:
+                                   ~/Library/Screen Savers).
+      --language                   Comma-separated list of language codes to
+                                   prefer for cask installation. The first
+                                   matching language is used, otherwise it
+                                   reverts to the cask's default language. The
+                                   default value is the language of your
+                                   system.
+  -q, --quiet                      Make some output more quiet.
+  -h, --help                       Show this message.
+Error: invalid option: --update
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % brew upgrade kubectl  
+Warning: kubectl 1.20.2 already installed
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % brew update kubectl 
+Error: This command updates brew itself, and does not take formula names.
+Use `brew upgrade kubectl` instead.
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl watch
+Error: unknown command "watch" for "kubectl"
+
+Did you mean this?
+        patch
+
+Run 'kubectl --help' for usage.
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl help
+kubectl controls the Kubernetes cluster manager.
+
+ Find more information at: https://kubernetes.io/docs/reference/kubectl/overview/
+
+Basic Commands (Beginner):
+  create        Create a resource from a file or from stdin.
+  expose        Take a replication controller, service, deployment or pod and expose it as a new Kubernetes Service
+  run           Run a particular image on the cluster
+  set           Set specific features on objects
+
+Basic Commands (Intermediate):
+  explain       Documentation of resources
+  get           Display one or many resources
+  edit          Edit a resource on the server
+  delete        Delete resources by filenames, stdin, resources and names, or by resources and label selector
+
+Deploy Commands:
+  rollout       Manage the rollout of a resource
+  scale         Set a new size for a Deployment, ReplicaSet or Replication Controller
+  autoscale     Auto-scale a Deployment, ReplicaSet, or ReplicationController
+
+Cluster Management Commands:
+  certificate   Modify certificate resources.
+  cluster-info  Display cluster info
+  top           Display Resource (CPU/Memory/Storage) usage.
+  cordon        Mark node as unschedulable
+  uncordon      Mark node as schedulable
+  drain         Drain node in preparation for maintenance
+  taint         Update the taints on one or more nodes
+
+Troubleshooting and Debugging Commands:
+  describe      Show details of a specific resource or group of resources
+  logs          Print the logs for a container in a pod
+  attach        Attach to a running container
+  exec          Execute a command in a container
+  port-forward  Forward one or more local ports to a pod
+  proxy         Run a proxy to the Kubernetes API server
+  cp            Copy files and directories to and from containers.
+  auth          Inspect authorization
+
+Advanced Commands:
+  diff          Diff live version against would-be applied version
+  apply         Apply a configuration to a resource by filename or stdin
+  patch         Update field(s) of a resource using strategic merge patch
+  replace       Replace a resource by filename or stdin
+  wait          Experimental: Wait for a specific condition on one or many resources.
+  convert       Convert config files between different API versions
+  kustomize     Build a kustomization target from a directory or a remote url.
+
+Settings Commands:
+  label         Update the labels on a resource
+  annotate      Update the annotations on a resource
+  completion    Output shell completion code for the specified shell (bash or zsh)
+
+Other Commands:
+  alpha         Commands for features in alpha
+  api-resources Print the supported API resources on the server
+  api-versions  Print the supported API versions on the server, in the form of "group/version"
+  config        Modify kubeconfig files
+  plugin        Provides utilities for interacting with plugins.
+  version       Print the client and server version information
+
+Usage:
+  kubectl [flags] [options]
+
+Use "kubectl <command> --help" for more information about a given command.
+Use "kubectl options" for a list of global command-line options (applies to all commands).
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % minikube start
+😄  minikube v1.17.0 on Darwin 11.1
+🆕  Kubernetes 1.20.2 is now available. If you would like to upgrade, specify: --kubernetes-version=v1.20.2
+✨  Using the docker driver based on existing profile
+👍  Starting control plane node minikube in cluster minikube
+🔄  Restarting existing docker container for "minikube" ...
+🐳  Preparing Kubernetes v1.20.0 on Docker 20.10.0 ...
+🔎  Verifying Kubernetes components...
+🌟  Enabled addons: storage-provisioner, default-storageclass, dashboard
+🏄  Done! kubectl is now configured to use "minikube" cluster and "default" namespace by default
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % kubectl get pods --watch
+^C%                                                                                                                                                                                                            
+(base) stomar-n@Sudhirs-MacBook-Pro-3 dockerKubernettes % 
